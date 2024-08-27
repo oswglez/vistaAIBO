@@ -68,7 +68,7 @@ public class RoomService {
    }
 
 
-// Método personalizado para encontrar todas los medias de una habitación específica
+// Metodo personalizado para encontrar todas los medias de una habitación específica
     public  List<Media> getMediaByHotelIdAndRoomId(Long hotelId, Long roomId) {
 //
 // buscar directamente en la base de datos de medias
@@ -76,7 +76,7 @@ public class RoomService {
         return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
     }
 
-    // Método personalizado para encontrar todas los medias de un tipo de habitación específica
+    // Metodo personalizado para encontrar todas los medias de un tipo de habitación específica
     public  List<Media>getMediaByRoomType(Long hotelId, String roomType) {
 //
 // buscar directamente en la base de datos de medias
@@ -101,7 +101,7 @@ public class RoomService {
         return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
     }
 
-    // Método personalizado para encontrar todas los amenities de un hotel específico
+    // Metodo personalizado para encontrar todas los amenities de un hotel específico
     public  List<Amenity> getAmenitiesByHotelIdAndRoomType(Long hotelId, String roomType){
 //
 // buscar reservacion por hotelId &  reservasionId

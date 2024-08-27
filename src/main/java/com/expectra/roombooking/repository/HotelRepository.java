@@ -11,33 +11,33 @@ import java.util.Optional;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-    // Método para buscar todos los hoteles
+    // Metodo para buscar todos los hoteles
     @Override
     List<Hotel> findAll();
 
-    // Método para buscar un hotel por ID
+    // Metodo para buscar un hotel por ID
     @Override
     Optional<Hotel> findById(Long id);
 
-    // Método para guardar un hotel (crear o actualizar)
+    // Metodo para guardar un hotel (crear o actualizar)
     @Override
     <S extends Hotel> S save(S entity);
 
-    // Método para eliminar un hotel por entidad
+    // Metodo para eliminar un hotel por entidad
     @Override
     void delete(Hotel entity);
 
-    // Método para eliminar un hotel por ID
+    // Metodo para eliminar un hotel por ID
     @Override
     void deleteById(Long id);
 
-    // Método personalizado para buscar hoteles por nombre
+    // Metodo personalizado para buscar hoteles por nombre
     List<Hotel> findByName(String name);
 
-    // Método personalizado para buscar hoteles por categoría
+    // Metodo personalizado para buscar hoteles por categoría
     List<Hotel> findByCategory(String category);
 
-    // Método personalizado para encontrar todas las amenities de un hotel específico
+    // Metodo personalizado para encontrar todas las amenities de un hotel específico
     List<Amenity> findAllByHotelIdAndAmenities(Long hotelId);
 }
 
