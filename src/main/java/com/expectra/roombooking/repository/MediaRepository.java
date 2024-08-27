@@ -1,6 +1,6 @@
 package com.expectra.roombooking.repository;
 
-import com.expectra.roombooking.model.Photo;
+import com.expectra.roombooking.model.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,34 +9,34 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PhotoRepository extends JpaRepository<Photo, Long> {
+public interface MediaRepository extends JpaRepository<Media, Long> {
 
     // Método para buscar todas las fotos
     @Override
-    List<Photo> findAll();
+    List<Media> findAll();
 
     // Método para buscar una foto por ID
     @Override
-    Optional<Photo> findById(Long id);
+    Optional<Media> findById(Long id);
 
     // Método para guardar una foto (crear o actualizar)
     @Override
-    <S extends Photo> S save(S entity);
+    <S extends Media> S save(S entity);
 
     // Método para eliminar una foto por entidad
     @Override
-    void delete(Photo entity);
+    void delete(Media entity);
 
     // Método para eliminar una foto por ID
     @Override
     void deleteById(Long id);
 
     // Método personalizado para buscar fotos por código
-    List<Photo> findByCode(String code);
+    List<Media> findByCode(String code);
 
     // Método personalizado para encontrar todas las fotos de una habitación específica
-    @Query("SELECT p FROM Photo p JOIN RoomPhoto rp ON p.id = rp.photoId WHERE rp.roomId = :roomId")
-    List<Photo> findAllByRoomId(Integer roomId);
+    @Query("SELECT p FROM Media p JOIN RoomMedia rp ON p.id = rp.mediaId WHERE rp.roomId = :roomId")
+    List<Media> findAllByRoomId(Integer roomId);
 }
 
 

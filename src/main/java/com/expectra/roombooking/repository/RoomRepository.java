@@ -1,7 +1,8 @@
 package com.expectra.roombooking.repository;
 
+import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
-import com.expectra.roombooking.model.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -31,16 +32,25 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Override
     void deleteById(Long id);
 
-    // Método personalizado para buscar habitaciones por hotel ID
+    // Método personalizado para buscar todas las habitaciones por hotel ID
     List<Room> findByHotelId(Long hotelId);
 
     // Método personalizado para buscar habitaciones por tamaño
     List<Room> findBySize(Integer size);
 
-    // Método personalizado para encontrar todas las habitaciones de un hotel específico
-    List<Room> findAllByHotelIdAndRoomType(Long hotelId, Integer roomType);
+    // Método personalizado para encontrar todas las habitaciones de un tipo especifico de un hotel
+    List<Room> findAllRoomsByHotelIdAndRoomType(Long hotelId, String roomType);
 
 
-    // Método personalizado para encontrar todas las mmedias de una habitacion específica
-    List<Video> getAllMediasByHotelIdAndRoomCode(Long hotelId, Integer roomCode);
+    // Método personalizado para encontrar todas las medias de una habitacion específica
+    List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId);
+
+    // Método personalizado para encontrar todas las medias de una habitacion específica
+    List<Media> getAllMediasByHotelIdAndRoomType(Long hotelId, String roomType);
+
+    // Método personalizado para encontrar todas las amenities de una habitacion específica
+    List<Amenity> getAllAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId);
+
+    // Método personalizado para encontrar todas las amenities de un tipo de habitacion específica
+    List<Amenity> getAllAmenitiesByHotelIdAndRoomType(Long hotelId, String roomType);
 }

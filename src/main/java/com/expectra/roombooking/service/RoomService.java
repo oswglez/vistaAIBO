@@ -1,13 +1,15 @@
 package com.expectra.roombooking.service;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
-import com.expectra.roombooking.model.Video;
 import com.expectra.roombooking.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.Media;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +39,7 @@ public class RoomService {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
 
-        room.setNumber(roomDetails.getNumber());
-        room.setCode(roomDetails.getCode());
+        room.setRoomType(roomDetails.getRoomType());
         room.setSize(roomDetails.getSize());
 
         return roomRepository.save(room);
@@ -51,6 +52,7 @@ public class RoomService {
     }
     // Método personalizado para encontrar todas las habitaciones de un hotel específico
    public  List<Room> findAllAvailableRooms(Long hotelId, Long roomId){
+        List<Room> availableOracle = new ArrayList<>();
 //
 // buscar reservacion por hotelId &  reservarionId
 // se accede a el API de oracle que nos devuelve el roomType y la fechaReservada
@@ -62,19 +64,29 @@ public class RoomService {
 // se accede a el API de oracle con hotelId, roomType y fecha de la reservacion  y
 // nos devuelve una lista de las habitaciones disponibles
 //
-        return roomRepository.findAllByHotelIdAndRoomType(hotelId, roomType);
+        return availableOracle;
    }
 
 
 // Método personalizado para encontrar todas los medias de una habitación específica
-    public  List<Video> getMediaByRoomCode(Long hotelId, Integer roomCode){
+    public  List<Media> getMediaByHotelIdAndRoomId(Long hotelId, Long roomId) {
 //
 // buscar directamente en la base de datos de medias
 //
-        return roomRepository.getAllMediasByHotelIdAndRoomCode(hotelId, roomCode);
+        return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
     }
+
+    // Método personalizado para encontrar todas los medias de un tipo de habitación específica
+    public  List<Media>getMediaByRoomType(Long hotelId, String roomType) {
+//
+// buscar directamente en la base de datos de medias
+//
+        return roomRepository.getAllMediasByHotelIdAndRoomType(hotelId, roomType);
+    }
+
+
     // Método personalizado para encontrar todas los amenities de un hotel específico
-    public  List<Room> findRoomAmenities(Long hotelId, Integer roomType){
+    public  List<Amenity> getAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId){
 //
 // buscar reservacion por hotelId &  reservasionId
 // se accede a el API de oracle que nos devuelve el roomType y la fechaReservada
@@ -86,7 +98,23 @@ public class RoomService {
 // se accede a el API de oracle con hotelId, roomType y fecha de la reservacion  y
 // nos devuelve una lista de las habitaciones disponibles
 //
-        return roomRepository.findAllByHotelIdAndRoomType(hotelId, roomType);
+        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
+    }
+
+    // Método personalizado para encontrar todas los amenities de un hotel específico
+    public  List<Amenity> getAmenitiesByHotelIdAndRoomType(Long hotelId, String roomType){
+//
+// buscar reservacion por hotelId &  reservasionId
+// se accede a el API de oracle que nos devuelve el roomType y la fechaReservada
+//
+
+
+//
+// buscar habitaciones disponibles de ese tipo para esa fecha
+// se accede a el API de oracle con hotelId, roomType y fecha de la reservacion  y
+// nos devuelve una lista de las habitaciones disponibles
+//
+        return roomRepository.getAllAmenitiesByHotelIdAndRoomType(hotelId, roomType);
     }
 }
 

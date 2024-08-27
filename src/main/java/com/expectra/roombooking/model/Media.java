@@ -1,5 +1,6 @@
 package com.expectra.roombooking.model;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 
-public class Amenity {
+public class Media {
 
     @jakarta.persistence.Id
     @Id
@@ -20,23 +21,21 @@ public class Amenity {
 
     private Long id;
 
+    private String mediaType;
 
-
-    private String code;
-
-    private String description;
-
-
-
-    @OneToMany(mappedBy = "amenity")
-
-    private List<HotelAmenity> hotelAmenities;
+    private String url;
 
 
 
-    @OneToMany(mappedBy = "amenity")
+    @OneToMany(mappedBy = "media")
 
-    private List<RoomAmenity> roomAmenities;
+    private List<RoomMedia> roomMedia;
+
+
+
+    @OneToMany(mappedBy = "media")
+
+    private List<HotelMedia> hotelMedia;
 
     // Getters and setters
 

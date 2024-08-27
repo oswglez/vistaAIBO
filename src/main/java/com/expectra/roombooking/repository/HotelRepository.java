@@ -2,7 +2,6 @@ package com.expectra.roombooking.repository;
 
 import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Hotel;
-import com.expectra.roombooking.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -38,7 +37,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     // Método personalizado para buscar hoteles por categoría
     List<Hotel> findByCategory(String category);
 
-    // Método personalizado para encontrar todas las habitaciones de un hotel específico
+    // Método personalizado para encontrar todas las amenities de un hotel específico
     List<Amenity> findAllByHotelIdAndAmenities(Long hotelId);
 }
 

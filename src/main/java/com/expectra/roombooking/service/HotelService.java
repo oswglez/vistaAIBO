@@ -35,9 +35,8 @@ public class HotelService {
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found"));
 
         hotel.setName(hotelDetails.getName());
-        hotel.setCategory(hotelDetails.getCategory());
-        hotel.setRoomQty(hotelDetails.getRoomQty());
-        hotel.setStories(hotelDetails.getStories());
+        hotel.setRoomCount(hotelDetails.getRoomCount());
+        hotel.setFullAddress(hotelDetails.getFullAddress());
 
         return hotelRepository.save(hotel);
     }
@@ -47,4 +46,6 @@ public class HotelService {
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found"));
         hotelRepository.delete(hotel);
     }
+
+
 }

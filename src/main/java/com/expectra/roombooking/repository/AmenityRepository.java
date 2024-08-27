@@ -32,4 +32,7 @@ public interface  AmenityRepository extends JpaRepository<Amenity, Long> {
 
     // Método personalizado para buscar amenidades por código
     List<Amenity> findByCode(String code);
+
+    // Método personalizado para buscar amenidades por código
+    List<Amenity> findAllAmenitiesByHotelId(Long hotelId);
 }
