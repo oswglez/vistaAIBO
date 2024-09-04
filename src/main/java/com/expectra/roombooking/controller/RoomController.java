@@ -2,7 +2,6 @@ package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.repository.RoomRepository;
 import com.expectra.roombooking.service.RoomService;
@@ -16,17 +15,9 @@ import java.util.List;
 @RequestMapping(value = "room")
 public class RoomController {
 
-    private final RoomRepository roomRepository;
-
-    @Value("${spring.application.name}")
-    String appName;
-
     @Autowired
     RoomService roomService;
 
-    public RoomController(HotelRepository hotelRepository, RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
-    }
 
     // Métodos...
 

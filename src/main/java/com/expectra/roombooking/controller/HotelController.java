@@ -4,7 +4,6 @@ import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
-import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.service.HotelService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +20,6 @@ import java.util.Optional;
 public class HotelController {
 
     private final HotelService hotelService;
-    @Value("${spring.application.name}")
-    String appName;
-
     public HotelController(HotelService hotelService) {
         this.hotelService= hotelService;
     }

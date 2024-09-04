@@ -1,10 +1,7 @@
 package com.expectra.roombooking.repository;
 
-import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
