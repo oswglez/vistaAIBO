@@ -2,42 +2,41 @@ package com.expectra.roombooking.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import java.util.List;
+
+import java.util.Set;
+
 @Data
 @Entity
-
+@Table(name = "room")
 public class Room {
-
     @jakarta.persistence.Id
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-
-    @JoinColumn(name = "hotel_id")
-
-    private Hotel hotel;
+    private Long roomId;
 
     private String roomType;
-
     private String size;
 
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private Hotel hotel;
 
+    @ManyToMany
+    @JoinTable(
+            name = "room_amenity",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id")
+    )
+    private Set<Amenity> amenities;
 
-    @OneToMany(mappedBy = "room")
-
-    private List<RoomMedia> roomMedia;
-
-
-
-    @OneToMany(mappedBy = "room")
-
-    private List<RoomAmenity> roomAmenities;
+    @ManyToMany
+    @JoinTable(
+            name = "room_media",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "media_id")
+    )
+    private Set<Media> media;
 
 
     // Getters and setters
-
 }

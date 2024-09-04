@@ -1,40 +1,45 @@
 package com.expectra.roombooking.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import java.util.List;
+
+import java.util.Set;
+
 @Data
 @Entity
-    public class Hotel {
-
+@Table(name = "hotel")
+public class Hotel {
     @jakarta.persistence.Id
-    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long hotelId;
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String name;
+    private Integer roomCount;
+    private String fullAddress;
 
-        private Long id;
-        private String name;
-        private Integer roomCount;
-        private String fullAddress;
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Room> rooms;
 
-        @OneToMany(mappedBy = "hotel")
+    @ManyToMany
+    @JoinTable(
+            name = "hotel_amenity",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id")
+    )
+    private Set<Amenity> amenities;
 
-        private List<Room> rooms;
+    @ManyToMany
+    @JoinTable(
+            name = "hotel_media",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "media_id")
+    )
+    private Set<Media> medias;
 
-        @OneToMany(mappedBy = "hotel")
-
-        private List<HotelMedia> hotelMedia;
-
-        @OneToMany(mappedBy = "hotel")
-
-        private List<HotelAmenity> hotelAmenities;
 
 
     // Getters and setters
+}
 
-    }
+

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,14 +67,16 @@ public class RoomService {
    }
 
 
-// Metodo personalizado para encontrar todas los medias de una habitación específica
-    public  List<Media> getMediaByHotelIdAndRoomId(Long hotelId, Long roomId) {
+    // Metodo personalizado para encontrar todas los medias de una habitación específica
+    // public  List<Media> getMediaByHotelIdAndRoomId(Long hotelId, Long roomId) {
+    public  List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId) {
+
 //
 // buscar directamente en la base de datos de medias
 //
         return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
     }
-
+    
     // Metodo personalizado para encontrar todas los medias de un tipo de habitación específica
     public  List<Media>getMediaByRoomType(Long hotelId, String roomType) {
 //

@@ -53,6 +53,6 @@ public class AmenityService {
     public List<Amenity> getAllAmenitiesByHotel(Long hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found"));
-        return amenityRepository.findAllAmenitiesByHotelId(hotelId);
+        return amenityRepository.getAllByHotelsContains(hotel);
     }
 }

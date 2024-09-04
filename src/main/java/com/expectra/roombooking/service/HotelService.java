@@ -1,7 +1,10 @@
 package com.expectra.roombooking.service;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Hotel;
+import com.expectra.roombooking.model.Media;
+import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +49,15 @@ public class HotelService {
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found"));
         hotelRepository.delete(hotel);
     }
+    public  List<Room> getAllRoomsByHotelId(Long hotelId){
+        return hotelRepository.findAllRoomsByHotelId(hotelId);
+    }
 
+    public  List<Amenity> getAmenitiesByHotelId(Long hotelId){
+        return hotelRepository.findAllAmenitiesByHotelId(hotelId);
+    }
 
+    public  List<Media> getMediasByHotelId(Long hotelId){
+        return hotelRepository.findAllMediasByHotelId(hotelId);
+    }
 }

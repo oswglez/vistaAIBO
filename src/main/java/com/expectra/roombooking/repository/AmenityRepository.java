@@ -1,6 +1,8 @@
 package com.expectra.roombooking.repository;
 
 import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.Hotel;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,11 +30,14 @@ public interface  AmenityRepository extends JpaRepository<Amenity, Long> {
 
     // Metodo para eliminar una amenidad por ID
     @Override
-    void deleteById(Long id);
+    void deleteById(Long amenityId);
 
     // Metodo personalizado para buscar amenidades por código
-    List<Amenity> findByCode(String code);
+    List<Amenity> getAmenitiesByCode(String code);
 
     // Metodo personalizado para buscar amenidades por código
-    List<Amenity> findAllAmenitiesByHotelId(Long hotelId);
+
+
+    List<Amenity> getAllByHotelsContains(Hotel hotel);
+
 }
