@@ -1,11 +1,11 @@
 package com.expectra.roombooking.controller;
 
+import com.expectra.roombooking.dto.RoomsByHotelIdResponseDTO;
 import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.service.HotelService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +31,21 @@ public class HotelController {
         return ResponseEntity.ok(hotel);
     }
     @GetMapping("{hotelId}/rooms")
-    public ResponseEntity<List<Room>> getRoomsByHotelId(
+    public ResponseEntity<List<Room>> getAllRoomsByHotelId(
             @PathVariable Long hotelId) {
         List<Room> rooms = hotelService.getAllRoomsByHotelId(hotelId);
         if (rooms.isEmpty()) {
             return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(rooms);
+    }
+    @GetMapping("{hotelId}/{reservationId}/available")
+    public ResponseEntity<RoomsByHotelIdResponseDTO> getAvailableRoomsByHotelId(
+            @PathVariable Long hotelId,
+            @PathVariable Long reservationId) {
+        RoomsByHotelIdResponseDTO rooms = hotelService.getAvailableRoomsByHotelId(hotelId, reservationId);
+        if (rooms == null) { // Verifica si la respuesta es null
+            return ResponseEntity.noContent().build(); // Retorna un 204 No Content
         }
         return ResponseEntity.ok(rooms);
     }

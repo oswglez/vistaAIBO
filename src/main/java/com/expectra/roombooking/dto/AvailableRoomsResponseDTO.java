@@ -1,6 +1,6 @@
 package com.expectra.roombooking.dto;
 
-public class reservationResponseDTO {
+public class AvailableRoomsResponseDTO {
     String arrivalDate;
     String departureDate;
     String arrivalTime;

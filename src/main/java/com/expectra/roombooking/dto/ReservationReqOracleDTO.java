@@ -1,6 +1,6 @@
 package com.expectra.roombooking.dto;
 
-public class reservationReqOracleDTO {
+public class ReservationReqOracleDTO {
     String reservationId;
     String hotelId;
     String fetchInstructions;
