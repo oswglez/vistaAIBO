@@ -1,7 +1,6 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.service.RoomService;
