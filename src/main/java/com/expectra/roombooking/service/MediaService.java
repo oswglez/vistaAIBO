@@ -3,6 +3,7 @@ package com.expectra.roombooking.service;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.repository.MediaRepository;
+import jakarta.persistence.Column;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -35,7 +36,9 @@ public class MediaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Media not found"));
 
         media.setMediaType(mediaDetails.getMediaType());
-        media.setUrl(mediaDetails.getUrl());
+        media.setMediaUrl(mediaDetails.getMediaUrl());
+        media.setMediaCode(mediaDetails.getMediaCode());
+        media.setMediaDescription(mediaDetails.getMediaDescription());
 
         return mediaRepository.save(media);
     }

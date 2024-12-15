@@ -5,6 +5,10 @@ import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.repository.RoomRepository;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +42,8 @@ public class RoomService {
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
 
         room.setRoomType(roomDetails.getRoomType());
-        room.setSize(roomDetails.getSize());
-
+        room.setRoomName(roomDetails.getRoomName());
+        room.setRoomNumber(roomDetails.getRoomNumber());
         return roomRepository.save(room);
     }
 

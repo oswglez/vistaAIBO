@@ -3,10 +3,7 @@ package com.expectra.roombooking.service;
 import com.expectra.roombooking.dto.ReservationResponseDTO;
 import com.expectra.roombooking.dto.RoomsByHotelIdResponseDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.Hotel;
-import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.model.Room;
+import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.repository.HotelRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import java.util.List;
 import java.util.Optional;
 
-//import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @Slf4j
 @Service
 public class HotelService {
@@ -48,9 +44,17 @@ public class HotelService {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found"));
 
-        hotel.setName(hotelDetails.getName());
-        hotel.setRoomCount(hotelDetails.getRoomCount());
-        hotel.setFullAddress(hotelDetails.getFullAddress());
+        hotel.setHotelName(hotelDetails.getHotelName());
+        hotel.setHotelAddress(hotelDetails.getHotelAddress());
+        hotel.setLocalPhone(hotelDetails.getLocalPhone());
+        hotel.setCelularPhone(hotelDetails.getCelularPhone());
+        hotel.setPmsVendor(hotelDetails.getPmsVendor());
+        hotel.setPmsHotelId(hotelDetails.getPmsHotelId());
+        hotel.setPmsToken(hotelDetails.getPmsToken());
+        hotel.setCrsVendor(hotelDetails.getCrsVendor());
+        hotel.setCrsHotelId(hotelDetails.getCrsHotelId());
+        hotel.setCrsToken(hotelDetails.getCrsToken());
+        hotel.setDisclaimer(hotelDetails.getDisclaimer());
 
         return hotelRepository.save(hotel);
     }
@@ -64,7 +68,7 @@ public class HotelService {
     public RoomsByHotelIdResponseDTO getAvailableRoomsByHotelId(Long hotelId, Long reservationId){
 // Paso1 con el hotel y la reservacion busco los datos de la habitacion en el PMS
         RoomsByHotelIdResponseDTO responseDTO = new RoomsByHotelIdResponseDTO();
-        log.warn("### Estoy en el get");
+//        log.warn("### Estoy en el get");
     try{
         ReservationResponseDTO response = this.webClient.get()
                 .uri("http://localhost:8090/hotel/{hotelId}/{id}", hotelId, reservationId) // URLs específicas por cada solicitud

@@ -34,15 +34,16 @@ public class AmenityService {
         return amenityRepository.findById(id);
     }
 
-    public Amenity updateAmenity(Long id, Amenity amenityDetails) {
-        Amenity amenity = amenityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found"));
+        public Amenity updateAmenity(Long id, Amenity amenityDetails) {
+            Amenity amenity = amenityRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Amenity not found"));
 
-        amenity.setCode(amenityDetails.getCode());
-        amenity.setDescription(amenityDetails.getDescription());
+            amenity.setAmenityCode(amenityDetails.getAmenityCode());
+            amenity.setAmenityDescription(amenityDetails.getAmenityDescription());
+            amenity.setAmenityType(amenityDetails.getAmenityType());
 
-        return amenityRepository.save(amenity);
-    }
+            return amenityRepository.save(amenity);
+        }
 
     public void deleteAmenity(Long id) {
         Amenity amenity = amenityRepository.findById(id)

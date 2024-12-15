@@ -1,42 +1,48 @@
 package com.expectra.roombooking.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
-
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Set;
 
-@Data
 @Entity
-@Table(name = "room")
+@Table(name="Room")
+@Getter
+@Setter
 public class Room {
-    @jakarta.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="room_id")
     private Long roomId;
 
-    private String roomType;
-    private String size;
+    @Column(name="room_number", nullable=false)
+    private Integer roomNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @Column(name="room_type", nullable=false) // Tipo de habitación, puedes definir un Enum si es necesario.
+    private Integer roomType;
+
+    @Column(name="room_name")
+    private String roomName;
+
+    // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="hotel_id", nullable=false) // Clave foránea hacia Hotel.
     private Hotel hotel;
 
+    // Relación con Amenity a través de la tabla intermedia room_amenity.
     @ManyToMany
     @JoinTable(
-            name = "room_amenity",
-            joinColumns = @JoinColumn(name = "room_id"),
-            inverseJoinColumns = @JoinColumn(name = "amenity_id")
-    )
-    private Set<Amenity> amenities;
+            name="room_amenity",
+            joinColumns=@JoinColumn(name="room_id"),
+            inverseJoinColumns=@JoinColumn(name="amenity_id"))
+    private Set<Amenity> amenities; // Relación con Amenity
 
+    // Relación con Media a través de la tabla intermedia room_media.
     @ManyToMany
     @JoinTable(
-            name = "room_media",
-            joinColumns = @JoinColumn(name = "room_id"),
-            inverseJoinColumns = @JoinColumn(name = "media_id")
-    )
-    private Set<Media> media;
-
-
-    // Getters and setters
+            name="room_media",
+            joinColumns=@JoinColumn(name="room_id"),
+            inverseJoinColumns=@JoinColumn(name="media_id"))
+    private Set<Media> media; // Relación con Media
 }

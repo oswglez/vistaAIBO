@@ -2,30 +2,39 @@ package com.expectra.roombooking.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.Check;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Data
 @Entity
-@Table(name = "media")
-@Check(constraints = "media_type IN ('IMAGE', 'VIDEO', 'AUDIO')")
+@Table(name="Media")
+@Data
 public class Media {
-
-    @Id // Solo usa jakarta.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="media_id")
     private Long mediaId;
+
+    @Column(name="media_code", nullable=false)
+    private Integer mediaCode;
+
+    @Column(name="media_type")
     private String mediaType;
-    private String url;
 
-    @ManyToMany(mappedBy = "medias")
-    private Set<Hotel> hotels = new LinkedHashSet<>(); // Usa java.util.Set
+    @Column(name="media_description")
+    private String mediaDescription;
 
-    @ManyToMany(mappedBy = "media")
-    private Set<Room> rooms = new LinkedHashSet<>(); // Usa java.util.Set
+    @Column(name="media_url")
+    private String mediaUrl;
 
-    // No necesitas otra relación con el mismo nombre (hotels) y tipo diferente
+
+    // Relación con Hotel a través de la tabla intermedia hotel_media
+    @ManyToMany(mappedBy="media")
+    private Set<Hotel> hotels;
+
+    // Relación con Room a través de la tabla intermedia room_media
+    @ManyToMany(mappedBy="media")
+    private Set<Room> rooms;
+
 
     // Getters and setters (Lombok se encarga con @Data)
 }
