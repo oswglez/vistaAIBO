@@ -33,7 +33,7 @@ public class Hotel {
     private Long pmsHotelId;
 
     @Column(name = "pms_token")
-    private Long pmsToken;
+    private String pmsToken;
 
     @Column(name = "crs_vendor")
     private String crsVendor;
@@ -42,13 +42,17 @@ public class Hotel {
     private Long crsHotelId;
 
     @Column(name = "crs_token")
-    private Long crsToken;
+    private String crsToken;
 
     @Column(name = "disclaimer")
     private String disclaimer;
-
-
-
+    @ManyToMany
+    @JoinTable(
+            name = "hotel_contact",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "contact_id")
+    )
+    private Set<Contact> contacts;
 
     @ManyToMany
     @JoinTable(

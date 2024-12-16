@@ -32,7 +32,7 @@ public interface  AmenityRepository extends JpaRepository<Amenity, Long> {
     void deleteById(Long amenityId);
 
     // Metodo personalizado para buscar amenidades por código
-    List<Amenity> getAmenitiesByCode(String code);
+    List<Amenity> getAmenitiesByAmenityCode(Integer code);
 
     // Metodo personalizado para buscar amenidades por código
 

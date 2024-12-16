@@ -35,10 +35,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     void deleteById(Long roomId);
 
     // Metodo personalizado para buscar todas las habitaciones por hotel ID
- //   List<Room> getAllByHotelId(Long hotelId);   **** verificar ****
+    List<Room> getRoomByHotelId(Long hotelId);
 
-    // Metodo personalizado para buscar habitaciones por tamaño
-    List<Room> getRoomBySize(String size);
+//    // Metodo personalizado para buscar habitaciones por tamaño
+//    List<Room> getRoomBySize(String size);
 
 
     // Metodo personalizado para encontrar todas las medias de una habitacion específica

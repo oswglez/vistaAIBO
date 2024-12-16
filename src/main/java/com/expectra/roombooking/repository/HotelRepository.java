@@ -37,7 +37,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     void deleteById(Long id);
 
     // Metodo personalizado para buscar hoteles por nombre
-    List<Hotel> findByName(String name);
+    List<Hotel> findByHotelName(String hotelName);
 
     @Query("SELECT r FROM Room r WHERE r.hotel.hotelId = :hotelId")
     List<Room> findAllRoomsByHotelId(Long hotelId);

@@ -35,8 +35,9 @@ public class Contact {
     @Column(name = "contact_email", nullable = false)
     private String contactEmail;
 
-    @Column(name = "address_id", nullable = false)
-    private String addresId;
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
 
     // Relación con Hotel a través de la tabla intermedia hotel_contact
     @ManyToMany(mappedBy = "contacts")
