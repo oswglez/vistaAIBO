@@ -2,76 +2,26 @@ package com.expectra.roombooking.service;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.repository.RoomRepository;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-@Service
-public class RoomService {
-
-    private final RoomRepository roomRepository;
-
-    @Autowired
-    public RoomService(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
-    }
-
-    public Room createRoom(Room room) {
-        return roomRepository.save(room);
-    }
-
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
-    }
-
-    public Optional<Room> getRoomById(Long id) {
-        return roomRepository.findById(id);
-    }
-
-    public Room updateRoom(Long id, Room roomDetails) {
-        Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
-
-        room.setRoomType(roomDetails.getRoomType());
-        room.setRoomName(roomDetails.getRoomName());
-        room.setRoomNumber(roomDetails.getRoomNumber());
-        return roomRepository.save(room);
-    }
-
-    public void deleteRoom(Long id) {
-        Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
-        roomRepository.delete(room);
-    }
-    // Metodo personalizado para encontrar todas los medias de una habitación específica
-    public  List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId) {
-        return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
-    }
-
-    // Metodo personalizado para encontrar todas los medias de un tipo de habitación específica
-    public  List<Media>getMediaByRoomType(Long hotelId, String roomType) {
-        return roomRepository.getAllMediasByHotelIdAndRoomType(hotelId, roomType);
-    }
-
-
-    // Metodo personalizado para encontrar todas los amenities de un hotel específico
-    public  List<Amenity> getAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId){
-        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
-    }
-
-    // Metodo personalizado para encontrar todas los amenities de un hotel específico
-    public  List<Amenity> getAmenitiesByHotelIdAndRoomType(Long hotelId, String roomType){
-
-        return roomRepository.getAllAmenitiesByHotelIdAndRoomType(hotelId, roomType);
-    }
+// RoomServiceImpl.java
+// RoomService.java
+public interface RoomService {
+    Room saveRoom(Room room);
+    void deleteRoom(Room room);
+    void deleteRoomById(Long roomId);
+    List<Room> getRoomsByHotelId(Long hotelId);
+    List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId);
+    List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId);
+    List<Media> getRoomMediaByHotelAndType(Long hotelId, String roomType);
+    List<Amenity> getRoomAmenitiesByHotelAndType(Long hotelId, String roomType);
+    Optional<Room> getRoomById(Long roomId);
 }
-

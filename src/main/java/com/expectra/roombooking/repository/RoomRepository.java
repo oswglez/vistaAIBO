@@ -14,14 +14,6 @@ import java.util.Optional;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    // Metodo para buscar todas las habitaciones
-    @Override
-    List<Room> findAll();
-
-    // Metodo para buscar una habitación por ID
-    @Override
-    Optional<Room> findById(Long roomId);
-
     // Metodo para guardar una habitación (crear o actualizar)
     @Override
     <S extends Room> S save(S entity);
@@ -36,10 +28,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     // Metodo personalizado para buscar todas las habitaciones por hotel ID
     List<Room> getRoomByHotelId(Long hotelId);
-
-//    // Metodo personalizado para buscar habitaciones por tamaño
-//    List<Room> getRoomBySize(String size);
-
 
     // Metodo personalizado para encontrar todas las medias de una habitacion específica
     @Query("SELECT m FROM Media m JOIN m.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomId = :roomId")

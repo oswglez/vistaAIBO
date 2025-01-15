@@ -1,11 +1,12 @@
 package com.expectra.roombooking.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+
 import java.util.Set;
 
 @Entity
-@Table(name = "Hotel")
+@Table(name = "hotel")
 @Data
 public class Hotel {
     @Id
@@ -17,7 +18,7 @@ public class Hotel {
     private String hotelName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_address_id", nullable = false) // Clave foránea hacia Address
+    @JoinColumn(name = "hotel_address_id", nullable = false)
     private Address hotelAddress;
 
     @Column(name = "local_phone")
@@ -33,7 +34,7 @@ public class Hotel {
     private Long pmsHotelId;
 
     @Column(name = "pms_token")
-    private String pmsToken;
+    private String pmsToken; // Cambiado de Long a String
 
     @Column(name = "crs_vendor")
     private String crsVendor;
@@ -42,11 +43,12 @@ public class Hotel {
     private Long crsHotelId;
 
     @Column(name = "crs_token")
-    private String crsToken;
+    private String crsToken; // Cambiado de Long a String
 
     @Column(name = "disclaimer")
     private String disclaimer;
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "hotel_contact",
             joinColumns = @JoinColumn(name = "hotel_id"),
@@ -54,19 +56,19 @@ public class Hotel {
     )
     private Set<Contact> contacts;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name="hotel_amenity",
-            joinColumns=@JoinColumn(name="hotel_id"),
-            inverseJoinColumns=@JoinColumn(name="amenity_id"))
-    private Set<Amenity> amenities; // Relación con Amenity
+            name = "hotel_amenity",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id")
+    )
+    private Set<Amenity> amenities;
 
-    // Relación con Media a través de la tabla intermedia hotel_media
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name="hotel_media",
-            joinColumns=@JoinColumn(name="hotel_id"),
-            inverseJoinColumns=@JoinColumn(name="media_id"))
-    private Set<Media> media; // Relación con Media
+            name = "hotel_media",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "media_id")
+    )
+    private Set<Media> media;
 }
-

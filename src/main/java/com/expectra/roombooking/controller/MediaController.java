@@ -3,8 +3,6 @@ package com.expectra.roombooking.controller;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.service.MediaService;
-import com.expectra.roombooking.service.HotelService;
-import com.expectra.roombooking.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,34 +15,22 @@ import java.util.List;
 public class MediaController {
 
     private final MediaService mediaService;
-    private final HotelService hotelService;
-    private final RoomService roomService;
 
     @Autowired
-    public MediaController(MediaService mediaService, HotelService hotelService, RoomService roomService) {
+    public MediaController(MediaService mediaService) {
         this.mediaService = mediaService;
-        this.hotelService = hotelService;
-        this.roomService = roomService;
     }
 
     // Create a new Media
     @PostMapping
-    public ResponseEntity<Media> createMedia(@RequestParam(required = false) Long hotelId,
-                                             @RequestParam(required = false) Long roomId,
-                                             @RequestBody Media media) {
+    public ResponseEntity<Media> createMedia(
+            @RequestParam(required = false) Long hotelId,
+            @RequestParam(required = false) Long roomId,
+            @RequestBody Media media) {
         if (hotelId == null && roomId == null) {
             throw new IllegalArgumentException("Either hotelId or roomId must be provided");
         }
-
-        if (roomId != null) {
-            roomService.getRoomById(roomId).orElseThrow(() ->
-                    new ResourceNotFoundException("Room not found with id: " + roomId));
-        } else {
-            hotelService.getHotelById(hotelId).orElseThrow(() ->
-                    new ResourceNotFoundException("Hotel not found with id: " + hotelId));
-        }
-
-        Media createdMedia = mediaService.createMedia(media);
+        Media createdMedia = mediaService.createMedia(media, hotelId, roomId);
         return new ResponseEntity<>(createdMedia, HttpStatus.CREATED);
     }
 
@@ -61,6 +47,20 @@ public class MediaController {
         return mediaService.getMediaById(id)
                 .map(media -> new ResponseEntity<>(media, HttpStatus.OK))
                 .orElseThrow(() -> new ResourceNotFoundException("Media not found with id: " + id));
+    }
+
+    // Get all Media for a specific Room
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<List<Media>> getAllMediaByRoomId(@PathVariable Long roomId) {
+        List<Media> mediaList = mediaService.getAllMediaByRoomId(roomId);
+        return new ResponseEntity<>(mediaList, HttpStatus.OK);
+    }
+
+    // Get all Media for a specific Hotel
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<Media>> getAllMediaByHotelId(@PathVariable Long hotelId) {
+        List<Media> mediaList = mediaService.getAllMediaByHotelId(hotelId);
+        return new ResponseEntity<>(mediaList, HttpStatus.OK);
     }
 
     // Update Media

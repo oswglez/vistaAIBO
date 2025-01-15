@@ -2,8 +2,8 @@ package com.expectra.roombooking.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.HashSet;
 import java.util.Set;
-
 
 @Entity
 @Table(name = "Contact")
@@ -39,7 +39,17 @@ public class Contact {
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    // Relación con Hotel a través de la tabla intermedia hotel_contact
     @ManyToMany(mappedBy = "contacts")
-    private Set<Hotel> hotels;
+    private Set<Hotel> hotels = new HashSet<>();
+
+    // Métodos de utilidad para manejar la relación
+    public void addHotel(Hotel hotel) {
+        this.hotels.add(hotel);
+        hotel.getContacts().add(this);
+    }
+
+    public void removeHotel(Hotel hotel) {
+        this.hotels.remove(hotel);
+        hotel.getContacts().remove(this);
+    }
 }

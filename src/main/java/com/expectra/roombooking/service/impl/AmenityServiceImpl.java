@@ -1,0 +1,133 @@
+package com.expectra.roombooking.service.impl;
+
+import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.Hotel;
+import com.expectra.roombooking.model.Room;
+import com.expectra.roombooking.repository.AmenityRepository;
+import com.expectra.roombooking.repository.HotelRepository;
+import com.expectra.roombooking.repository.RoomRepository;
+import com.expectra.roombooking.service.AmenityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class AmenityServiceImpl implements AmenityService {
+
+    private final AmenityRepository amenityRepository;
+    private final HotelRepository hotelRepository;
+    private final RoomRepository roomRepository;
+
+    @Autowired
+    public AmenityServiceImpl(AmenityRepository amenityRepository,
+                              HotelRepository hotelRepository,
+                              RoomRepository roomRepository) {
+        this.amenityRepository = amenityRepository;
+        this.hotelRepository = hotelRepository;
+        this.roomRepository = roomRepository;
+    }
+
+    @Override
+    @Transactional
+    public Amenity createAmenity(Long hotelId, Amenity amenity) {
+        if (hotelId != null) {
+            Hotel hotel = hotelRepository.findById(hotelId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
+            amenity.getHotels().add(hotel);
+        }
+        return amenityRepository.save(amenity);
+    }
+
+    @Override
+    public Optional<Amenity> getAmenityById(Long id) {
+        return amenityRepository.findById(id);
+    }
+
+    @Override
+    public List<Amenity> getAllAmenities() {
+        return amenityRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Amenity updateAmenity(Long id, Amenity amenityDetails) {
+        Amenity amenity = amenityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + id));
+
+        amenity.setAmenityCode(amenityDetails.getAmenityCode());
+        amenity.setAmenityType(amenityDetails.getAmenityType());
+        amenity.setAmenityDescription(amenityDetails.getAmenityDescription());
+
+        return amenityRepository.save(amenity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAmenity(Long id) {
+        Amenity amenity = amenityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + id));
+        amenityRepository.delete(amenity);
+    }
+
+    @Override
+    public List<Amenity> getAmenitiesByRoomId(Long roomId) {
+        return amenityRepository.findAllAmenitiessByRoomId(roomId);
+    }
+
+    @Override
+    public List<Amenity> getAmenitiesByHotelId(Long hotelId) {
+        return amenityRepository.findAllAmenitiesByHotelId(hotelId);
+    }
+
+    @Override
+    @Transactional
+    public Amenity addAmenityToRoom(Long roomId, Long amenityId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
+        Amenity amenity = amenityRepository.findById(amenityId)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + amenityId));
+
+        amenity.getRooms().add(room);
+        return amenityRepository.save(amenity);
+    }
+
+    @Override
+    @Transactional
+    public Amenity addAmenityToHotel(Long hotelId, Long amenityId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
+        Amenity amenity = amenityRepository.findById(amenityId)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + amenityId));
+
+        amenity.getHotels().add(hotel);
+        return amenityRepository.save(amenity);
+    }
+
+    @Override
+    @Transactional
+    public void removeAmenityFromRoom(Long roomId, Long amenityId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
+        Amenity amenity = amenityRepository.findById(amenityId)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + amenityId));
+
+        amenity.getRooms().remove(room);
+        amenityRepository.save(amenity);
+    }
+
+    @Override
+    @Transactional
+    public void removeAmenityFromHotel(Long hotelId, Long amenityId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
+        Amenity amenity = amenityRepository.findById(amenityId)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + amenityId));
+
+        amenity.getHotels().remove(hotel);
+        amenityRepository.save(amenity);
+    }
+}

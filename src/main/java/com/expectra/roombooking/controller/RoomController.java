@@ -1,6 +1,9 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.Hotel;
+import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.service.RoomService;
 import com.expectra.roombooking.service.HotelService;
@@ -27,19 +30,12 @@ public class RoomController {
     // Create a new Room
     @PostMapping
     public ResponseEntity<Room> createRoom(@RequestParam Long hotelId, @RequestBody Room room) {
-        hotelService.getHotelById(hotelId).orElseThrow(() ->
-                new ResourceNotFoundException("Hotel not found with id: " + hotelId));
+        Hotel hotel = hotelService.findHotelById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
-//        room.setHotelId(hotelId); // Assuming Room has a hotelId field
-        Room createdRoom = roomService.createRoom(room);
-        return new ResponseEntity<>(createdRoom, HttpStatus.CREATED);
-    }
-
-    // Get all Rooms
-    @GetMapping
-    public ResponseEntity<List<Room>> getAllRooms() {
-        List<Room> rooms = roomService.getAllRooms();
-        return new ResponseEntity<>(rooms, HttpStatus.OK);
+        room.setHotel(hotel);
+        Room savedRoom = roomService.saveRoom(room);
+        return new ResponseEntity<>(savedRoom, HttpStatus.CREATED);
     }
 
     // Get Room by ID
@@ -50,27 +46,66 @@ public class RoomController {
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
     }
 
+    // Get Rooms by Hotel ID
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<Room>> getRoomsByHotelId(@PathVariable Long hotelId) {
+        List<Room> rooms = roomService.getRoomsByHotelId(hotelId);
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
+    }
+
     // Update Room
     @PutMapping("/{id}")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
-        Room updatedRoom = roomService.updateRoom(id, roomDetails);
+        Room existingRoom = roomService.getRoomById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
+
+        // Actualizar los campos necesarios
+        existingRoom.setRoomNumber(roomDetails.getRoomNumber());
+        existingRoom.setRoomType(roomDetails.getRoomType());
+        existingRoom.setRoomName(roomDetails.getRoomName());
+        existingRoom.setAmenities(roomDetails.getAmenities());
+        existingRoom.setMedia(roomDetails.getMedia());
+
+        Room updatedRoom = roomService.saveRoom(existingRoom);
         return new ResponseEntity<>(updatedRoom, HttpStatus.OK);
     }
 
     // Delete Room
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
-        roomService.deleteRoom(id);
+        roomService.deleteRoomById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Get Rooms by Hotel ID                                    **DESARROLLAR **
-//    @GetMapping("/hotel/{hotelId}")
-//    public ResponseEntity<List<Room>> getRoomsByHotelId(@PathVariable Long hotelId) {
-//        hotelService.getHotelById(hotelId).orElseThrow(() ->
-//                new ResourceNotFoundException("Hotel not found with id: " + hotelId));
-//
-//        List<Room> rooms = roomService.getRoomsByHotelId(hotelId);
-//        return new ResponseEntity<>(rooms, HttpStatus.OK);
-//    }
+    // Get Room Media by Hotel and Room ID
+    @GetMapping("/{hotelId}/{roomId}/media")
+    public ResponseEntity<List<Media>> getRoomMedia(@PathVariable Long hotelId, @PathVariable Long roomId) {
+        List<Media> media = roomService.getRoomMediaByHotelAndRoom(hotelId, roomId);
+        return new ResponseEntity<>(media, HttpStatus.OK);
+    }
+
+    // Get Room Amenities by Hotel and Room ID
+    @GetMapping("/{hotelId}/{roomId}/amenities")
+    public ResponseEntity<List<Amenity>> getRoomAmenities(@PathVariable Long hotelId, @PathVariable Long roomId) {
+        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoom(hotelId, roomId);
+        return new ResponseEntity<>(amenities, HttpStatus.OK);
+    }
+
+    // Get Room Media by Hotel ID and Room Type
+    @GetMapping("/{hotelId}/type/{roomType}/media")
+    public ResponseEntity<List<Media>> getRoomMediaByType(
+            @PathVariable Long hotelId,
+            @PathVariable String roomType) {
+        List<Media> media = roomService.getRoomMediaByHotelAndType(hotelId, roomType);
+        return new ResponseEntity<>(media, HttpStatus.OK);
+    }
+
+    // Get Room Amenities by Hotel ID and Room Type
+    @GetMapping("/{hotelId}/type/{roomType}/amenities")
+    public ResponseEntity<List<Amenity>> getRoomAmenitiesByType(
+            @PathVariable Long hotelId,
+            @PathVariable String roomType) {
+        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndType(hotelId, roomType);
+        return new ResponseEntity<>(amenities, HttpStatus.OK);
+    }
 }
