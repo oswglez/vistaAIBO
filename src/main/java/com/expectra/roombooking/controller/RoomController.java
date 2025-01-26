@@ -47,11 +47,11 @@ public class RoomController {
     }
 
     // Get Rooms by Hotel ID
-    @GetMapping("/hotel/{hotelId}")
-    public ResponseEntity<List<Room>> getRoomsByHotelId(@PathVariable Long hotelId) {
-        List<Room> rooms = roomService.getRoomsByHotelId(hotelId);
-        return new ResponseEntity<>(rooms, HttpStatus.OK);
-    }
+//    @GetMapping("/hotel/{hotelId}")
+//    public ResponseEntity<List<Room>> getRoomsByHotelId(@PathVariable Long hotelId) {
+//        List<Room> rooms = roomService.getRoomsByHotelId(hotelId);
+//        return new ResponseEntity<>(rooms, HttpStatus.OK);
+//    }
 
     // Update Room
     @PutMapping("/{id}")

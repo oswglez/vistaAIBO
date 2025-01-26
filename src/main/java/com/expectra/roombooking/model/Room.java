@@ -4,12 +4,12 @@ import lombok.Data;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="Room")
-@Getter
-@Setter
+@Table(name="room")
+@Data
 public class Room {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -26,8 +26,8 @@ public class Room {
     private String roomName;
 
     // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="hotel_id", nullable=false) // Clave foránea hacia Hotel.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_hotel_id", nullable = false)
     private Hotel hotel;
 
     // Relación con Amenity a través de la tabla intermedia room_amenity.
@@ -44,5 +44,6 @@ public class Room {
             name="room_media",
             joinColumns=@JoinColumn(name="room_id"),
             inverseJoinColumns=@JoinColumn(name="media_id"))
-    private Set<Media> media; // Relación con Media
+    private Set<Media> media = new HashSet<>();
+
 }

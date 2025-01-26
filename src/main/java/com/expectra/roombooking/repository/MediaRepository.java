@@ -3,6 +3,7 @@ package com.expectra.roombooking.repository;
 import com.expectra.roombooking.model.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,10 +33,13 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     void deleteById(Long mediaId);
 
     // Método personalizado para encontrar todas las medias de una habitación específica
-    @Query("SELECT p FROM Media p JOIN RoomMedia rp ON p.id = rp.mediaId WHERE rp.roomId = :roomId")
+    @Query("SELECT m FROM Media m JOIN m.rooms r WHERE r.roomId = :roomId")
+
     List<Media> findAllMediasByRoomId(Long roomId);
 
-    // Método personalizado para encontrar todas las medias de un hotel específico
-    @Query("SELECT p FROM Media p JOIN RoomMedia rp ON p.id = rp.mediaId WHERE rp.roomId = :roomId")
-    List<Media> findAllMediasByHotelId(Long HotelId);
+    // Método personalizado para encontrar todas las medias de un hotel específic
+
+    @Query("SELECT m FROM Media m JOIN m.hotels h WHERE h.hotelId = :hotelId")
+    List<Media> findAllMediasByHotelId(@Param("hotelId") Long hotelId);
+
 }

@@ -18,7 +18,7 @@ public interface RoomService {
     Room saveRoom(Room room);
     void deleteRoom(Room room);
     void deleteRoomById(Long roomId);
-    List<Room> getRoomsByHotelId(Long hotelId);
+ //   List<Room> getRoomsByHotelId(Long hotelId);
     List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId);
     List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId);
     List<Media> getRoomMediaByHotelAndType(Long hotelId, String roomType);

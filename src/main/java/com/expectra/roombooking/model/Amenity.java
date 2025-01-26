@@ -7,9 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="Amenity")
-@Getter
-@Setter
+@Table(name="amenity")
+@Data
     public class Amenity {
         @Id
         @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,6 +24,8 @@ import java.util.Set;
         @Column(name="amenity_description")
         private String amenityDescription;
 
+        // Relación con Hotel a través de la tabla intermedia hotel_amenity
+        @ManyToMany
         @JoinTable(
                 name = "hotel_amenity",
                 joinColumns = @JoinColumn(name = "amenity_id"),

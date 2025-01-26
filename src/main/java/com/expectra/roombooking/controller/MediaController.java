@@ -3,6 +3,7 @@ package com.expectra.roombooking.controller;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.service.MediaService;
+import com.expectra.roombooking.service.impl.MediaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,6 @@
 package com.expectra.roombooking.repository;
 
-import com.expectra.roombooking.model.Amenity;
-
+import com.expectra.roombooking.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,35 +9,35 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-    public interface  AmenityRepository extends JpaRepository<Amenity, Long> {
+    public interface AddressRepository extends JpaRepository<Address, Long> {
 
     // Metodo para buscar todas las amenidades
     @Override
-    List<Amenity> findAll();
+    List<Address> findAll();
 
     // Metodo para buscar una amenidad por ID
     @Override
-    Optional<Amenity> findById(Long id);
+    Optional<Address> findById(Long id);
 
     // Metodo para guardar una amenidad (crear o actualizar)
     @Override
-    <S extends Amenity> S save(S entity);
+    <S extends Address> S save(S entity);
 
     // Metodo para eliminar una amenidad por entidad
     @Override
-    void delete(Amenity entity);
+    void delete(Address entity);
 
     // Metodo para eliminar una amenidad por ID
     @Override
-    void deleteById(Long amenityId);
+    void deleteById(Long addressId);
 
 
-    // Método personalizado para encontrar todas las medias de una habitación específica
-    @Query("SELECT a FROM Amenity a JOIN a.rooms r WHERE r.roomId = :roomId")
-    List<Amenity> findAllAmenitiesByRoomId(Long roomId);
+    @Query("SELECT a FROM Address a JOIN a.contacts c WHERE c.contactId = :contactId")
+    List<Address> findAllAddressByContactId(Long contactId);
 
     // Método personalizado para encontrar todas las medias de un hotel específico
-    @Query("SELECT a FROM Amenity a JOIN a.hotels h WHERE h.hotelId = :hotelId")
-    List<Amenity> findAllAmenitiesByHotelId(Long hotelId);
+
+    @Query("SELECT a FROM Address a JOIN a.hotels h WHERE h.hotelId = :hotelId")
+    List<Address> findAllAddressByHotelId(Long hotelId);
 
 }

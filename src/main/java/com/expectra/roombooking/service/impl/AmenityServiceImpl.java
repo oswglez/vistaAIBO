@@ -75,7 +75,7 @@ public class AmenityServiceImpl implements AmenityService {
 
     @Override
     public List<Amenity> getAmenitiesByRoomId(Long roomId) {
-        return amenityRepository.findAllAmenitiessByRoomId(roomId);
+        return amenityRepository.findAllAmenitiesByRoomId(roomId);
     }
 
     @Override

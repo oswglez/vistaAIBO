@@ -26,8 +26,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Override
     void deleteById(Long roomId);
 
-    // Metodo personalizado para buscar todas las habitaciones por hotel ID
-    List<Room> getRoomByHotelId(Long hotelId);
 
     // Metodo personalizado para encontrar todas las medias de una habitacion específica
     @Query("SELECT m FROM Media m JOIN m.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomId = :roomId")

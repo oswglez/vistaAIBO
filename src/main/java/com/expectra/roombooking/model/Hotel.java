@@ -3,6 +3,8 @@ package com.expectra.roombooking.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,6 +50,10 @@ public class Hotel {
     @Column(name = "disclaimer")
     private String disclaimer;
 
+    // Relación uno a muchos con Room
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Room> rooms; // Representa las habitaciones asociadas
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "hotel_contact",
@@ -70,5 +76,9 @@ public class Hotel {
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id")
     )
-    private Set<Media> media;
+    private Set<Media> media = new HashSet<>();
+
+    // Relación Many-to-Many con Address
+    @ManyToMany(mappedBy = "hotels")
+    private Set<Address> addresses = new HashSet<>();
 }

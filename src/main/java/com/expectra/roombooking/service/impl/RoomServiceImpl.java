@@ -1,13 +1,11 @@
 package com.expectra.roombooking.service.impl;
 
-        import com.expectra.roombooking.exception.ResourceNotFoundException;
         import com.expectra.roombooking.model.Amenity;
-        import com.expectra.roombooking.model.Hotel;
         import com.expectra.roombooking.model.Media;
         import com.expectra.roombooking.model.Room;
+        import com.expectra.roombooking.repository.HotelRepository;
         import com.expectra.roombooking.repository.RoomRepository;
         import com.expectra.roombooking.service.RoomService;
-        import jakarta.persistence.*;
         import jakarta.transaction.Transactional;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.stereotype.Service;
@@ -20,10 +18,13 @@ package com.expectra.roombooking.service.impl;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
+    private final HotelRepository hotelRepository;
+
 
     @Autowired
-    public RoomServiceImpl(RoomRepository roomRepository) {
+    public RoomServiceImpl(RoomRepository roomRepository, HotelRepository hotelRepository) {
         this.roomRepository = roomRepository;
+        this.hotelRepository = hotelRepository;
     }
 
     @Override
@@ -41,10 +42,10 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.deleteById(roomId);
     }
 
-    @Override
-    public List<Room> getRoomsByHotelId(Long hotelId) {
+ //   @Override
+/*    public List<Room> getRoomsByHotelId(Long hotelId) {
         return roomRepository.getRoomByHotelId(hotelId);
-    }
+    }*/
 
     @Override
     public List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId) {

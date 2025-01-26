@@ -1,11 +1,16 @@
+// MediaServiceImpl.java
 package com.expectra.roombooking.service.impl;
 
+import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.repository.HotelRepository;
-import com.expectra.roombooking.service.HotelService;
+import com.expectra.roombooking.repository.MediaRepository;
+import com.expectra.roombooking.repository.RoomRepository;
+import com.expectra.roombooking.service.AddressService;
+import com.expectra.roombooking.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,64 +19,63 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
-public class HotelServiceImpl implements HotelService {
+public class AddressServiceImpl implements AddressService {
 
+    private final MediaRepository mediaRepository;
     private final HotelRepository hotelRepository;
+    private final RoomRepository roomRepository;
 
     @Autowired
-    public HotelServiceImpl(HotelRepository hotelRepository) {
+    public AddressServiceImpl(MediaRepository mediaRepository,
+                              HotelRepository hotelRepository,
+                              RoomRepository roomRepository) {
+        this.mediaRepository = mediaRepository;
         this.hotelRepository = hotelRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Hotel> findAllHotels() {
-        return hotelRepository.findAll();
+        return null;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Hotel> findHotelById(Long hotelId) {
-        return hotelRepository.findById(hotelId);
+        return Optional.empty();
     }
 
     @Override
     public Hotel saveHotel(Hotel hotel) {
-        return hotelRepository.save(hotel);
+        return null;
     }
 
     @Override
     public void deleteHotel(Hotel hotel) {
-        hotelRepository.delete(hotel);
+
     }
 
     @Override
     public void deleteHotelById(Long hotelId) {
-        hotelRepository.deleteById(hotelId);
+
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Hotel> findHotelsByName(String hotelName) {
-        return hotelRepository.findByHotelName(hotelName);
+        return null;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Amenity> findHotelAmenities(Long hotelId) {
-        return hotelRepository.findAllAmenitiesByHotelId(hotelId);
+        return null;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Media> findHotelMedias(Long hotelId) {
-        return hotelRepository.findAllMediasByHotelId(hotelId);
+        return null;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Room> findHotelRooms(Long hotelId) {
-        return hotelRepository.findAllRoomsByHotelId(hotelId);
+        return null;
     }
 }

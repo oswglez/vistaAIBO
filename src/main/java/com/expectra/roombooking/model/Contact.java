@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Contact")
+@Table(name = "contact")
 @Data
 public class Contact {
     @Id
@@ -52,4 +52,7 @@ public class Contact {
         this.hotels.remove(hotel);
         hotel.getContacts().remove(this);
     }
+    // Relación Many-to-Many con Address
+    @ManyToMany(mappedBy = "contacts")
+    private Set<Address> addresses = new HashSet<>();
 }

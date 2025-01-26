@@ -49,5 +49,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     @Query("SELECT m FROM Media m JOIN m.hotels h WHERE h.hotelId = :hotelId")
     List<Media> findAllMediasByHotelId(@Param("hotelId") Long hotelId);
+
+  //  @Query("SELECT r FROM Ro m JOIN m.hotels h WHERE h.hotelId = :hotelId")
+    List<Room> findAllRoomsByHotelId(@Param("hotelId") Long hotelId);
 }
 

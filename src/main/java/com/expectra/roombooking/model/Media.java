@@ -3,10 +3,11 @@ package com.expectra.roombooking.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="Media")
+@Table(name="media")
 @Data
 public class Media {
     @Id
@@ -26,15 +27,11 @@ public class Media {
     @Column(name="media_url")
     private String mediaUrl;
 
-
     // Relación con Hotel a través de la tabla intermedia hotel_media
     @ManyToMany(mappedBy="media")
-    private Set<Hotel> hotels;
+    private Set<Hotel> hotels = new HashSet<>();
 
-    // Relación con Room a través de la tabla intermedia room_media
     @ManyToMany(mappedBy="media")
-    private Set<Room> rooms;
+    private Set<Room> rooms = new HashSet<>();
 
-
-    // Getters and setters (Lombok se encarga con @Data)
 }
