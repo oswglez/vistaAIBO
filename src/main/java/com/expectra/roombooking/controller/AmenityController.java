@@ -3,6 +3,7 @@ package com.expectra.roombooking.controller;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.service.AmenityService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/amenities")
+@Tag(name = "Amenity Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")
 public class AmenityController {
 
     private final AmenityService amenityService;

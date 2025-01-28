@@ -5,6 +5,7 @@ import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.service.HotelService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/hotels")
+@Tag(name = "Hotel Management", description = "Endpoints para gestión de hoteles")
+
 @CrossOrigin(origins = "*")
 public class HotelController {
-
+    private final String messageNotfound = "Hotel not found" ;
     private final HotelService hotelService;
 
     @Autowired
@@ -43,7 +46,7 @@ public class HotelController {
     public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
         return hotelService.findHotelById(id)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + id));
     }
 
     // Update Hotel
@@ -56,14 +59,14 @@ public class HotelController {
                     Hotel updated = hotelService.saveHotel(hotelDetails);
                     return ResponseEntity.ok(updated);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + id));
     }
 
     // Delete Hotel
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
         if (!hotelService.findHotelById(id).isPresent()) {
-            throw new ResourceNotFoundException("Hotel not found with id: " + id);
+            throw new ResourceNotFoundException(messageNotfound + id);
         }
         hotelService.deleteHotelById(id);
         return ResponseEntity.noContent().build();
@@ -80,7 +83,7 @@ public class HotelController {
     @GetMapping("/{id}/amenities")
     public ResponseEntity<List<Amenity>> getHotelAmenities(@PathVariable Long id) {
         if (!hotelService.findHotelById(id).isPresent()) {
-            throw new ResourceNotFoundException("Hotel not found with id: " + id);
+            throw new ResourceNotFoundException(messageNotfound + id);
         }
         List<Amenity> amenities = hotelService.findHotelAmenities(id);
         return ResponseEntity.ok(amenities);
@@ -90,7 +93,7 @@ public class HotelController {
     @GetMapping("/{id}/media")
     public ResponseEntity<List<Media>> getHotelMedia(@PathVariable Long id) {
         if (!hotelService.findHotelById(id).isPresent()) {
-            throw new ResourceNotFoundException("Hotel not found with id: " + id);
+            throw new ResourceNotFoundException(messageNotfound + id);
         }
         List<Media> media = hotelService.findHotelMedias(id);
         return ResponseEntity.ok(media);

@@ -7,17 +7,13 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class HomeController {
- //   private final HotelRepository hotelRepository;
     @Value("${spring.application.name}")
     String appName;
 
-//    public HomeController(HotelRepository hotelRepository) {
- //       this.hotelRepository = hotelRepository;
-//    }
 
     @RequestMapping("/")
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
-        return "esigned-html/index";
+        return "designed-html/index";
     }
 }

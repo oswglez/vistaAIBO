@@ -7,6 +7,7 @@ import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.service.RoomService;
 import com.expectra.roombooking.service.HotelService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
+@Tag(name = "Room Management", description = "Endpoints para gestión de habitaciones")
 public class RoomController {
 
     private final RoomService roomService;
@@ -45,15 +47,6 @@ public class RoomController {
                 .map(room -> new ResponseEntity<>(room, HttpStatus.OK))
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
     }
-
-    // Get Rooms by Hotel ID
-//    @GetMapping("/hotel/{hotelId}")
-//    public ResponseEntity<List<Room>> getRoomsByHotelId(@PathVariable Long hotelId) {
-//        List<Room> rooms = roomService.getRoomsByHotelId(hotelId);
-//        return new ResponseEntity<>(rooms, HttpStatus.OK);
-//    }
-
-    // Update Room
     @PutMapping("/{id}")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
         Room existingRoom = roomService.getRoomById(id)

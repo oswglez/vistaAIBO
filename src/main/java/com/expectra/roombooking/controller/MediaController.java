@@ -3,7 +3,7 @@ package com.expectra.roombooking.controller;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.service.MediaService;
-import com.expectra.roombooking.service.impl.MediaServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/media")
+@Tag(name = "Media Management", description = "Endpoints para gestión de medias de hoteles y habitaciones")
+
 public class MediaController {
 
     private final MediaService mediaService;
