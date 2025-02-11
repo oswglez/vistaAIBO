@@ -2,6 +2,7 @@ package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.model.Contact;
 import com.expectra.roombooking.service.ContactService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ public class ContactController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Consulta un contacto", description = "Consulta de un contacto a traves de su Id.")
     public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
         return contactService.findById(id)
                 .map(ResponseEntity::ok)
@@ -36,12 +38,14 @@ public class ContactController {
     }
 
     @PostMapping
+    @Operation(summary = "Crea un contacto", description = "Creación de un contacto")
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         Contact savedContact = contactService.save(contact);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedContact);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza un contacto", description = "Actualiza los datos de un contacto a traves de su Id.")
     public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody Contact contact) {
         try {
             Contact updatedContact = contactService.update(id, contact);
@@ -52,6 +56,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina un contacto", description = "Elimina o desconecta de un hotel un contacto a traves de su Id.")
     public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
         contactService.delete(id);
         return ResponseEntity.noContent().build();

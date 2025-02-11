@@ -1,5 +1,6 @@
 package com.expectra.roombooking.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ public class HomeController {
 
 
     @RequestMapping("/")
+    @Operation(summary = "Home Page", description = "Posible pagina de inicio")
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
         return "designed-html/index";

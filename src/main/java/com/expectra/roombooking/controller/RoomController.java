@@ -7,6 +7,7 @@ import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
 import com.expectra.roombooking.service.RoomService;
 import com.expectra.roombooking.service.HotelService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class RoomController {
 
     // Create a new Room
     @PostMapping
+    @Operation(summary = "Crea una habitación", description = "Crea una habitación de un hotel.")
     public ResponseEntity<Room> createRoom(@RequestParam Long hotelId, @RequestBody Room room) {
         Hotel hotel = hotelService.findHotelById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
@@ -42,12 +44,14 @@ public class RoomController {
 
     // Get Room by ID
     @GetMapping("/{id}")
+    @Operation(summary = "Cosulta una habitación", description = "Recupera una habitación de acuerdo a su Id.")
     public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
         return roomService.getRoomById(id)
                 .map(room -> new ResponseEntity<>(room, HttpStatus.OK))
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
     }
     @PutMapping("/{id}")
+    @Operation(summary = "Actualiza una habitación", description = "Actualiza los datos de una habitación.")
     public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
         Room existingRoom = roomService.getRoomById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
@@ -65,6 +69,7 @@ public class RoomController {
 
     // Delete Room
     @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina una habitación", description = "Elimina una habbitación y desconecta sus medias y amenities.")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         roomService.deleteRoomById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -72,6 +77,7 @@ public class RoomController {
 
     // Get Room Media by Hotel and Room ID
     @GetMapping("/{hotelId}/{roomId}/media")
+    @Operation(summary = "Consulta las medias", description = "Consulta las medias de una habitación de un hotel.")
     public ResponseEntity<List<Media>> getRoomMedia(@PathVariable Long hotelId, @PathVariable Long roomId) {
         List<Media> media = roomService.getRoomMediaByHotelAndRoom(hotelId, roomId);
         return new ResponseEntity<>(media, HttpStatus.OK);
@@ -79,6 +85,7 @@ public class RoomController {
 
     // Get Room Amenities by Hotel and Room ID
     @GetMapping("/{hotelId}/{roomId}/amenities")
+    @Operation(summary = "Consulta las amenities", description = "Consulta las ammenities de una habitación de un hotel.")
     public ResponseEntity<List<Amenity>> getRoomAmenities(@PathVariable Long hotelId, @PathVariable Long roomId) {
         List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoom(hotelId, roomId);
         return new ResponseEntity<>(amenities, HttpStatus.OK);
@@ -86,6 +93,7 @@ public class RoomController {
 
     // Get Room Media by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/media")
+    @Operation(summary = "Consulta las medias", description = "Consulta las medias de un tipo  habitación de un hotel.")
     public ResponseEntity<List<Media>> getRoomMediaByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
@@ -95,6 +103,7 @@ public class RoomController {
 
     // Get Room Amenities by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/amenities")
+    @Operation(summary = "Consulta las amenities", description = "Consulta las ammenities de un tipo habitación de un hotel.")
     public ResponseEntity<List<Amenity>> getRoomAmenitiesByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
