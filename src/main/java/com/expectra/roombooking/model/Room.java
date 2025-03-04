@@ -2,9 +2,6 @@ package com.expectra.roombooking.model;
 
 import lombok.Data;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.HashSet;
 import java.util.Set;

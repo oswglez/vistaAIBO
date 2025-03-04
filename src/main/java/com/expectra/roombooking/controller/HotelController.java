@@ -71,7 +71,7 @@ public class HotelController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Elimina un hotel", description = "Elimmina y sus habitaciones un hotel usando el hotelId.")
     public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
-        if (!hotelService.findHotelById(id).isPresent()) {
+        if (hotelService.findHotelById(id).isEmpty()) {
             throw new ResourceNotFoundException(messageNotfound + id);
         }
         hotelService.deleteHotelById(id);
@@ -90,7 +90,7 @@ public class HotelController {
     @GetMapping("/{id}/amenities")
     @Operation(summary = "Consulta las amenities", description = "Consulta las amenities de un hotel usando el hotelId.")
     public ResponseEntity<List<Amenity>> getHotelAmenities(@PathVariable Long id) {
-        if (!hotelService.findHotelById(id).isPresent()) {
+        if (hotelService.findHotelById(id).isEmpty()) {
             throw new ResourceNotFoundException(messageNotfound + id);
         }
         List<Amenity> amenities = hotelService.findHotelAmenities(id);
@@ -101,7 +101,7 @@ public class HotelController {
     @GetMapping("/{id}/media")
     @Operation(summary = "Consulta las medias", description = "Consulta las medias de un de un hotel usando el hotelId.")
     public ResponseEntity<List<Media>> getHotelMedia(@PathVariable Long id) {
-        if (!hotelService.findHotelById(id).isPresent()) {
+        if (hotelService.findHotelById(id).isEmpty()) {
             throw new ResourceNotFoundException(messageNotfound + id);
         }
         List<Media> media = hotelService.findHotelMedias(id);

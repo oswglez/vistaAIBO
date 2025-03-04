@@ -4,17 +4,11 @@ package com.expectra.roombooking.service.impl;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.repository.AddressRepository;
-import com.expectra.roombooking.repository.HotelRepository;
-import com.expectra.roombooking.repository.MediaRepository;
-import com.expectra.roombooking.repository.RoomRepository;
 import com.expectra.roombooking.service.AddressService;
-import com.expectra.roombooking.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
