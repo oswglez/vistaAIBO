@@ -2,10 +2,8 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.Hotel;
-import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.model.Room;
+import com.expectra.roombooking.model.*;
+import com.expectra.roombooking.repository.AddressRepository;
 import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.repository.MediaRepository;
 import com.expectra.roombooking.repository.RoomRepository;
@@ -21,61 +19,43 @@ import java.util.Optional;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    private final MediaRepository mediaRepository;
-    private final HotelRepository hotelRepository;
-    private final RoomRepository roomRepository;
-
     @Autowired
-    public AddressServiceImpl(MediaRepository mediaRepository,
-                              HotelRepository hotelRepository,
-                              RoomRepository roomRepository) {
-        this.mediaRepository = mediaRepository;
-        this.hotelRepository = hotelRepository;
-        this.roomRepository = roomRepository;
+    private AddressRepository addressRepository;
+
+    @Override
+    public List<Address> getAllAddresses() {
+        return addressRepository.findAll();
     }
 
     @Override
-    public List<Hotel> findAllHotels() {
-        return null;
+    public Address getAddressById(Long id) {
+        return addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
     }
 
     @Override
-    public Optional<Hotel> findHotelById(Long hotelId) {
-        return Optional.empty();
+    public Address createAddress(Address address) {
+        return addressRepository.save(address);
     }
 
     @Override
-    public Hotel saveHotel(Hotel hotel) {
-        return null;
+    public Address updateAddress(Long id, Address addressDetails) {
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
+
+        address.setCountry(addressDetails.getCountry());
+        address.setState(addressDetails.getState());
+        address.setCity(addressDetails.getCity());
+        address.setStreet(addressDetails.getStreet());
+        address.setPostalCode(addressDetails.getPostalCode());
+
+        return addressRepository.save(address);
     }
 
     @Override
-    public void deleteHotel(Hotel hotel) {
-
-    }
-
-    @Override
-    public void deleteHotelById(Long hotelId) {
-
-    }
-
-    @Override
-    public List<Hotel> findHotelsByName(String hotelName) {
-        return null;
-    }
-
-    @Override
-    public List<Amenity> findHotelAmenities(Long hotelId) {
-        return null;
-    }
-
-    @Override
-    public List<Media> findHotelMedias(Long hotelId) {
-        return null;
-    }
-
-    @Override
-    public List<Room> findHotelRooms(Long hotelId) {
-        return null;
+    public void deleteAddress(Long id) {
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
+        addressRepository.delete(address);
     }
 }

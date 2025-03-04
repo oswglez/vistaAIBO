@@ -30,7 +30,7 @@ public class HotelController {
 
     // Create a new Hotel
     @PostMapping
-    @Operation(summary = "Actualiza un hotel", description = "Actualiza un hotel usando el hotelId.")
+    @Operation(summary = "Actualiza un hotel", description = "Crea un hotel usando el hotelId.")
     public ResponseEntity<Hotel> createHotel(@RequestBody Hotel hotel) {
         Hotel savedHotel = hotelService.saveHotel(hotel);
         return new ResponseEntity<>(savedHotel, HttpStatus.CREATED);

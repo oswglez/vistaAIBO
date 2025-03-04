@@ -75,21 +75,21 @@ public class RoomController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Get Room Media by Hotel and Room ID
-    @GetMapping("/{hotelId}/{roomId}/media")
-    @Operation(summary = "Consulta las medias", description = "Consulta las medias de una habitación de un hotel.")
-    public ResponseEntity<List<Media>> getRoomMedia(@PathVariable Long hotelId, @PathVariable Long roomId) {
-        List<Media> media = roomService.getRoomMediaByHotelAndRoom(hotelId, roomId);
-        return new ResponseEntity<>(media, HttpStatus.OK);
-    }
-
-    // Get Room Amenities by Hotel and Room ID
-    @GetMapping("/{hotelId}/{roomId}/amenities")
-    @Operation(summary = "Consulta las amenities", description = "Consulta las ammenities de una habitación de un hotel.")
-    public ResponseEntity<List<Amenity>> getRoomAmenities(@PathVariable Long hotelId, @PathVariable Long roomId) {
-        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoom(hotelId, roomId);
-        return new ResponseEntity<>(amenities, HttpStatus.OK);
-    }
+//    // Get Room Media by Hotel and Room ID
+//    @GetMapping("/{hotelId}/{roomId}/media")
+//    @Operation(summary = "Consulta las medias", description = "Consulta las medias de una habitación de un hotel.")
+//    public ResponseEntity<List<Media>> getRoomMedia(@PathVariable Long hotelId, @PathVariable Long roomId) {
+//        List<Media> media = roomService.getRoomMediaByHotelAndRoom(hotelId, roomId);
+//        return new ResponseEntity<>(media, HttpStatus.OK);
+//    }
+//
+//    // Get Room Amenities by Hotel and Room ID
+//    @GetMapping("/{hotelId}/{roomId}/amenities")
+//    @Operation(summary = "Consulta las amenities", description = "Consulta las ammenities de una habitación de un hotel.")
+//    public ResponseEntity<List<Amenity>> getRoomAmenities(@PathVariable Long hotelId, @PathVariable Long roomId) {
+//        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoom(hotelId, roomId);
+//        return new ResponseEntity<>(amenities, HttpStatus.OK);
+//    }
 
     // Get Room Media by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/media")

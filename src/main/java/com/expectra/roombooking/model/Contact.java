@@ -35,9 +35,6 @@ public class Contact {
     @Column(name = "contact_email", nullable = false)
     private String contactEmail;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
 
     @ManyToMany(mappedBy = "contacts")
     private Set<Hotel> hotels = new HashSet<>();
