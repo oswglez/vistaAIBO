@@ -18,8 +18,9 @@ import java.util.Set;
         @Column(name="amenity_code", nullable=false)
         private Integer amenityCode;
 
-        @Column(name="amenity_type", nullable=false)
-        private String amenityType;
+    @Enumerated(EnumType.STRING) // Almacena el valor del Enum como una cadena en la base de datos
+    @Column(name="amenity_type", nullable=false)
+        private AmenityType amenityType;
 
         @Column(name="amenity_description")
         private String amenityDescription;

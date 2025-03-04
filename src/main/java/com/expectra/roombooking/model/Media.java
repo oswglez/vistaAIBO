@@ -18,8 +18,9 @@ public class Media {
     @Column(name="media_code", nullable=false)
     private Integer mediaCode;
 
+    @Enumerated(EnumType.STRING) // Almacena el valor del Enum como una cadena en la base de datos
     @Column(name="media_type")
-    private String mediaType;
+    private MediaType mediaType;
 
     @Column(name="media_description")
     private String mediaDescription;

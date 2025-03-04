@@ -1,10 +1,10 @@
 package com.expectra.roombooking.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,12 +16,9 @@ public class Hotel {
     @Column(name = "hotel_id")
     private Long hotelId;
 
+    @NotBlank(message = "El nombre del hotel no puede estar vacío")
     @Column(name = "hotel_name", nullable = false)
     private String hotelName;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_address_id", nullable = false)
-    private Address hotelAddress;
 
     @Column(name = "local_phone")
     private String localPhone;
@@ -52,7 +49,7 @@ public class Hotel {
 
     // Relación uno a muchos con Room
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Room> rooms; // Representa las habitaciones asociadas
+    private Set<Room> rooms = new HashSet<>(); // Representa las habitaciones asociadas
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -60,15 +57,25 @@ public class Hotel {
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
-    private Set<Contact> contacts;
+    private Set<Contact> contacts = new HashSet<>();
 
+    // Métodos de utilidad para manejar la relación con Contact
+    public void addContact(Contact contact) {
+        this.contacts.add(contact);
+        contact.getHotels().add(this);
+    }
+
+    public void removeContact(Contact contact) {
+        this.contacts.remove(contact);
+        contact.getHotels().remove(this);
+    }
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "hotel_amenity",
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
-    private Set<Amenity> amenities;
+    private Set<Amenity> amenities = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -79,6 +86,23 @@ public class Hotel {
     private Set<Media> media = new HashSet<>();
 
     // Relación Many-to-Many con Address
-    @ManyToMany(mappedBy = "hotels")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "hotel_address",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
     private Set<Address> addresses = new HashSet<>();
+
+
+    // Métodos de utilidad para manejar la relación con Address
+    public void addAddress(Address address) {
+        this.addresses.add(address);
+        address.getHotels().add(this);
+    }
+
+    public void removeAddress(Address address) {
+        this.addresses.remove(address);
+        address.getHotels().remove(this);
+    }
 }

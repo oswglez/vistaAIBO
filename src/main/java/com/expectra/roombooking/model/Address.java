@@ -39,12 +39,33 @@ public class Address {
     )
     private Set<Contact> contacts = new HashSet<>();
 
+    public void addContact(Contact contact) {
+        this.contacts.add(contact);
+        contact.getAddresses().add(this);
+    }
+
+    public void removeContact(Contact contact) {
+        this.contacts.remove(contact);
+        contact.getAddresses().remove(this);
+    }
     // Relación Many-to-Many con Hotel
     @ManyToMany
     @JoinTable(
-            name = "address_hotel",
+            name = "hotel_address",
             joinColumns = @JoinColumn(name = "address_id"),
             inverseJoinColumns = @JoinColumn(name = "hotel_id")
     )
     private Set<Hotel> hotels = new HashSet<>();
+
+    // Métodos de utilidad para manejar la relación con Hotel
+    public void addHotel(Hotel hotel) {
+        this.hotels.add(hotel);
+        hotel.getAddresses().add(this);
+    }
+
+    public void removeHotel(Hotel hotel) {
+        this.hotels.remove(hotel);
+        hotel.getAddresses().remove(this);
+    }
+
 }

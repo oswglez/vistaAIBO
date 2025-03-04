@@ -35,6 +35,7 @@ public class Contact {
     @Column(name = "contact_email", nullable = false)
     private String contactEmail;
 
+    // Relación Many-to-Many con Hotel
 
     @ManyToMany(mappedBy = "contacts")
     private Set<Hotel> hotels = new HashSet<>();
@@ -52,4 +53,13 @@ public class Contact {
     // Relación Many-to-Many con Address
     @ManyToMany(mappedBy = "contacts")
     private Set<Address> addresses = new HashSet<>();
+
+    public void addAddress(Address address) {
+        this.addresses.add(address);
+        address.getContacts().add(this);
+    }
+    public void removeAddress(Address address) {
+        this.addresses.remove(address);
+        address.getContacts().remove(this);
+    }
 }
