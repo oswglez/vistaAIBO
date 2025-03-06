@@ -1,9 +1,6 @@
 package com.expectra.roombooking.service.impl;
 
-import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.Hotel;
-import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.model.Room;
+import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +64,12 @@ public class HotelServiceImpl implements HotelService {
     @Transactional(readOnly = true)
     public List<Media> findHotelMedias(Long hotelId) {
         return hotelRepository.findAllMediasByHotelId(hotelId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Contact> findAllContactsByHotelId(Long hotelId) {
+        return hotelRepository.findAllContactsByHotelId(hotelId);
     }
 
     @Override

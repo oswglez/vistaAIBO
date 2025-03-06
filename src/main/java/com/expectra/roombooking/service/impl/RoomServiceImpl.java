@@ -33,29 +33,23 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deleteRoom(Room room) {
-        roomRepository.delete(room);
-    }
-
-    @Override
     public void deleteRoomById(Long roomId) {
         roomRepository.deleteById(roomId);
     }
 
  //   @Override
-/*    public List<Room> getRoomsByHotelId(Long hotelId) {
-        return roomRepository.getRoomByHotelId(hotelId);
-    }*/
+//   public List<Room> getRoomsByHotelId(Long hotelId) {
+//        return roomRepository.getAllRoomsByHotelId(hotelId);
+//    }
+ @Override
+ public List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId) {
+     return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
+ }
 
-    @Override
-    public List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId) {
-        return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
-    }
-
-    @Override
-    public List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId) {
-        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
-    }
+//    @Override
+//    public List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId) {
+//        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
+//    }
 
     @Override
     public List<Media> getRoomMediaByHotelAndType(Long hotelId, String roomType) {

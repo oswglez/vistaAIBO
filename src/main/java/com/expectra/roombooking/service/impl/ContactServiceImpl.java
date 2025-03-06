@@ -31,9 +31,15 @@ public class ContactServiceImpl implements ContactService {
         return contactRepository.findAll();
     }
 
+
     @Override
     public Optional<Contact> findById(Long id) {
         return contactRepository.findById(id);
+    }
+
+    @Override
+    public List<Contact> findByLastName(String lastName) {
+        return contactRepository.findByLastName(lastName);
     }
 
     @Override

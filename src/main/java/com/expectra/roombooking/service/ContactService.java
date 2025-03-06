@@ -11,4 +11,6 @@ public interface ContactService {
     Contact update(Long id, Contact contact);
     void delete(Long id);
     void removeContactFromHotel(Long contactId, Long hotelId);
+    List<Contact> findByLastName(String lastName);
+
 }

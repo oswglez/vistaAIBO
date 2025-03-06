@@ -1,9 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.Hotel;
-import com.expectra.roombooking.model.Media;
+import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hotels")
@@ -83,9 +83,24 @@ public class HotelController {
     @Operation(summary = "Consulta de hoteles", description = "Consulta un hotel por su nombre.")
     public ResponseEntity<List<Hotel>> getHotelsByName(@RequestParam String name) {
         List<Hotel> hotels = hotelService.findHotelsByName(name);
+        if (hotels.isEmpty()) {
+            System.out.println("name = " + name);
+            throw new ResourceNotFoundException("No se encontraron hoteles con el nombre: " + name);
+        }
         return ResponseEntity.ok(hotels);
     }
 
+
+// Get Hotel rooms
+@GetMapping("/{id}/rooms")
+@Operation(summary = "Consulta las habitaciones", description = "Consulta las habbitaciones de un hotel usando el hotelId.")
+public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long id) {
+    if (hotelService.findHotelById(id).isEmpty()) {
+        throw new ResourceNotFoundException(messageNotfound + id);
+    }
+    List<Room> rooms = hotelService.findHotelRooms(id);
+    return ResponseEntity.ok(rooms);
+}
     // Get Hotel Amenities
     @GetMapping("/{id}/amenities")
     @Operation(summary = "Consulta las amenities", description = "Consulta las amenities de un hotel usando el hotelId.")
@@ -106,5 +121,14 @@ public class HotelController {
         }
         List<Media> media = hotelService.findHotelMedias(id);
         return ResponseEntity.ok(media);
+    }
+    @GetMapping("/{id}/contact")
+    @Operation(summary = "Consulta los contactos", description = "Consulta los contactos de un de un hotel usando el hotelId.")
+    public ResponseEntity<List<Contact>> getAllContactsByHotelId(@PathVariable Long id) {
+        if (hotelService.findHotelById(id).isEmpty()) {
+            throw new ResourceNotFoundException(messageNotfound + id);
+        }
+        List<Contact> contact = hotelService.findAllContactsByHotelId(id);
+        return ResponseEntity.ok(contact);
     }
 }

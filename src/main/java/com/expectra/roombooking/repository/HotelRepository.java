@@ -1,9 +1,6 @@
 package com.expectra.roombooking.repository;
 
-import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.Hotel;
-import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.model.Room;
+import com.expectra.roombooking.model.*;
 import jakarta.persistence.OneToMany;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -52,5 +49,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
   //  @Query("SELECT r FROM Ro m JOIN m.hotels h WHERE h.hotelId = :hotelId")
     List<Room> findAllRoomsByHotelId(@Param("hotelId") Long hotelId);
+
+    List<Contact> findAllContactsByHotelId(@Param("hotelId") Long hotelId);
 }
 
