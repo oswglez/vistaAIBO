@@ -26,12 +26,13 @@ public class ContactController {
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Consulta todos los  contactos", description = "Consulta todos los contactos")
     public ResponseEntity<List<Contact>> getAllContacts() {
         return ResponseEntity.ok(contactService.findAll());
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Consulta un contacto", description = "Consulta de un contacto a traves de su Id.")
+    @Operation(summary = "Consulta un contacto por Id", description = "Consulta de un contacto a traves de su Id.")
     public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
         return contactService.findById(id)
                 .map(ResponseEntity::ok)
@@ -39,7 +40,7 @@ public class ContactController {
     }
     // Get Hotels by Name
     @GetMapping("/{lastName}")
-    @Operation(summary = "Consulta de contactos", description = "Consulta un contacto por su nombre.")
+    @Operation(summary = "Consulta de contactos por lastName", description = "Consulta un contacto por su nombre.")
     public ResponseEntity<List<Contact>> getContactByLastName(@RequestParam String name) {
         List<Contact> contacts = contactService.findContactByLastName(name);
         if (contacts.isEmpty()) {
@@ -67,7 +68,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/hotel/{hotelId}/contact/{contactId}")
-    @Operation(summary = "Elimina un.   contacto", description = "Elimina o desconecta un contacto de un hotel.")
+    @Operation(summary = "Remueve un contacto de un hotel", description = "Elimina o desconecta un contacto de un hotel.")
     public ResponseEntity<Void> removeContactFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long contactId) {
@@ -76,7 +77,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Elimina un contacto", description = "Elimina o desconecta de un hotel un contacto a traves de su Id.")
+    @Operation(summary = "Elimina un contacto", description = "Elimina contacto a traves de su Id.")
     public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
         contactService.delete(id);
         return ResponseEntity.noContent().build();

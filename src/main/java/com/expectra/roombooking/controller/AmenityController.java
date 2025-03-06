@@ -88,7 +88,7 @@ public class AmenityController {
 //    }
 
     @DeleteMapping("/room/{roomId}/amenity/{amenityId}")
-    @Operation(summary = "Elimina una amenity", description = "Elimina o desconecta una amenity de una habitación.")
+    @Operation(summary = "Desconecta o elimina una amenity de una habitacion", description = "Elimina o desconecta una amenity de una habitación.")
     public ResponseEntity<Void> removeAmenityFromRoom(
             @PathVariable Long roomId,
             @PathVariable Long amenityId) {
@@ -97,7 +97,7 @@ public class AmenityController {
     }
 
     @DeleteMapping("/hotel/{hotelId}/amenity/{amenityId}")
-    @Operation(summary = "Elimina una amenity", description = "Elimina o desconecta una amenity de un hotel.")
+    @Operation(summary = "Desconecta o elimina una amenity de. un. hotel", description = "Elimina o desconecta una amenity de un hotel.")
     public ResponseEntity<Void> removeAmenityFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long amenityId) {

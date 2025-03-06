@@ -76,7 +76,7 @@ public class RoomController {
     }
     // Get Room Media by Hotel ID and Room Unit
     @GetMapping("/{hotelId}/roomId/{roomId}/media")
-    @Operation(summary = "Consulta las medias", description = "Consulta las medias de una habitación de un hotel.")
+    @Operation(summary = "Consulta las medias por roomId", description = "Consulta las medias de una habitación de un hotel.")
     public ResponseEntity<List<Media>> getRoomMediasByHotelIdAndRoomId(
             @PathVariable Long hotelId,
             @PathVariable Long roomId) {
@@ -86,7 +86,7 @@ public class RoomController {
 
     // Get Room Amenities by Hotel ID and Room Type
     @GetMapping("/{hotelId}/roomId/{roomId}/amenities")
-    @Operation(summary = "Consulta las amenities", description = "Consulta las ammenities de una habitación de un hotel.")
+    @Operation(summary = "Consulta las amenities por roomId", description = "Consulta las ammenities de una habitación de un hotel.")
     public ResponseEntity<List<Amenity>> getRoomAmenitiesByHotelIdAndRoomId(
             @PathVariable Long hotelId,
             @PathVariable Long roomId) {
@@ -95,7 +95,7 @@ public class RoomController {
     }
     // Get Room Media by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/media")
-    @Operation(summary = "Consulta las medias", description = "Consulta las medias de un tipo  habitación de un hotel.")
+    @Operation(summary = "Consulta las medias por tipo. de habitacion", description = "Consulta las medias de un tipo  habitación de un hotel.")
     public ResponseEntity<List<Media>> getRoomMediaByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
@@ -105,7 +105,7 @@ public class RoomController {
 
     // Get Room Amenities by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/amenities")
-    @Operation(summary = "Consulta las amenities", description = "Consulta las ammenities de un tipo habitación de un hotel.")
+    @Operation(summary = "Consulta las amenities por tipo. de habitacion", description = "Consulta las ammenities de un tipo habitación de un hotel.")
     public ResponseEntity<List<Amenity>> getRoomAmenitiesByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {

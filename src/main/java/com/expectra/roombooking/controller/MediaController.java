@@ -49,7 +49,7 @@ public class MediaController {
 
     // Get Media by ID
     @GetMapping("/{id}")
-    @Operation(summary = "Consulta una media", description = "Consulta una media a través de su id.")
+    @Operation(summary = "Consulta una media por su Id", description = "Consulta una media a través de su id.")
     public ResponseEntity<Media> getMediaById(@PathVariable Long id) {
         return mediaService.getMediaById(id)
                 .map(media -> new ResponseEntity<>(media, HttpStatus.OK))
@@ -89,7 +89,7 @@ public class MediaController {
     }
 
     @DeleteMapping("/room/{roomId}/media/{mediaId}")
-    @Operation(summary = "Elimina una media", description = "Elimina o desconecta una media de una habitación.")
+    @Operation(summary = "Remueve una media de una habitacion", description = "Elimina o desconecta una media de una habitación.")
     public ResponseEntity<Void> removeMediaFromRoom(
             @PathVariable Long roomId,
             @PathVariable Long mediaId) {
@@ -98,7 +98,7 @@ public class MediaController {
     }
 
     @DeleteMapping("/hotel/{hotelId}/media/{mediaId}")
-    @Operation(summary = "Elimina una media", description = "Elimina o desconecta una media de un hotel.")
+    @Operation(summary = "Remueve una media de un hotel", description = "Elimina o desconecta una media de un hotel.")
     public ResponseEntity<Void> removeAmenityFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long mediaId) {
