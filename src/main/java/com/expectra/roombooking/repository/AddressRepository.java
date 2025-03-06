@@ -1,6 +1,7 @@
 package com.expectra.roombooking.repository;
 
 import com.expectra.roombooking.model.Address;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,22 +14,27 @@ import java.util.Optional;
 
     // Metodo para buscar todas las amenidades
     @Override
+    @NonNull
     List<Address> findAll();
 
     // Metodo para buscar una amenidad por ID
     @Override
-    Optional<Address> findById(Long id);
+    @NonNull
+    Optional<Address> findById(@NonNull Long id);
 
     // Metodo para guardar una amenidad (crear o actualizar)
     @Override
+    @NonNull
     <S extends Address> S save(S entity);
 
     // Metodo para eliminar una amenidad por entidad
     @Override
+    @NonNull
     void delete(Address entity);
 
     // Metodo para eliminar una amenidad por ID
     @Override
+    @NonNull
     void deleteById(Long addressId);
 
 

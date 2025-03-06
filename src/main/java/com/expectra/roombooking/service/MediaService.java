@@ -1,13 +1,5 @@
 package com.expectra.roombooking.service;
 
-import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.repository.MediaRepository;
-import jakarta.persistence.Column;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
 import com.expectra.roombooking.model.Media;
 import java.util.List;
 import java.util.Optional;
