@@ -37,7 +37,7 @@ import java.util.Optional;
 
     // Método personalizado para encontrar todas las medias de un hotel específico
 
-    @Query("SELECT a FROM Address a JOIN a.hotels h WHERE h.hotelId = :hotelId")
-    List<Address> findAllAddressByHotelId(Long hotelId);
+//    @Query("SELECT a FROM Address a JOIN a.hotels h WHERE h.hotelId = :hotelId")
+//    List<Address> findAllAddressByHotelId(Long hotelId);
 
 }

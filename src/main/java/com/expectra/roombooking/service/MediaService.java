@@ -20,4 +20,6 @@ public interface MediaService {
     void deleteMedia(Long id);
     List<Media> getAllMediaByRoomId(Long roomId);
     List<Media> getAllMediaByHotelId(Long hotelId);
+    void removeMediaFromRoom(Long roomId, Long mediaId);
+    void removeMediaFromHotel(Long hotelId, Long mediaId);
 }

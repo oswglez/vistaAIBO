@@ -2,6 +2,7 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Room;
@@ -107,5 +108,29 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public List<Media> getAllMediaByHotelId(Long hotelId) {
         return mediaRepository.findAllMediasByHotelId(hotelId);
+    }
+
+    @Override
+    @Transactional
+    public void removeMediaFromRoom(Long roomId, Long mediaId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
+        Media media = mediaRepository.findById(mediaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + mediaId));
+
+        media.getRooms().remove(room);
+        mediaRepository.save(media);
+    }
+
+    @Override
+    @Transactional
+    public void removeMediaFromHotel(Long hotelId, Long mediaId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
+        Media media = mediaRepository.findById(mediaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + mediaId));
+
+        media.getHotels().remove(hotel);
+        mediaRepository.save(media);
     }
 }

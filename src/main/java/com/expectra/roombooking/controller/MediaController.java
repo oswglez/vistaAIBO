@@ -56,21 +56,21 @@ public class MediaController {
                 .orElseThrow(() -> new ResourceNotFoundException("Media not found with id: " + id));
     }
 
-    // Get all Media for a specific Room
-    @GetMapping("/room/{roomId}")
-    @Operation(summary = "Consulta una media", description = "Consulta una media de una room unit.")
-    public ResponseEntity<List<Media>> getAllMediaByRoomId(@PathVariable Long roomId) {
-        List<Media> mediaList = mediaService.getAllMediaByRoomId(roomId);
-        return new ResponseEntity<>(mediaList, HttpStatus.OK);
-    }
-
-    // Get all Media for a specific Hotel
-    @GetMapping("/hotel/{hotelId}")
-    @Operation(summary = "Consulta todas las media", description = "Consulta todas las medias de un hotel por el hotelId.")
-    public ResponseEntity<List<Media>> getAllMediaByHotelId(@PathVariable Long hotelId) {
-        List<Media> mediaList = mediaService.getAllMediaByHotelId(hotelId);
-        return new ResponseEntity<>(mediaList, HttpStatus.OK);
-    }
+//    // Get all Media for a specific Room
+//    @GetMapping("/room/{roomId}")
+//    @Operation(summary = "Consulta una media", description = "Consulta una media de una room unit.")
+//    public ResponseEntity<List<Media>> getAllMediaByRoomId(@PathVariable Long roomId) {
+//        List<Media> mediaList = mediaService.getAllMediaByRoomId(roomId);
+//        return new ResponseEntity<>(mediaList, HttpStatus.OK);
+//    }
+//
+//    // Get all Media for a specific Hotel
+//    @GetMapping("/hotel/{hotelId}")
+//    @Operation(summary = "Consulta todas las media", description = "Consulta todas las medias de un hotel por el hotelId.")
+//    public ResponseEntity<List<Media>> getAllMediaByHotelId(@PathVariable Long hotelId) {
+//        List<Media> mediaList = mediaService.getAllMediaByHotelId(hotelId);
+//        return new ResponseEntity<>(mediaList, HttpStatus.OK);
+//    }
 
     // Update Media
     @PutMapping("/{id}")
@@ -85,6 +85,24 @@ public class MediaController {
     @Operation(summary = "Elimina una media", description = "Elimina una media por la mediaId.")
     public ResponseEntity<Void> deleteMedia(@PathVariable Long id) {
         mediaService.deleteMedia(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/room/{roomId}/media/{mediaId}")
+    @Operation(summary = "Elimina una media", description = "Elimina o desconecta una media de una habitación.")
+    public ResponseEntity<Void> removeMediaFromRoom(
+            @PathVariable Long roomId,
+            @PathVariable Long mediaId) {
+        mediaService.removeMediaFromRoom(roomId, mediaId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/hotel/{hotelId}/media/{mediaId}")
+    @Operation(summary = "Elimina una media", description = "Elimina o desconecta una media de un hotel.")
+    public ResponseEntity<Void> removeAmenityFromHotel(
+            @PathVariable Long hotelId,
+            @PathVariable Long mediaId) {
+        mediaService.removeMediaFromHotel(hotelId, mediaId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

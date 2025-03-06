@@ -3,18 +3,27 @@ package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.*;
-import com.expectra.roombooking.repository.AddressRepository;
+import com.expectra.roombooking.repository.*;
 import com.expectra.roombooking.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class AddressServiceImpl implements AddressService {
 
+    private final ContactRepository contactRepository;
+    private final HotelRepository hotelRepository;
+    private final AddressRepository addressRepository;
+
     @Autowired
-    private AddressRepository addressRepository;
+    public AddressServiceImpl(ContactRepository contactRepository, HotelRepository hotelRepository, AddressRepository addressRepository) {
+        this.contactRepository = contactRepository;
+        this.hotelRepository = hotelRepository;
+        this.addressRepository = addressRepository;
+    }
 
     @Override
     public List<Address> getAllAddresses() {
@@ -45,7 +54,29 @@ public class AddressServiceImpl implements AddressService {
 
         return addressRepository.save(address);
     }
+    @Override
+    @Transactional
+    public void removeAddressFromContact(Long contactId, Long addressId) {
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow(() -> new ResourceNotFoundException("Contact not found with id: " + contactId));
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + addressId));
 
+        address.getContacts().remove(contact);
+        addressRepository.save(address);
+    }
+
+    @Override
+    @Transactional
+    public void removeAddressFromHotel(Long hotelId, Long addressId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + addressId));
+
+        address.getHotels().remove(hotel);
+        addressRepository.save(address);
+    }
     @Override
     public void deleteAddress(Long id) {
         Address address = addressRepository.findById(id)

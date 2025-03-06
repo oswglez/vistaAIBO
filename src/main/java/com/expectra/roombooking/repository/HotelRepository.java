@@ -38,8 +38,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Override
     void deleteById(@NonNull Long id);
 
-    @OneToMany(mappedBy = "hotel") // Indica el lado inverso de la relación
-    List<Room> room =  new ArrayList<>();
+//    @OneToMany(mappedBy = "hotel") // Indica el lado inverso de la relación
+//    List<Room> room =  new ArrayList<>();
 
     // Metodo personalizado para buscar hoteles por nombre
     List<Hotel> findByHotelName(String hotelName);
@@ -49,16 +49,16 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     List<Amenity> findAllAmenitiesByHotelId(@NonNull Long hotelId);
 
     @Query("SELECT m FROM Media m JOIN m.hotels h WHERE h.hotelId = :hotelId")
-    List<Media> findAllMediasByHotelId(@Param("hotelId") Long hotelId);
+    List<Media> findAllMediasByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-    @Query("SELECT r FROM Room r JOIN Hotel h WHERE r.hotel = :hotelId")
+    @Query("SELECT r FROM Room r WHERE r.hotel.hotelId = :hotelId")
     List<Room> findAllRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-    @Query("SELECT c FROM Contact c JOIN Hotel h WHERE c.hotels = :hotelId")
+    @Query("SELECT c FROM Contact c JOIN c.hotels h WHERE h.hotelId = :hotelId")
     List<Contact> findAllContactsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-    @Query("SELECT a FROM Address a JOIN Hotel h WHERE a.hotels = :hotelId")
-    List<Address> findAllAddressesByHotelId(@Param("hotelId") Long hotelId);
+    @Query("SELECT a FROM Address a JOIN a.hotels h WHERE h.hotelId = :hotelId")
+    List<Address> findAllAddressesByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
 
 }

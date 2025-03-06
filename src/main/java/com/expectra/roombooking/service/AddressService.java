@@ -12,4 +12,6 @@ public interface AddressService {
     Address createAddress(Address address);
     Address updateAddress(Long id, Address addressDetails);
     void deleteAddress(Long id);
+    void removeAddressFromContact(Long roomId, Long addressId);
+    void removeAddressFromHotel(Long hotelId, Long addressId);
 }
