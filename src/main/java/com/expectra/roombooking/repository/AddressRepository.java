@@ -25,17 +25,16 @@ import java.util.Optional;
     // Metodo para guardar una amenidad (crear o actualizar)
     @Override
     @NonNull
-    <S extends Address> S save(S entity);
+    <S extends Address> S save(@NonNull S entity);
 
     // Metodo para eliminar una amenidad por entidad
     @Override
     @NonNull
-    void delete(Address entity);
+    void delete(@NonNull Address entity);
 
     // Metodo para eliminar una amenidad por ID
     @Override
-    @NonNull
-    void deleteById(Long addressId);
+    void deleteById(@NonNull Long addressId);
 
 
     @Query("SELECT a FROM Address a JOIN a.contacts c WHERE c.contactId = :contactId")
