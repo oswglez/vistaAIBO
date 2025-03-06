@@ -32,7 +32,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     // Metodo para eliminar un hotel por entidad
     @Override
-    void delete(Hotel entity);
+    void delete(@NonNull Hotel entity);
 
     // Metodo para eliminar un hotel por ID
     @Override
@@ -51,11 +51,13 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT m FROM Media m JOIN m.hotels h WHERE h.hotelId = :hotelId")
     List<Media> findAllMediasByHotelId(@Param("hotelId") Long hotelId);
 
-  //  @Query("SELECT r FROM Ro m JOIN m.hotels h WHERE h.hotelId = :hotelId")
+    @Query("SELECT r FROM Room r JOIN Hotel h WHERE r.hotel = :hotelId")
     List<Room> findAllRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
+    @Query("SELECT c FROM Contact c JOIN Hotel h WHERE c.hotels = :hotelId")
     List<Contact> findAllContactsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
+    @Query("SELECT a FROM Address a JOIN Hotel h WHERE a.hotels = :hotelId")
     List<Address> findAllAddressesByHotelId(@Param("hotelId") Long hotelId);
 
 
