@@ -29,7 +29,6 @@ import java.util.Optional;
 
     // Metodo para eliminar una amenidad por entidad
     @Override
-    @NonNull
     void delete(@NonNull Address entity);
 
     // Metodo para eliminar una amenidad por ID

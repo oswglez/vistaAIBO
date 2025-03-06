@@ -2,7 +2,6 @@ package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Contact;
-import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.service.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -10,8 +10,6 @@ public interface MediaService {
     Optional<Media> getMediaById(Long id);
     Media updateMedia(Long id, Media mediaDetails);
     void deleteMedia(Long id);
-    List<Media> getAllMediaByRoomId(Long roomId);
-    List<Media> getAllMediaByHotelId(Long hotelId);
     void removeMediaFromRoom(Long roomId, Long mediaId);
     void removeMediaFromHotel(Long hotelId, Long mediaId);
 }
