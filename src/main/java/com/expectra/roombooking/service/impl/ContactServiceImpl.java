@@ -38,7 +38,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> findByLastName(String lastName) {
+    public List<Contact> GetContactByLastName(String lastName) {
         return contactRepository.findByLastName(lastName);
     }
 

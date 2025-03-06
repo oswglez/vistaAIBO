@@ -8,6 +8,8 @@ package com.expectra.roombooking.service.impl;
         import com.expectra.roombooking.service.RoomService;
         import jakarta.transaction.Transactional;
         import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.data.jpa.repository.Query;
+        import org.springframework.data.repository.query.Param;
         import org.springframework.stereotype.Service;
 
         import java.util.List;
@@ -42,22 +44,25 @@ public class RoomServiceImpl implements RoomService {
 //        return roomRepository.getAllRoomsByHotelId(hotelId);
 //    }
  @Override
- public List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId) {
+ public List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId) {
      return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
  }
-
+    @Override
+    public List<Amenity> getAllAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId) {
+        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
+    }
 //    @Override
 //    public List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId) {
 //        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
 //    }
 
     @Override
-    public List<Media> getRoomMediaByHotelAndType(Long hotelId, String roomType) {
+    public List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType) {
         return roomRepository.getAllMediasByHotelIdAndRoomType(hotelId, roomType);
     }
 
     @Override
-    public List<Amenity> getRoomAmenitiesByHotelAndType(Long hotelId, String roomType) {
+    public List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType) {
         return roomRepository.getAllAmenitiesByHotelIdAndRoomType(hotelId, roomType);
     }
 

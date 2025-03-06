@@ -1,6 +1,8 @@
 package com.expectra.roombooking.controller;
 
+import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Contact;
+import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.service.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +38,17 @@ public class ContactController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    // Get Hotels by Name
+    @GetMapping("/search")
+    @Operation(summary = "Consulta de contactos", description = "Consulta un contacto por su nombre.")
+    public ResponseEntity<List<Contact>> GetContactByLastName(@RequestParam String name) {
+        List<Contact> contacts = contactService.GetContactByLastName(name);
+        if (contacts.isEmpty()) {
+            System.out.println("name = " + name);
+            throw new ResourceNotFoundException("No se encontraron contactos con el nombre: " + name);
+        }
+        return ResponseEntity.ok(contacts);
+    }
     @PostMapping
     @Operation(summary = "Crea un contacto", description = "Creación de un contacto")
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
@@ -53,6 +65,15 @@ public class ContactController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @DeleteMapping("/hotel/{hotelId}/contact/{contactId}")
+    @Operation(summary = "Elimina un.   contacto", description = "Elimina o desconecta un contacto de un hotel.")
+    public ResponseEntity<Void> removeContactFromHotel(
+            @PathVariable Long hotelId,
+            @PathVariable Long contactId) {
+        contactService.removeContactFromHotel(hotelId, contactId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

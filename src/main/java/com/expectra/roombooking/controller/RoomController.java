@@ -74,14 +74,32 @@ public class RoomController {
         roomService.deleteRoomById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    // Get Room Media by Hotel ID and Room Unit
+    @GetMapping("/{hotelId}/roomId/{roomId}/media")
+    @Operation(summary = "Consulta las medias", description = "Consulta las medias de una habitación de un hotel.")
+    public ResponseEntity<List<Media>> getRoomMediasByHotelIdAndRoomId(
+            @PathVariable Long hotelId,
+            @PathVariable Long roomId) {
+        List<Media> medias = roomService.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
+        return new ResponseEntity<>(medias, HttpStatus.OK);
+    }
 
+    // Get Room Amenities by Hotel ID and Room Type
+    @GetMapping("/{hotelId}/roomId/{roomId}/amenities")
+    @Operation(summary = "Consulta las amenities", description = "Consulta las ammenities de una habitación de un hotel.")
+    public ResponseEntity<List<Amenity>> getRoomAmenitiesByHotelIdAndRoomId(
+            @PathVariable Long hotelId,
+            @PathVariable Long roomId) {
+        List<Amenity> amenities = roomService.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
+        return new ResponseEntity<>(amenities, HttpStatus.OK);
+    }
     // Get Room Media by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/media")
     @Operation(summary = "Consulta las medias", description = "Consulta las medias de un tipo  habitación de un hotel.")
     public ResponseEntity<List<Media>> getRoomMediaByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
-        List<Media> media = roomService.getRoomMediaByHotelAndType(hotelId, roomType);
+        List<Media> media = roomService.getRoomMediaByHotelAndRoomType(hotelId, roomType);
         return new ResponseEntity<>(media, HttpStatus.OK);
     }
 
@@ -91,7 +109,7 @@ public class RoomController {
     public ResponseEntity<List<Amenity>> getRoomAmenitiesByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
-        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndType(hotelId, roomType);
+        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoomType(hotelId, roomType);
         return new ResponseEntity<>(amenities, HttpStatus.OK);
     }
 }

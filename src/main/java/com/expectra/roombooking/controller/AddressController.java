@@ -2,7 +2,9 @@ package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.model.Address;
 import com.expectra.roombooking.service.AddressService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +39,23 @@ public class AddressController {
         return ResponseEntity.ok(updatedAddress);
     }
 
+    @DeleteMapping("contact/{contactId}/address/{addressId}")
+    @Operation(summary = "Elimina una direccion", description = "Elimina o desconecta una direccion de un contacto.")
+    public ResponseEntity<Void> removeContctFromAddress(
+            @PathVariable Long contactId,
+            @PathVariable Long addressId) {
+        addressService.removeAddressFromContact(contactId, addressId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/hotel/{hotelId}/address/{addressId}")
+    @Operation(summary = "Elimina una direccion", description = "Elimina o desconecta una direccion de un hotel.")
+    public ResponseEntity<Void> removeAmenityFromHotel(
+            @PathVariable Long hotelId,
+            @PathVariable Long addressId) {
+        addressService.removeAddressFromContact(hotelId, addressId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
         addressService.deleteAddress(id);
