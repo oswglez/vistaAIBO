@@ -2,6 +2,7 @@ package com.expectra.roombooking.repository;
 
 import com.expectra.roombooking.model.*;
 import jakarta.persistence.OneToMany;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,14 +17,17 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     // Metodo para buscar todos los hoteles
     @Override
+    @NonNull
     List<Hotel> findAll();
 
     // Metodo para buscar un hotel por ID
     @Override
+    @NonNull
     Optional<Hotel> findById(Long hotelId);
 
     // Metodo para guardar un hotel (crear o actualizar)
     @Override
+    @NonNull
     <S extends Hotel> S save(S entity);
 
     // Metodo para eliminar un hotel por entidad
