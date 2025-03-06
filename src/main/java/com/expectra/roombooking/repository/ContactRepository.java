@@ -11,5 +11,5 @@ import java.util.List;
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     // Métodos personalizados si son necesarios
     // Metodo personalizado para buscar hoteles por nombre
-    List<Contact> findByLastName(String lastName);
+    List<Contact> findContactByLastName(String lastName);
 }

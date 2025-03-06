@@ -10,7 +10,6 @@ public interface HotelService {
     List<Hotel> findAllHotels();
     Optional<Hotel> findHotelById(Long hotelId);
     Hotel saveHotel(Hotel hotel);
-    void deleteHotel(Hotel hotel);
     void deleteHotelById(Long hotelId);
 
     // Operaciones específicas

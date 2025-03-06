@@ -39,11 +39,6 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void deleteHotel(Hotel hotel) {
-        hotelRepository.delete(hotel);
-    }
-
-    @Override
     public void deleteHotelById(Long hotelId) {
         hotelRepository.deleteById(hotelId);
     }

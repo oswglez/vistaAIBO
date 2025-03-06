@@ -38,8 +38,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> GetContactByLastName(String lastName) {
-        return contactRepository.findByLastName(lastName);
+    public List<Contact> findContactByLastName(String lastName) {
+        return contactRepository.findContactByLastName(lastName);
     }
 
     @Override

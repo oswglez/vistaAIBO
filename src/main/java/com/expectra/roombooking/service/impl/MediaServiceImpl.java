@@ -100,16 +100,6 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public List<Media> getAllMediaByRoomId(Long roomId) {
-        return mediaRepository.findAllMediasByRoomId(roomId);
-    }
-
-    @Override
-    public List<Media> getAllMediaByHotelId(Long hotelId) {
-        return mediaRepository.findAllMediasByHotelId(hotelId);
-    }
-
-    @Override
     @Transactional
     public void removeMediaFromRoom(Long roomId, Long mediaId) {
         Room room = roomRepository.findById(roomId)

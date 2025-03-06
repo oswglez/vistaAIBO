@@ -25,7 +25,7 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<List<Contact>> getAllContacts() {
         return ResponseEntity.ok(contactService.findAll());
     }
@@ -38,10 +38,10 @@ public class ContactController {
                 .orElse(ResponseEntity.notFound().build());
     }
     // Get Hotels by Name
-    @GetMapping("/search")
+    @GetMapping("/{lastName}")
     @Operation(summary = "Consulta de contactos", description = "Consulta un contacto por su nombre.")
-    public ResponseEntity<List<Contact>> GetContactByLastName(@RequestParam String name) {
-        List<Contact> contacts = contactService.GetContactByLastName(name);
+    public ResponseEntity<List<Contact>> getContactByLastName(@RequestParam String name) {
+        List<Contact> contacts = contactService.findContactByLastName(name);
         if (contacts.isEmpty()) {
             System.out.println("name = " + name);
             throw new ResourceNotFoundException("No se encontraron contactos con el nombre: " + name);

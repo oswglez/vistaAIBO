@@ -41,7 +41,7 @@ public class AddressController {
 
     @DeleteMapping("contact/{contactId}/address/{addressId}")
     @Operation(summary = "Elimina una direccion", description = "Elimina o desconecta una direccion de un contacto.")
-    public ResponseEntity<Void> removeContctFromAddress(
+    public ResponseEntity<Void> removeContactFromAddress(
             @PathVariable Long contactId,
             @PathVariable Long addressId) {
         addressService.removeAddressFromContact(contactId, addressId);
@@ -53,7 +53,7 @@ public class AddressController {
     public ResponseEntity<Void> removeAmenityFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long addressId) {
-        addressService.removeAddressFromContact(hotelId, addressId);
+        addressService.removeAddressFromHotel(hotelId, addressId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @DeleteMapping("/{id}")
