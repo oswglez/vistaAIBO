@@ -131,4 +131,13 @@ public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long id) {
         List<Contact> contact = hotelService.findAllContactsByHotelId(id);
         return ResponseEntity.ok(contact);
     }
+    @GetMapping("/{id}/address")
+    @Operation(summary = "Consulta las direcciones", description = "Consulta las direcciones de un de un hotel usando el hotelId.")
+    public ResponseEntity<List<Address>> getAllAddressesByHotelId(@PathVariable Long id) {
+        if (hotelService.findHotelById(id).isEmpty()) {
+            throw new ResourceNotFoundException(messageNotfound + id);
+        }
+        List<Address> addresses = hotelService.findAllAddressesByHotelId(id);
+        return ResponseEntity.ok(addresses);
+    }
 }

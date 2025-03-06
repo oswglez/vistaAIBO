@@ -74,6 +74,12 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Address> findAllAddressesByHotelId(Long hotelId) {
+        return hotelRepository.findAllAddressesByHotelId(hotelId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Room> findHotelRooms(Long hotelId) {
         return hotelRepository.findAllRoomsByHotelId(hotelId);
     }

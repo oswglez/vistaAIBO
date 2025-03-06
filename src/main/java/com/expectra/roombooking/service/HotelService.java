@@ -19,7 +19,7 @@ public interface HotelService {
     List<Media> findHotelMedias(Long hotelId);
     List<Room> findHotelRooms(Long hotelId);
     List<Contact> findAllContactsByHotelId(Long hotelId);
-
+    List<Address> findAllAddressesByHotelId(Long hotelId);
 
 
 }

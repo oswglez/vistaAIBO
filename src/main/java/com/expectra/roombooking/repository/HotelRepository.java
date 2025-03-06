@@ -51,5 +51,9 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     List<Room> findAllRoomsByHotelId(@Param("hotelId") Long hotelId);
 
     List<Contact> findAllContactsByHotelId(@Param("hotelId") Long hotelId);
+
+    List<Address> findAllAddressesByHotelId(@Param("hotelId") Long hotelId);
+
+
 }
 
