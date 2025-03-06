@@ -23,12 +23,12 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     // Metodo para buscar un hotel por ID
     @Override
     @NonNull
-    Optional<Hotel> findById(Long hotelId);
+    Optional<Hotel> findById(@NonNull Long hotelId);
 
     // Metodo para guardar un hotel (crear o actualizar)
     @Override
     @NonNull
-    <S extends Hotel> S save(S entity);
+    <S extends Hotel> S save(@NonNull S entity);
 
     // Metodo para eliminar un hotel por entidad
     @Override
@@ -36,25 +36,25 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     // Metodo para eliminar un hotel por ID
     @Override
-    void deleteById(Long id);
+    void deleteById(@NonNull Long id);
 
     @OneToMany(mappedBy = "hotel") // Indica el lado inverso de la relación
-    public List<Room> room =  new ArrayList<>();
+    List<Room> room =  new ArrayList<>();
 
     // Metodo personalizado para buscar hoteles por nombre
     List<Hotel> findByHotelName(String hotelName);
 
     // Metodo personalizado para encontrar todas las amenities de un hotel específico
     @Query("SELECT a FROM Amenity a JOIN a.hotels h WHERE h.hotelId = :hotelId")
-    List<Amenity> findAllAmenitiesByHotelId(Long hotelId);
+    List<Amenity> findAllAmenitiesByHotelId(@NonNull Long hotelId);
 
     @Query("SELECT m FROM Media m JOIN m.hotels h WHERE h.hotelId = :hotelId")
     List<Media> findAllMediasByHotelId(@Param("hotelId") Long hotelId);
 
   //  @Query("SELECT r FROM Ro m JOIN m.hotels h WHERE h.hotelId = :hotelId")
-    List<Room> findAllRoomsByHotelId(@Param("hotelId") Long hotelId);
+    List<Room> findAllRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-    List<Contact> findAllContactsByHotelId(@Param("hotelId") Long hotelId);
+    List<Contact> findAllContactsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
     List<Address> findAllAddressesByHotelId(@Param("hotelId") Long hotelId);
 
