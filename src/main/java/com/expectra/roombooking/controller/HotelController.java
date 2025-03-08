@@ -17,7 +17,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 public class HotelController {
-    private final String messageNotfound = "Hotel not found" ;
+    private final String messageNotfound = "Hotel not found by Id" ;
     private final HotelService hotelService;
 
     @Autowired
@@ -26,7 +26,7 @@ public class HotelController {
     }
 
     // Create a new Hotel
-    @PostMapping
+    @PostMapping("/")
     @Operation(summary = "Crea un hotel", description = "Crea un hotel usando el hotelId.")
     public ResponseEntity<Hotel> createHotel(@RequestBody Hotel hotel) {
         Hotel savedHotel = hotelService.saveHotel(hotel);
@@ -34,7 +34,7 @@ public class HotelController {
     }
 
     // Get all Hotels
-    @GetMapping("/search")
+    @GetMapping
     @Operation(summary = "Consulta todos los hoteles", description = "Consulta de todos los hoteles.")
     public ResponseEntity<List<Hotel>> getAllHotels() {
         List<Hotel> hotels = hotelService.findAllHotels();
@@ -42,99 +42,99 @@ public class HotelController {
     }
 
     // Get Hotel by ID
-    @GetMapping("/{id}")
+    @GetMapping("/{hotelId}")
     @Operation(summary = "Consulta un hotel", description = "Consulta un hotel usando el hotelId.")
-    public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
-        return hotelService.findHotelById(id)
+    public ResponseEntity<Hotel> getHotelById(@PathVariable Long hotelId) {
+        return hotelService.findHotelById(hotelId)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + id));
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + hotelId));
     }
 
     // Update Hotel
-    @PutMapping("/{id}")
+    @PutMapping("/{hotelId}")
     @Operation(summary = "Actualiza un hotel", description = "Actualiza un hotel usando el hotelId.")
-    public ResponseEntity<Hotel> updateHotel(@PathVariable Long id, @RequestBody Hotel hotelDetails) {
-        return hotelService.findHotelById(id)
+    public ResponseEntity<Hotel> updateHotel(@PathVariable Long hotelId, @RequestBody Hotel hotelDetails) {
+        return hotelService.findHotelById(hotelId)
                 .map(existingHotel -> {
                     // Mantener el ID original
-                    hotelDetails.setHotelId(id);
+                    hotelDetails.setHotelId(hotelId);
                     Hotel updated = hotelService.saveHotel(hotelDetails);
                     return ResponseEntity.ok(updated);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + id));
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + hotelId));
     }
 
     // Delete Hotel
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Elimina un hotel", description = "Elimmina y sus habitaciones un hotel usando el hotelId.")
-    public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
-        if (hotelService.findHotelById(id).isEmpty()) {
-            throw new ResourceNotFoundException(messageNotfound + id);
+    @DeleteMapping("/{hotelId}")
+    @Operation(summary = "Elimina un hotel", description = "Elimina y sus habitaciones un hotel usando el hotelId.")
+    public ResponseEntity<Void> deleteHotel(@PathVariable Long hotelId) {
+        if (hotelService.findHotelById(hotelId).isEmpty()) {
+            throw new ResourceNotFoundException(messageNotfound + hotelId);
         }
-        hotelService.deleteHotelById(id);
+        hotelService.deleteHotelById(hotelId);
         return ResponseEntity.noContent().build();
     }
 
     // Get Hotels by Name
-    @GetMapping("/{hotelName}")
+    @GetMapping("/search")
     @Operation(summary = "Consulta por nombre de hotel", description = "Consulta un hotel por su nombre.")
-    public ResponseEntity<List<Hotel>> getHotelsByName(@RequestParam String name) {
-        List<Hotel> hotels = hotelService.findHotelsByName(name);
+    public ResponseEntity<List<Hotel>> getHotelsByName(@RequestParam String hotelName) {
+        List<Hotel> hotels = hotelService.findHotelsByName(hotelName);
         if (hotels.isEmpty()) {
-            System.out.println("name = " + name);
-            throw new ResourceNotFoundException("No se encontraron hoteles con el nombre: " + name);
+            System.out.println("name = " + hotelName);
+            throw new ResourceNotFoundException("No se encontraron hoteles con el nombre: " + hotelName);
         }
         return ResponseEntity.ok(hotels);
     }
 
 
 // Get Hotel rooms
-@GetMapping("/{id}/rooms")
+@GetMapping("/{hotelid}/rooms")
 @Operation(summary = "Consulta todas las habitaciones", description = "Consulta las habbitaciones de un hotel usando el hotelId.")
-public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long id) {
-    if (hotelService.findHotelById(id).isEmpty()) {
-        throw new ResourceNotFoundException(messageNotfound + id);
+public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long Hotelid) {
+    if (hotelService.findHotelById(Hotelid).isEmpty()) {
+        throw new ResourceNotFoundException(messageNotfound + Hotelid);
     }
-    List<Room> rooms = hotelService.findHotelRooms(id);
+    List<Room> rooms = hotelService.findHotelRooms(Hotelid);
     return ResponseEntity.ok(rooms);
 }
     // Get Hotel Amenities
-    @GetMapping("/{id}/amenities")
+    @GetMapping("/{hotelId}/amenities")
     @Operation(summary = "Consulta todas las amenities", description = "Consulta las amenities de un hotel usando el hotelId.")
-    public ResponseEntity<List<Amenity>> getHotelAmenities(@PathVariable Long id) {
-        if (hotelService.findHotelById(id).isEmpty()) {
-            throw new ResourceNotFoundException(messageNotfound + id);
+    public ResponseEntity<List<Amenity>> getHotelAmenities(@PathVariable Long hotelId) {
+        if (hotelService.findHotelById(hotelId).isEmpty()) {
+            throw new ResourceNotFoundException(messageNotfound + hotelId);
         }
-        List<Amenity> amenities = hotelService.findHotelAmenities(id);
+        List<Amenity> amenities = hotelService.findHotelAmenities(hotelId);
         return ResponseEntity.ok(amenities);
     }
 
     // Get Hotel Media
-    @GetMapping("/{id}/media")
+    @GetMapping("/{hotelId}/media")
     @Operation(summary = "Consulta todas las medias", description = "Consulta las medias de un de un hotel usando el hotelId.")
-    public ResponseEntity<List<Media>> getHotelMedia(@PathVariable Long id) {
-        if (hotelService.findHotelById(id).isEmpty()) {
-            throw new ResourceNotFoundException(messageNotfound + id);
+    public ResponseEntity<List<Media>> getHotelMedia(@PathVariable Long hotelId) {
+        if (hotelService.findHotelById(hotelId).isEmpty()) {
+            throw new ResourceNotFoundException(messageNotfound + hotelId);
         }
-        List<Media> media = hotelService.findHotelMedias(id);
+        List<Media> media = hotelService.findHotelMedias(hotelId);
         return ResponseEntity.ok(media);
     }
-    @GetMapping("/{id}/contacts")
+    @GetMapping("/{hotelId}/contacts")
     @Operation(summary = "Consulta los contactos", description = "Consulta los contactos de un de un hotel usando el hotelId.")
-    public ResponseEntity<List<Contact>> getAllContactsByHotelId(@PathVariable Long id) {
-        if (hotelService.findHotelById(id).isEmpty()) {
-            throw new ResourceNotFoundException(messageNotfound + id);
+    public ResponseEntity<List<Contact>> getAllContactsByHotelId(@PathVariable Long hotelId) {
+        if (hotelService.findHotelById(hotelId).isEmpty()) {
+            throw new ResourceNotFoundException(messageNotfound + hotelId);
         }
-        List<Contact> contact = hotelService.findAllContactsByHotelId(id);
+        List<Contact> contact = hotelService.findAllContactsByHotelId(hotelId);
         return ResponseEntity.ok(contact);
     }
-    @GetMapping("/{id}/address")
+    @GetMapping("/{hotelId}/address")
     @Operation(summary = "Consulta las direcciones", description = "Consulta las direcciones de un de un hotel usando el hotelId.")
-    public ResponseEntity<List<Address>> getAllAddressesByHotelId(@PathVariable Long id) {
-        if (hotelService.findHotelById(id).isEmpty()) {
-            throw new ResourceNotFoundException(messageNotfound + id);
+    public ResponseEntity<List<Address>> getAllAddressesByHotelId(@PathVariable Long hotelId) {
+        if (hotelService.findHotelById(hotelId).isEmpty()) {
+            throw new ResourceNotFoundException(messageNotfound + hotelId);
         }
-        List<Address> addresses = hotelService.findAllAddressesByHotelId(id);
+        List<Address> addresses = hotelService.findAllAddressesByHotelId(hotelId);
         return ResponseEntity.ok(addresses);
     }
 }
