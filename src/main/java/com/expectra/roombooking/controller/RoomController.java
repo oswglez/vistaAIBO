@@ -23,6 +23,8 @@ public class RoomController {
 
     private final RoomService roomService;
     private final HotelService hotelService;
+    private final String messageNotfound = "Room not found by Id" ;
+
 
     @Autowired
     public RoomController(RoomService roomService, HotelService hotelService) {
@@ -31,9 +33,9 @@ public class RoomController {
     }
 
     // Create a new Room
-    @PostMapping
+    @PostMapping("/{hotelId}")
     @Operation(summary = "Crea una habitación", description = "Crea una habitación de un hotel.")
-    public ResponseEntity<Room> createRoom(@RequestParam Long hotelId, @RequestBody Room room) {
+    public ResponseEntity<Room> createRoom(@PathVariable Long hotelId, @RequestBody Room room) {
         Hotel hotel = hotelService.findHotelById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
@@ -43,18 +45,18 @@ public class RoomController {
     }
 
     // Get Room by ID
-    @GetMapping("/{id}")
-    @Operation(summary = "Cosulta una habitación", description = "Recupera una habitación de acuerdo a su Id.")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
-        return roomService.getRoomById(id)
+    @GetMapping("/{roomId}")
+    @Operation(summary = "Cosulta una habitación por id", description = "Recupera una habitación de acuerdo a su Id.")
+    public ResponseEntity<Room> getRoomById(@PathVariable Long roomId) {
+        return roomService.getRoomById(roomId)
                 .map(room -> new ResponseEntity<>(room, HttpStatus.OK))
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + roomId));
     }
-    @PutMapping("/{id}")
+    @PutMapping("/{roomId}")
     @Operation(summary = "Actualiza una habitación", description = "Actualiza los datos de una habitación.")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
-        Room existingRoom = roomService.getRoomById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
+    public ResponseEntity<Room> updateRoom(@PathVariable Long roomId, @RequestBody Room roomDetails) {
+        Room existingRoom = roomService.getRoomById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + roomId));
 
         // Actualizar los campos necesarios
         existingRoom.setRoomNumber(roomDetails.getRoomNumber());
@@ -68,10 +70,10 @@ public class RoomController {
     }
 
     // Delete Room
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{roomId}")
     @Operation(summary = "Elimina una habitación", description = "Elimina una habbitación y desconecta sus medias y amenities.")
-    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
-        roomService.deleteRoomById(id);
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
+        roomService.deleteRoomById(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     // Get Room Media by Hotel ID and Room Unit

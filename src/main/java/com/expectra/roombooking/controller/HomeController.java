@@ -12,7 +12,7 @@ public class HomeController {
     String appName;
 
 
-    @RequestMapping("/")
+    @RequestMapping
     @Operation(summary = "Home Page", description = "Posible pagina de inicio")
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
