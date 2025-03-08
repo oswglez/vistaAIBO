@@ -20,7 +20,6 @@ public class ContactController {
 
     private final ContactService contactService;
     private final String messageNotFound = "Contact not found with ID: ";
-    private final String hotelNotFound = "Hotel not found with ID: ";
 
     @Autowired
     public ContactController(ContactService contactService) {

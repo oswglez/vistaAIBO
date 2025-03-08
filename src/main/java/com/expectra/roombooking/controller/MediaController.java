@@ -25,8 +25,6 @@ public class MediaController {
         this.mediaService = mediaService;
     }
     private final String mediaNotFound = "Media not found with ID: ";
-    private final String hotelNotFound = "Hotel not found with ID: ";
-    private final String roomNotFound = "Room not found with ID: ";
 
     // Create a new Media
     @PostMapping

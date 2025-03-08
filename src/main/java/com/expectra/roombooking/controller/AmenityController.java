@@ -19,8 +19,6 @@ public class AmenityController {
 
     private final AmenityService amenityService;
     private final String messageNotFound = "Amenity not found with ID: ";
-    private final String hotelNotFound = "Hotel not found with ID: ";
-    private final String roomNotFound = "Room not found with ID: ";
 
     @Autowired
     public AmenityController(AmenityService amenityService) {
