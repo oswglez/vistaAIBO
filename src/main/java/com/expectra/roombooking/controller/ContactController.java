@@ -19,33 +19,35 @@ import java.util.List;
 public class ContactController {
 
     private final ContactService contactService;
+    private final String messageNotFound = "Contact not found with ID: ";
+    private final String hotelNotFound = "Hotel not found with ID: ";
 
     @Autowired
     public ContactController(ContactService contactService) {
         this.contactService = contactService;
     }
 
-    @GetMapping("/search")
+    @GetMapping
     @Operation(summary = "Consulta todos los  contactos", description = "Consulta todos los contactos")
     public ResponseEntity<List<Contact>> getAllContacts() {
-        return ResponseEntity.ok(contactService.findAll());
+        List<Contact> contacts = contactService.findAll();
+        return ResponseEntity.ok(contacts);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{contactId}")
     @Operation(summary = "Consulta un contacto por Id", description = "Consulta de un contacto a traves de su Id.")
-    public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
-        return contactService.findById(id)
+    public ResponseEntity<Contact> getContactById(@PathVariable Long contactId) {
+        return contactService.findById(contactId)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotFound + contactId));
     }
     // Get Hotels by Name
-    @GetMapping("/{lastName}")
+    @GetMapping("/search")
     @Operation(summary = "Consulta de contactos por lastName", description = "Consulta un contacto por su nombre.")
-    public ResponseEntity<List<Contact>> getContactByLastName(@RequestParam String name) {
-        List<Contact> contacts = contactService.findContactByLastName(name);
+    public ResponseEntity<List<Contact>> getContactByLastName(@RequestParam String lastName) {
+        List<Contact> contacts = contactService.findContactByLastName(lastName);
         if (contacts.isEmpty()) {
-            System.out.println("name = " + name);
-            throw new ResourceNotFoundException("No se encontraron contactos con el nombre: " + name);
+            throw new ResourceNotFoundException("No se encontraron contactos con el apellido: " + lastName);
         }
         return ResponseEntity.ok(contacts);
     }
@@ -53,33 +55,39 @@ public class ContactController {
     @Operation(summary = "Crea un contacto", description = "Creación de un contacto")
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         Contact savedContact = contactService.save(contact);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedContact);
+        return new ResponseEntity<>(savedContact, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{contactId}")
     @Operation(summary = "Actualiza un contacto", description = "Actualiza los datos de un contacto a traves de su Id.")
-    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody Contact contact) {
-        try {
-            Contact updatedContact = contactService.update(id, contact);
-            return ResponseEntity.ok(updatedContact);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Contact> updateContact
+            (@PathVariable Long contactId,
+             @RequestBody Contact contactDetails) {
+        return contactService.findById(contactId)
+                .map(existingContact -> {
+                    existingContact.setFirstName(contactDetails.getFirstName());
+                    existingContact.setLastName(contactDetails.getLastName());
+//                    existingContact.setEmail(contactDetails.getEmail());
+//                    existingContact.setPhone(contactDetails.getPhone());
+                    Contact updatedContact = contactService.save(existingContact);
+                    return ResponseEntity.ok(updatedContact);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotFound + contactId));
     }
 
-    @DeleteMapping("/hotel/{hotelId}/contact/{contactId}")
+    @DeleteMapping("/hotels/{hotelId}/contacts/{contactId}")
     @Operation(summary = "Remueve un contacto de un hotel", description = "Elimina o desconecta un contacto de un hotel.")
     public ResponseEntity<Void> removeContactFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long contactId) {
         contactService.removeContactFromHotel(hotelId, contactId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{contactId}")
     @Operation(summary = "Elimina un contacto", description = "Elimina contacto a traves de su Id.")
-    public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
-        contactService.delete(id);
+    public ResponseEntity<Void> deleteContact(@PathVariable Long contactId) {
+        contactService.delete(contactId);
         return ResponseEntity.noContent().build();
     }
 }

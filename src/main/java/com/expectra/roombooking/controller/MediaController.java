@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/media")
+@RequestMapping("/api/medias")
 @Tag(name = "Media Management", description = "Endpoints para gestión de medias de hoteles y habitaciones")
 
 public class MediaController {
@@ -24,6 +24,9 @@ public class MediaController {
     public MediaController(MediaService mediaService) {
         this.mediaService = mediaService;
     }
+    private final String mediaNotFound = "Media not found with ID: ";
+    private final String hotelNotFound = "Hotel not found with ID: ";
+    private final String roomNotFound = "Room not found with ID: ";
 
     // Create a new Media
     @PostMapping
@@ -38,71 +41,74 @@ public class MediaController {
         Media createdMedia = mediaService.createMedia(media, hotelId, roomId);
         return new ResponseEntity<>(createdMedia, HttpStatus.CREATED);
     }
-
+//    // Crear media asociada a un hotel
+//    @PostMapping("/hotels/{hotelId}")
+//    @Operation(summary = "Crear media para un hotel", description = "Crea un recurso multimedia y lo asocia a un hotel.")
+//    public ResponseEntity<Media> createHotelMedia(
+//            @PathVariable Long hotelId,
+//            @RequestBody Media media) {
+//        Media createdMedia = mediaService.createMediaForHotel(hotelId, media);
+//        return new ResponseEntity<>(createdMedia, HttpStatus.CREATED);
+//    }
+//
+//    // Crear media asociada a una habitación
+//    @PostMapping("/rooms/{roomId}")
+//    @Operation(summary = "Crear media para una habitación", description = "Crea un recurso multimedia y lo asocia a una habitación.")
+//    public ResponseEntity<Media> createRoomMedia(
+//            @PathVariable Long roomId,
+//            @RequestBody Media media) {
+//        Media createdMedia = mediaService.createMediaForRoom(roomId, media);
+//        return new ResponseEntity<>(createdMedia, HttpStatus.CREATED);
+//    }
     // Get all Media
     @GetMapping
     @Operation(summary = "Consulta todas las medias", description = "Consulta todas las medias.")
     public ResponseEntity<List<Media>> getAllMedia() {
         List<Media> mediaList = mediaService.getAllMedia();
-        return new ResponseEntity<>(mediaList, HttpStatus.OK);
+        return ResponseEntity.ok(mediaList);
     }
 
     // Get Media by ID
-    @GetMapping("/{id}")
+    @GetMapping("/{mediaId}")
     @Operation(summary = "Consulta una media por su Id", description = "Consulta una media a través de su id.")
-    public ResponseEntity<Media> getMediaById(@PathVariable Long id) {
-        return mediaService.getMediaById(id)
-                .map(media -> new ResponseEntity<>(media, HttpStatus.OK))
-                .orElseThrow(() -> new ResourceNotFoundException("Media not found with id: " + id));
+    public ResponseEntity<Media> getMediaById(@PathVariable Long mediaId) {
+        return mediaService.getMediaById(mediaId)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException(mediaNotFound + mediaId));
     }
 
-//    // Get all Media for a specific Room
-//    @GetMapping("/room/{roomId}")
-//    @Operation(summary = "Consulta una media", description = "Consulta una media de una room unit.")
-//    public ResponseEntity<List<Media>> getAllMediaByRoomId(@PathVariable Long roomId) {
-//        List<Media> mediaList = mediaService.getAllMediaByRoomId(roomId);
-//        return new ResponseEntity<>(mediaList, HttpStatus.OK);
-//    }
-//
-//    // Get all Media for a specific Hotel
-//    @GetMapping("/hotel/{hotelId}")
-//    @Operation(summary = "Consulta todas las media", description = "Consulta todas las medias de un hotel por el hotelId.")
-//    public ResponseEntity<List<Media>> getAllMediaByHotelId(@PathVariable Long hotelId) {
-//        List<Media> mediaList = mediaService.getAllMediaByHotelId(hotelId);
-//        return new ResponseEntity<>(mediaList, HttpStatus.OK);
-//    }
 
     // Update Media
-    @PutMapping("/{id}")
+    @PutMapping("/{mediaId}")
     @Operation(summary = "Actualiza una media", description = "Actualiza una media por la mediaId.")
-    public ResponseEntity<Media> updateMedia(@PathVariable Long id, @RequestBody Media mediaDetails) {
-        Media updatedMedia = mediaService.updateMedia(id, mediaDetails);
-        return new ResponseEntity<>(updatedMedia, HttpStatus.OK);
+    public ResponseEntity<Media> updateMedia(@PathVariable Long mediaId, @RequestBody Media mediaDetails) {
+        Media updatedMedia = mediaService.updateMedia(mediaId, mediaDetails);
+        return ResponseEntity.ok(updatedMedia);
     }
 
     // Delete Media
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{mediaId}")
     @Operation(summary = "Elimina una media", description = "Elimina una media por la mediaId.")
-    public ResponseEntity<Void> deleteMedia(@PathVariable Long id) {
-        mediaService.deleteMedia(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteMedia(@PathVariable Long mediaId) {
+        mediaService.deleteMedia(mediaId);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/room/{roomId}/media/{mediaId}")
+    @DeleteMapping("/rooms/{roomId}/media/{mediaId}")
     @Operation(summary = "Remueve una media de una habitacion", description = "Elimina o desconecta una media de una habitación.")
     public ResponseEntity<Void> removeMediaFromRoom(
             @PathVariable Long roomId,
             @PathVariable Long mediaId) {
         mediaService.removeMediaFromRoom(roomId, mediaId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/hotel/{hotelId}/media/{mediaId}")
+    @DeleteMapping("/hotels/{hotelId}/media/{mediaId}")
     @Operation(summary = "Remueve una media de un hotel", description = "Elimina o desconecta una media de un hotel.")
     public ResponseEntity<Void> removeAmenityFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long mediaId) {
         mediaService.removeMediaFromHotel(hotelId, mediaId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

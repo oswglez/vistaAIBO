@@ -18,13 +18,18 @@ import java.util.List;
 public class AmenityController {
 
     private final AmenityService amenityService;
+    private final String messageNotFound = "Amenity not found with ID: ";
+    private final String hotelNotFound = "Hotel not found with ID: ";
+    private final String roomNotFound = "Room not found with ID: ";
 
     @Autowired
     public AmenityController(AmenityService amenityService) {
         this.amenityService = amenityService;
     }
 
-    @PostMapping
+//. falta perfeccionar el metodo para que verifique si la amenity existe en ese caso solo lo conecta
+
+    @PutMapping
     @Operation(summary = "Crear una amenity", description = "Crea una amenity.")
     public ResponseEntity<Amenity> createAmenity(
             @RequestParam(required = false) Long hotelId,
@@ -37,78 +42,46 @@ public class AmenityController {
     @Operation(summary = "Obtiene todas las amenity", description = "Recupera todas las amenities de la base de datos.")
     public ResponseEntity<List<Amenity>> getAllAmenities() {
         List<Amenity> amenities = amenityService.getAllAmenities();
-        return new ResponseEntity<>(amenities, HttpStatus.OK);
+        return ResponseEntity.ok(amenities);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{amenityId}")
     @Operation(summary = "Obtiene una amenity", description = "Recupera una amenity usando su ID.")
-    public ResponseEntity<Amenity> getAmenityById(@PathVariable Long id) {
-        return amenityService.getAmenityById(id)
-                .map(amenity -> new ResponseEntity<>(amenity, HttpStatus.OK))
-                .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + id));
+    public ResponseEntity<Amenity> getAmenityById(@PathVariable Long amenityId) {
+        return amenityService.getAmenityById(amenityId)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException(messageNotFound + amenityId));
     }
 
-//    @GetMapping("/room/{roomId}")
-//    @Operation(summary = "Amenities de una habitacion", description = "Obtiene todas las amenities de una habitacion especificada")
-//    public ResponseEntity<List<Amenity>> getAmenitiesByRoomId(@PathVariable Long roomId) {
-//        List<Amenity> amenities = amenityService.getAmenitiesByRoomId(roomId);
-//        return new ResponseEntity<>(amenities, HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/hotel/{hotelId}")
-//    @Operation(summary = "Amenities de un hotel", description = "Obtiene todas las amenities de un hotel especificado")
-//    public ResponseEntity<List<Amenity>> getAmenitiesByHotelId(@PathVariable Long hotelId) {
-//        List<Amenity> amenities = amenityService.getAmenitiesByHotelId(hotelId);
-//        return new ResponseEntity<>(amenities, HttpStatus.OK);
-//    }
-
-    @PutMapping("/{id}")
+    @PutMapping("/{amenityId}")
     @Operation(summary = "Actualiza una amenity", description = "Actualiza los datos de una amenity existente usando su Id.")
-    public ResponseEntity<Amenity> updateAmenity(@PathVariable Long id, @RequestBody Amenity amenityDetails) {
-        Amenity updatedAmenity = amenityService.updateAmenity(id, amenityDetails);
-        return new ResponseEntity<>(updatedAmenity, HttpStatus.OK);
+    public ResponseEntity<Amenity> updateAmenity(@PathVariable Long amenityId, @RequestBody Amenity amenityDetails) {
+        Amenity updatedAmenity = amenityService.updateAmenity(amenityId, amenityDetails);
+        return ResponseEntity.ok(updatedAmenity);
     }
-//
-//    @PostMapping("/room/{roomId}/amenity/{amenityId}")
-//    @Operation(summary = "Actualiza una amenity", description = "Actualiza los datos de una amenity existente usando su Id y la habitación Id.")
-//    public ResponseEntity<Amenity> addAmenityToRoom(
-//            @PathVariable Long roomId,
-//            @PathVariable Long amenityId) {
-//        Amenity amenity = amenityService.addAmenityToRoom(roomId, amenityId);
-//        return new ResponseEntity<>(amenity, HttpStatus.OK);
-//    }
-//
-//    @PostMapping("/hotel/{hotelId}/amenity/{amenityId}")
-//    @Operation(summary = "Actualiza una amenity", description = "Actualiza los datos de una amenity existente usando su Id y el hotel Id.")
-//    public ResponseEntity<Amenity> addAmenityToHotel(
-//            @PathVariable Long hotelId,
-//            @PathVariable Long amenityId) {
-//        Amenity amenity = amenityService.addAmenityToHotel(hotelId, amenityId);
-//        return new ResponseEntity<>(amenity, HttpStatus.OK);
-//    }
 
-    @DeleteMapping("/room/{roomId}/amenity/{amenityId}")
+    @DeleteMapping("/rooms/{roomId}/amenities/{amenityId}")
     @Operation(summary = "Desconecta o elimina una amenity de una habitacion", description = "Elimina o desconecta una amenity de una habitación.")
     public ResponseEntity<Void> removeAmenityFromRoom(
             @PathVariable Long roomId,
             @PathVariable Long amenityId) {
         amenityService.removeAmenityFromRoom(roomId, amenityId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/hotel/{hotelId}/amenity/{amenityId}")
+    @DeleteMapping("/hotels/{hotelId}/amenities/{amenityId}")
     @Operation(summary = "Desconecta o elimina una amenity de. un. hotel", description = "Elimina o desconecta una amenity de un hotel.")
     public ResponseEntity<Void> removeAmenityFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long amenityId) {
         amenityService.removeAmenityFromHotel(hotelId, amenityId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{amenityId}")
     @Operation(summary = "Elimina una amenity", description = "Elimina una amenity.")
-    public ResponseEntity<Void> deleteAmenity(@PathVariable Long id) {
-        amenityService.deleteAmenity(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteAmenity(@PathVariable Long amenityId) {
+        amenityService.deleteAmenity(amenityId);
+        return ResponseEntity.noContent().build();
     }
 }
