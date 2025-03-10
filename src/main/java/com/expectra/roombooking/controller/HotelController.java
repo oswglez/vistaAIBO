@@ -91,11 +91,11 @@ public class HotelController {
 // Get Hotel rooms
 @GetMapping("/{hotelid}/rooms")
 @Operation(summary = "Consulta todas las habitaciones", description = "Consulta las habbitaciones de un hotel usando el hotelId.")
-public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long Hotelid) {
-    if (hotelService.findHotelById(Hotelid).isEmpty()) {
-        throw new ResourceNotFoundException(messageNotfound + Hotelid);
+public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long hotelid) {
+    if (hotelService.findHotelById(hotelid).isEmpty()) {
+        throw new ResourceNotFoundException(messageNotfound + hotelid);
     }
-    List<Room> rooms = hotelService.findHotelRooms(Hotelid);
+    List<Room> rooms = hotelService.findHotelRooms(hotelid);
     return ResponseEntity.ok(rooms);
 }
     // Get Hotel Amenities
@@ -128,7 +128,7 @@ public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long Hotelid) {
         List<Contact> contact = hotelService.findAllContactsByHotelId(hotelId);
         return ResponseEntity.ok(contact);
     }
-    @GetMapping("/{hotelId}/address")
+    @GetMapping("/{hotelId}/addresses")
     @Operation(summary = "Consulta las direcciones", description = "Consulta las direcciones de un de un hotel usando el hotelId.")
     public ResponseEntity<List<Address>> getAllAddressesByHotelId(@PathVariable Long hotelId) {
         if (hotelService.findHotelById(hotelId).isEmpty()) {

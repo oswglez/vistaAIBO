@@ -1,10 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.Hotel;
-import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.model.Room;
+import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.service.RoomService;
 import com.expectra.roombooking.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +46,7 @@ public class RoomController {
     @Operation(summary = "Cosulta una habitación por id", description = "Recupera una habitación de acuerdo a su Id.")
     public ResponseEntity<Room> getRoomById(@PathVariable Long roomId) {
         return roomService.getRoomById(roomId)
-                .map(room -> new ResponseEntity<>(room, HttpStatus.OK))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + roomId));
     }
     @PutMapping("/{roomId}")
@@ -101,8 +98,13 @@ public class RoomController {
     public ResponseEntity<List<Media>> getRoomMediaByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
-        List<Media> media = roomService.getRoomMediaByHotelAndRoomType(hotelId, roomType);
-        return new ResponseEntity<>(media, HttpStatus.OK);
+        try {
+            RoomType type = RoomType.valueOf(roomType.toUpperCase()); // Convierte String a Enum
+            List<Media> media = roomService.getRoomMediaByHotelAndRoomType(hotelId, type);
+            return new ResponseEntity<>(media, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Si el valor no es válido, devuelve 400
+        }
     }
 
     // Get Room Amenities by Hotel ID and Room Type
@@ -111,7 +113,17 @@ public class RoomController {
     public ResponseEntity<List<Amenity>> getRoomAmenitiesByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
-        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoomType(hotelId, roomType);
-        return new ResponseEntity<>(amenities, HttpStatus.OK);
+        try {
+            RoomType type = RoomType.valueOf(roomType.toUpperCase()); // Convierte String a Enum
+            List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoomType(hotelId, type);
+            return new ResponseEntity<>(amenities, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Si el valor no es válido, devuelve 400
+        }
+//
+//
+//
+//        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoomType(hotelId, roomType);
+//        return new ResponseEntity<>(amenities, HttpStatus.OK);
     }
 }

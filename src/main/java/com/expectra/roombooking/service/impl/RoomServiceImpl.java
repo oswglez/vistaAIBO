@@ -3,7 +3,7 @@ package com.expectra.roombooking.service.impl;
         import com.expectra.roombooking.model.Amenity;
         import com.expectra.roombooking.model.Media;
         import com.expectra.roombooking.model.Room;
-        import com.expectra.roombooking.repository.HotelRepository;
+        import com.expectra.roombooking.model.RoomType;
         import com.expectra.roombooking.repository.RoomRepository;
         import com.expectra.roombooking.service.RoomService;
         import jakarta.transaction.Transactional;
@@ -18,13 +18,11 @@ package com.expectra.roombooking.service.impl;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
-    private final HotelRepository hotelRepository;
 
 
     @Autowired
-    public RoomServiceImpl(RoomRepository roomRepository, HotelRepository hotelRepository) {
+    public RoomServiceImpl(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
-        this.hotelRepository = hotelRepository;
     }
 
     @Override
@@ -55,12 +53,12 @@ public class RoomServiceImpl implements RoomService {
 //    }
 
     @Override
-    public List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType) {
+    public List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, RoomType roomType) {
         return roomRepository.getAllMediasByHotelIdAndRoomType(hotelId, roomType);
     }
 
     @Override
-    public List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType) {
+    public List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, RoomType roomType) {
         return roomRepository.getAllAmenitiesByHotelIdAndRoomType(hotelId, roomType);
     }
 

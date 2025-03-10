@@ -1,5 +1,6 @@
 package com.expectra.roombooking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import jakarta.persistence.*;
 
@@ -28,6 +29,7 @@ public class Room {
     // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_hotel_id", nullable = false)
+    @JsonIgnore
     private Hotel hotel;
 
     // Relación con Amenity a través de la tabla intermedia room_amenity.
