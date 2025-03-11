@@ -22,7 +22,6 @@ public class AmenityServiceImpl implements AmenityService {
     private final AmenityRepository amenityRepository;
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
-    private final RoomServiceImpl roomServiceImpl;
 
     @Autowired
     public AmenityServiceImpl(AmenityRepository amenityRepository,
@@ -31,7 +30,6 @@ public class AmenityServiceImpl implements AmenityService {
         this.amenityRepository = amenityRepository;
         this.hotelRepository = hotelRepository;
         this.roomRepository = roomRepository;
-        this.roomServiceImpl = roomServiceImpl;
     }
 
     @Override
