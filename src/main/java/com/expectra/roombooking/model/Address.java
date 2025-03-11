@@ -1,5 +1,6 @@
 package com.expectra.roombooking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,7 @@ public class Address {
             joinColumns = @JoinColumn(name = "address_id"), // Columna que referencia a Address
             inverseJoinColumns = @JoinColumn(name = "contact_id") // Columna que referencia a Contact
     )
+    @JsonIgnore
     private Set<Contact> contacts = new HashSet<>();
 
     public void addContact(Contact contact) {
@@ -48,14 +50,12 @@ public class Address {
         this.contacts.remove(contact);
         contact.getAddresses().remove(this);
     }
+
     // Relación Many-to-Many con Hotel
-    @ManyToMany
-    @JoinTable(
-            name = "hotel_address",
-            joinColumns = @JoinColumn(name = "address_id"),
-            inverseJoinColumns = @JoinColumn(name = "hotel_id")
-    )
+    @ManyToMany(mappedBy = "addresses")
+    @JsonIgnore
     private Set<Hotel> hotels = new HashSet<>();
+
 
     // Métodos de utilidad para manejar la relación con Hotel
     public void addHotel(Hotel hotel) {

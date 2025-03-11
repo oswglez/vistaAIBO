@@ -60,7 +60,7 @@ public class RoomController {
         existingRoom.setRoomType(roomDetails.getRoomType());
         existingRoom.setRoomName(roomDetails.getRoomName());
         existingRoom.setAmenities(roomDetails.getAmenities());
-        existingRoom.setMedia(roomDetails.getMedia());
+        existingRoom.setMedias(roomDetails.getMedias());
 
         Room updatedRoom = roomService.saveRoom(existingRoom);
         return new ResponseEntity<>(updatedRoom, HttpStatus.OK);

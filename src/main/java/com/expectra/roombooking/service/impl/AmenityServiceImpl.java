@@ -9,6 +9,7 @@ import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.repository.RoomRepository;
 import com.expectra.roombooking.service.AmenityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +22,16 @@ public class AmenityServiceImpl implements AmenityService {
     private final AmenityRepository amenityRepository;
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
+    private final RoomServiceImpl roomServiceImpl;
 
     @Autowired
     public AmenityServiceImpl(AmenityRepository amenityRepository,
                               HotelRepository hotelRepository,
-                              RoomRepository roomRepository) {
+                              RoomRepository roomRepository, RoomServiceImpl roomServiceImpl) {
         this.amenityRepository = amenityRepository;
         this.hotelRepository = hotelRepository;
         this.roomRepository = roomRepository;
+        this.roomServiceImpl = roomServiceImpl;
     }
 
     @Override
@@ -70,6 +73,10 @@ public class AmenityServiceImpl implements AmenityService {
     public void deleteAmenity(Long id) {
         Amenity amenity = amenityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + id));
+
+        if (!amenity.getHotels().isEmpty() || !amenity.getRooms().isEmpty()) {
+            throw new ResourceNotFoundException("amenity has actives relationships  id: " + id);
+        }
         amenityRepository.delete(amenity);
     }
 
@@ -109,25 +116,45 @@ public class AmenityServiceImpl implements AmenityService {
 
     @Override
     @Transactional
+    @EntityGraph(attributePaths = {"amenity"})
     public void removeAmenityFromRoom(Long roomId, Long amenityId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
         Amenity amenity = amenityRepository.findById(amenityId)
                 .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + amenityId));
 
-        amenity.getRooms().remove(room);
-        amenityRepository.save(amenity);
+        room.getAmenities().remove(amenity);
+        roomRepository.save(room);
+        roomRepository.flush();
+
+        if (amenity.getHotels().isEmpty() && amenity.getRooms().isEmpty()) {
+            amenityRepository.delete(amenity);
+        }
     }
 
     @Override
     @Transactional
+    @EntityGraph(attributePaths = {"amenity"})
     public void removeAmenityFromHotel(Long hotelId, Long amenityId) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
         Amenity amenity = amenityRepository.findById(amenityId)
                 .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + amenityId));
 
-        amenity.getHotels().remove(hotel);
-        amenityRepository.save(amenity);
+        hotel.getAmenities().remove(amenity);
+        hotelRepository.save(hotel);
+        hotelRepository.flush();
+
+
+        // 🔹 Verificar si el Amenity quedó huérfano y eliminarlo
+        if (amenity.getHotels().isEmpty() && amenity.getRooms().isEmpty()) {
+            amenityRepository.delete(amenity);
+        }
+
+
+//
+//        if (amenity.getHotels().isEmpty() && amenity.getRooms().isEmpty()) {
+//            amenityRepository.delete(amenity);
+//        }
     }
 }

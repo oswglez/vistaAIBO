@@ -64,6 +64,11 @@ public class AddressServiceImpl implements AddressService {
 
         address.getContacts().remove(contact);
         addressRepository.save(address);
+        addressRepository.flush();
+
+        if (address.getHotels().isEmpty() && address.getContacts().isEmpty()) {
+            addressRepository.delete(address); // Elimina la dirección si está huérfana
+        }
     }
 
     @Override
@@ -74,13 +79,22 @@ public class AddressServiceImpl implements AddressService {
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + addressId));
 
-        address.getHotels().remove(hotel);
-        addressRepository.save(address);
+        hotel.getAddresses().remove(address);
+        hotelRepository.save(hotel);
+        hotelRepository.flush();
+
+        if (address.getHotels().isEmpty() && address.getContacts().isEmpty()) {
+            addressRepository.delete(address); // Elimina la dirección si está huérfana
+        }
     }
     @Override
     public void deleteAddress(Long id) {
         Address address = addressRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
-        addressRepository.delete(address);
+
+        if (!address.getHotels().isEmpty() || !address.getContacts().isEmpty()) {
+            throw new ResourceNotFoundException("address has actives relationships  id: " + id);
+        }
+        addressRepository.delete(address); // Elimina la dirección si está huérfana
     }
 }

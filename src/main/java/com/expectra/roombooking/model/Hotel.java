@@ -1,8 +1,9 @@
 package com.expectra.roombooking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,8 @@ import java.util.Set;
 @Entity
 @Table(name = "hotel")
 @Data
+@ToString(exclude = {"medias", "amenities", "rooms", "contacts", "addresses"})
+@EqualsAndHashCode(exclude = {"medias", "amenities", "rooms", "contacts", "addresses"})
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +60,7 @@ public class Hotel {
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
+    @JsonIgnore
     private Set<Contact> contacts = new HashSet<>();
 
     // Métodos de utilidad para manejar la relación con Contact
@@ -69,29 +73,54 @@ public class Hotel {
         this.contacts.remove(contact);
         contact.getHotels().remove(this);
     }
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinTable(
             name = "hotel_amenity",
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
+    @JsonIgnore
     private Set<Amenity> amenities = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    // Métodos de utilidad para manejar la relación con Amenity
+    public void addAmenity(Amenity amenity) {
+        this.amenities.add(amenity);
+        amenity.getHotels().add(this);
+    }
+
+    public void removeAmenity(Amenity amenity) {
+        this.amenities.remove(amenity);
+        amenity.getHotels().remove(this);
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinTable(
             name = "hotel_media",
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id")
     )
-    private Set<Media> media = new HashSet<>();
+    @JsonIgnore
+    private Set<Media> medias = new HashSet<>();
+
+    // Métodos de utilidad para manejar la relación con Media
+    public void addMedia(Media media) {
+        this.medias.add(media);
+        media.getHotels().add(this);
+    }
+
+    public void removeMedia(Media media) {
+        this.medias.remove(media);
+        media.getHotels().remove(this);
+    }
 
     // Relación Many-to-Many con Address
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinTable(
             name = "hotel_address",
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id")
     )
+    @JsonIgnore
     private Set<Address> addresses = new HashSet<>();
 
 
@@ -105,4 +134,5 @@ public class Hotel {
         this.addresses.remove(address);
         address.getHotels().remove(this);
     }
+
 }

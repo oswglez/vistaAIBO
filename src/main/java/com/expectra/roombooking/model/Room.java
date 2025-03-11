@@ -38,7 +38,19 @@ public class Room {
             name="room_amenity",
             joinColumns=@JoinColumn(name="room_id"),
             inverseJoinColumns=@JoinColumn(name="amenity_id"))
+    @JsonIgnore
     private Set<Amenity> amenities; // Relación con Amenity
+
+    // Métodos de utilidad para manejar la relación con Amenity
+    public void addAmenity(Amenity amenity) {
+        this.amenities.add(amenity);
+        amenity.getRooms().add(this);
+    }
+
+    public void removeAmenity(Amenity amenity) {
+        this.amenities.remove(amenity);
+        amenity.getRooms().remove(this);
+    }
 
     // Relación con Media a través de la tabla intermedia room_media.
     @ManyToMany
@@ -46,6 +58,17 @@ public class Room {
             name="room_media",
             joinColumns=@JoinColumn(name="room_id"),
             inverseJoinColumns=@JoinColumn(name="media_id"))
-    private Set<Media> media = new HashSet<>();
+    @JsonIgnore
+    private Set<Media> medias = new HashSet<>();
 
+    // Métodos de utilidad para manejar la relación con Media
+    public void addMedia(Media media) {
+        this.medias.add(media);
+        media.getRooms().add(this);
+    }
+
+    public void removeMedia(Media media) {
+        this.medias.remove(media);
+        media.getRooms().remove(this);
+    }
 }

@@ -66,8 +66,11 @@ public class ContactController {
                 .map(existingContact -> {
                     existingContact.setFirstName(contactDetails.getFirstName());
                     existingContact.setLastName(contactDetails.getLastName());
-//                    existingContact.setEmail(contactDetails.getEmail());
-//                    existingContact.setPhone(contactDetails.getPhone());
+                    existingContact.setContactTitle(contactDetails.getContactTitle());
+                    existingContact.setContactEmail(contactDetails.getContactEmail());
+                    existingContact.setContactMobileNumber(contactDetails.getContactMobileNumber());
+                    existingContact.setContactLocalNumber(contactDetails.getContactLocalNumber());
+                    existingContact.setContactFaxNumber(contactDetails.getContactFaxNumber());
                     Contact updatedContact = contactService.save(existingContact);
                     return ResponseEntity.ok(updatedContact);
                 })

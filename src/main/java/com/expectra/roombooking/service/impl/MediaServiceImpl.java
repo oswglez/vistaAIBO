@@ -2,6 +2,7 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Room;
@@ -40,14 +41,14 @@ public class MediaServiceImpl implements MediaService {
         if (hotelId != null) {
             Hotel hotel = hotelRepository.findById(hotelId)
                     .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
-            hotel.getMedia().add(savedMedia);
+            hotel.getMedias().add(savedMedia);
             hotelRepository.save(hotel);
         }
 
         if (roomId != null) {
             Room room = roomRepository.findById(roomId)
                     .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
-            room.getMedia().add(savedMedia);
+            room.getMedias().add(savedMedia);
             roomRepository.save(room);
         }
 
@@ -84,19 +85,10 @@ public class MediaServiceImpl implements MediaService {
         Media media = mediaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Media not found with id: " + id));
 
-        // Eliminar las referencias en hoteles
-        for (Hotel hotel : media.getHotels()) {
-            hotel.getMedia().remove(media);
-            hotelRepository.save(hotel);
-        }
-
-        // Eliminar las referencias en habitaciones
-        for (Room room : media.getRooms()) {
-            room.getMedia().remove(media);
-            roomRepository.save(room);
-        }
-
-        mediaRepository.delete(media);
+            if (!media.getHotels().isEmpty() || !media.getRooms().isEmpty()) {
+                throw new ResourceNotFoundException("media has actives relationships  id: " + id);
+            }
+            mediaRepository.delete(media);
     }
 
     @Override
@@ -109,6 +101,10 @@ public class MediaServiceImpl implements MediaService {
 
         media.getRooms().remove(room);
         mediaRepository.save(media);
+
+        if (media.getHotels().isEmpty() && media.getRooms().isEmpty()) {
+            mediaRepository.delete(media);
+        }
     }
 
     @Override
@@ -121,5 +117,9 @@ public class MediaServiceImpl implements MediaService {
 
         media.getHotels().remove(hotel);
         mediaRepository.save(media);
+
+        if (media.getHotels().isEmpty() && media.getRooms().isEmpty()) {
+            mediaRepository.delete(media);
+        }
     }
 }

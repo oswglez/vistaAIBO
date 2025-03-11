@@ -71,14 +71,20 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     @Transactional
-    public void removeContactFromHotel(Long contactId, Long hotelId) {
-        Contact contact = contactRepository.findById(contactId)
-                .orElseThrow(() -> new RuntimeException("Contact not found with id: " + contactId));
-
+    public void removeContactFromHotel(Long hotelId, Long contactId) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new RuntimeException("Hotel not found with id: " + hotelId));
 
-        contact.removeHotel(hotel);
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow(() -> new RuntimeException("Contact not found with id: " + contactId));
+
+        hotel.getContacts().remove(contact);
+        hotelRepository.save(hotel);
+        hotelRepository.flush();
         // La persistencia se maneja automáticamente debido a @Transactional
+        // 🔹 Verificar si el Amenity quedó huérfano y eliminarlo
+        if (contact.getHotels().isEmpty() && contact.getAddresses().isEmpty()) {
+            contactRepository.delete(contact);
+        }
     }
 }

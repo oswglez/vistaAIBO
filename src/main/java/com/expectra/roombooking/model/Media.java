@@ -1,5 +1,6 @@
 package com.expectra.roombooking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,10 +30,12 @@ public class Media {
     private String mediaUrl;
 
     // Relación con Hotel a través de la tabla intermedia hotel_media
-    @ManyToMany(mappedBy="media")
+    @ManyToMany(mappedBy="medias")
+    @JsonIgnore
     private Set<Hotel> hotels = new HashSet<>();
 
-    @ManyToMany(mappedBy="media")
+    @ManyToMany(mappedBy="medias")
+    @JsonIgnore
     private Set<Room> rooms = new HashSet<>();
 
 }

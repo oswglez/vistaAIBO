@@ -1,5 +1,6 @@
 package com.expectra.roombooking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.HashSet;
@@ -38,6 +39,7 @@ public class Contact {
     // Relación Many-to-Many con Hotel
 
     @ManyToMany(mappedBy = "contacts")
+    @JsonIgnore
     private Set<Hotel> hotels = new HashSet<>();
 
     // Métodos de utilidad para manejar la relación
@@ -52,6 +54,7 @@ public class Contact {
     }
     // Relación Many-to-Many con Address
     @ManyToMany(mappedBy = "contacts")
+    @JsonIgnore
     private Set<Address> addresses = new HashSet<>();
 
     public void addAddress(Address address) {

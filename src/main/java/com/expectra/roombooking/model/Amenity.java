@@ -1,5 +1,6 @@
 package com.expectra.roombooking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,20 +27,21 @@ import java.util.Set;
         private String amenityDescription;
 
         // Relación con Hotel a través de la tabla intermedia hotel_amenity
-        @ManyToMany
-        @JoinTable(
-                name = "hotel_amenity",
-                joinColumns = @JoinColumn(name = "amenity_id"),
-                inverseJoinColumns = @JoinColumn(name = "hotel_id")
-        )
+        @ManyToMany(mappedBy = "amenities")
+        @JsonIgnore
         private Set<Hotel> hotels = new HashSet<>();
 
+//
+//        @ManyToMany
+//        @JoinTable(
+//                name = "hotel_amenity",
+//                joinColumns = @JoinColumn(name = "amenity_id"),
+//                inverseJoinColumns = @JoinColumn(name = "hotel_id")
+//        )
+//        private Set<Hotel> hotels = new HashSet<>();
+
         // Relación con Room a través de la tabla intermedia room_amenity
-        @ManyToMany
-        @JoinTable(
-                name = "room_amenity",
-                joinColumns = @JoinColumn(name = "amenity_id"),
-                inverseJoinColumns = @JoinColumn(name = "room_id")
-        )
+        @ManyToMany(mappedBy = "amenities")
+        @JsonIgnore
         private Set<Room> rooms = new HashSet<>();
     }
