@@ -72,6 +72,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.1.0</version> <!-- Verifica la última versión en https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+		</dependency>
 <!--        <dependency>-->
 <!--            <groupId>jakarta.persistence</groupId>-->
 <!--            <artifactId>jakarta.persistence-api</artifactId>-->
