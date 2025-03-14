@@ -1,5 +1,6 @@
 package com.expectra.roombooking.repository;
 
+import com.expectra.roombooking.dto.HotelDTO;
 import com.expectra.roombooking.model.*;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -57,6 +58,9 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT a FROM Address a JOIN a.hotels h WHERE h.hotelId = :hotelId")
     List<Address> findAllAddressesByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
+    @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms WHERE h.hotelId = :hotelId")
+
+    Optional<Hotel> getHotelAndRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
 }
 

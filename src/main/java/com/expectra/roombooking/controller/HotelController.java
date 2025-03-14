@@ -1,5 +1,6 @@
 package com.expectra.roombooking.controller;
 
+import com.expectra.roombooking.dto.HotelDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.service.HotelService;
@@ -49,7 +50,16 @@ public class HotelController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + hotelId));
     }
-
+    // Get Hotel by ID
+    @GetMapping(value = "/{hotelId}/roomsDTO", produces = "application/json")
+    @Operation(summary = "Consulta un hotel y todas sus habitacionees", description = "Consulta un hotel y rooms usando el hotelId.")
+    public ResponseEntity<HotelDTO> getAllRoomsByHotelId(@PathVariable Long hotelId) {
+        HotelDTO hotelDTO = hotelService.getHotelAndRoomsByHotelId(hotelId);
+        return ResponseEntity.ok(hotelDTO);
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(hotelDTO);
+    }
     // Update Hotel
     @PutMapping("/{hotelId}")
     @Operation(summary = "Actualiza un hotel", description = "Actualiza un hotel usando el hotelId.")
