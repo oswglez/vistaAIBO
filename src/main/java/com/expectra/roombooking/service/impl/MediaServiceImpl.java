@@ -98,8 +98,9 @@ public class MediaServiceImpl implements MediaService {
         Media media = mediaRepository.findById(mediaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + mediaId));
 
-        media.getRooms().remove(room);
-        mediaRepository.save(media);
+        room.getMedias().remove(media);
+        roomRepository.save(room);
+
 
         if (media.getHotels().isEmpty() && media.getRooms().isEmpty()) {
             mediaRepository.delete(media);
@@ -114,8 +115,11 @@ public class MediaServiceImpl implements MediaService {
         Media media = mediaRepository.findById(mediaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + mediaId));
 
-        media.getHotels().remove(hotel);
-        mediaRepository.save(media);
+//        media.getHotels().remove(hotel);
+//        mediaRepository.save(media);
+
+        hotel.getMedias().remove(media);
+        hotelRepository.save(hotel);
 
         if (media.getHotels().isEmpty() && media.getRooms().isEmpty()) {
             mediaRepository.delete(media);

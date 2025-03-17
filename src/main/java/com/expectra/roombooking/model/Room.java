@@ -3,6 +3,8 @@ package com.expectra.roombooking.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +12,8 @@ import java.util.Set;
 @Entity
 @Table(name="room")
 @Data
+@ToString(exclude = {"medias", "amenities"}) // Excluye colecciones
+@EqualsAndHashCode(exclude = {"medias", "amenities"}) // Excluye colecciones
 public class Room {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,6 +29,12 @@ public class Room {
 
     @Column(name="room_name")
     private String roomName;
+
+    @Column(name = "building", nullable = false)
+    private Integer roomBuilding;
+
+    @Column(name = "floor", nullable = false)
+    private Integer roomFloor;
 
     // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
     @ManyToOne(fetch = FetchType.LAZY)

@@ -19,6 +19,14 @@ public class Hotel {
     @Column(name = "hotel_id")
     private Long hotelId;
 
+    @NotBlank(message = "El hotel chain no puede estar vacío")
+    @Column(name = "hotel_chain", nullable = false, columnDefinition = "VARCHAR DEFAULT 'Hilton'")
+    private String hotelChain;
+
+    @NotBlank(message = "El hotel brand no puede estar vacío")
+    @Column(name = "hotel_brand", nullable = false, columnDefinition = "VARCHAR DEFAULT 'Sandals Resorts'")
+    private String hotelBrand;
+
     @NotBlank(message = "El nombre del hotel no puede estar vacío")
     @Column(name = "hotel_name", nullable = false)
     private String hotelName;
@@ -49,6 +57,12 @@ public class Hotel {
 
     @Column(name = "disclaimer")
     private String disclaimer;
+
+    @Column(name = "total_floors", nullable = false)
+    private Integer totalFloors;
+
+    @Column(name = "total_rooms", nullable = false)
+    private Integer totalRooms;
 
     // Relación uno a muchos con Room
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)

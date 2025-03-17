@@ -10,10 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 public class HotelServiceImpl implements HotelService {
 
     private final HotelRepository hotelRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public HotelServiceImpl(HotelRepository hotelRepository, ModelMapper modelMapper) {
@@ -94,11 +92,11 @@ public class HotelServiceImpl implements HotelService {
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel no encontrado"));
         HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);
 
-        Set<RoomDTO> roomDTOs = hotel.getRooms().stream()
-                .map(room -> modelMapper.map(room, RoomDTO.class))
-                .collect(Collectors.toSet());
-
-        dto.setRooms(roomDTOs);
+        dto.setRooms(hotel.getRooms().stream()
+                .map(room -> {
+                    return modelMapper.map(room, RoomDTO.class);
+                })
+                .collect(Collectors.toSet()));
         return dto;
     }
 }
