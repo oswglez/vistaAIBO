@@ -99,4 +99,18 @@ public class HotelServiceImpl implements HotelService {
                 .collect(Collectors.toSet()));
         return dto;
     }
+    @Override
+    @Transactional(readOnly = true)
+    public HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, RoomType roomType) {
+        Hotel hotel = hotelRepository.findHotelAndRoomsByHotelIdAndRoomType(hotelId, roomType)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel no encontrado"));
+        HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);
+
+        dto.setRooms(hotel.getRooms().stream()
+                .map(room -> {
+                    return modelMapper.map(room, RoomDTO.class);
+                })
+                .collect(Collectors.toSet()));
+        return dto;
+    }
 }

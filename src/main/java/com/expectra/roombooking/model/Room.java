@@ -30,10 +30,10 @@ public class Room {
     @Column(name="room_name")
     private String roomName;
 
-    @Column(name = "building", nullable = false)
-    private Integer roomBuilding;
+    @Column(name = "room_building", columnDefinition = "VARCHAR DEFAULT 'Main'")
+    private String roomBuilding;
 
-    @Column(name = "floor", nullable = false)
+    @Column(name = "room_floor", nullable = false, columnDefinition = "INTEGER DEFAULT 1")
     private Integer roomFloor;
 
     // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.

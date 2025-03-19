@@ -58,10 +58,10 @@ public class Hotel {
     @Column(name = "disclaimer")
     private String disclaimer;
 
-    @Column(name = "total_floors", nullable = false)
+    @Column(name = "total_floors", nullable = false, columnDefinition = "INTEGER DEFAULT 1")
     private Integer totalFloors;
 
-    @Column(name = "total_rooms", nullable = false)
+    @Column(name = "total_rooms", nullable = false,  columnDefinition = "INTEGER DEFAULT 10")
     private Integer totalRooms;
 
     // Relación uno a muchos con Room

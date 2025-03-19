@@ -12,31 +12,6 @@ import java.util.Optional;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-    // Metodo para buscar todos los hoteles
-    @Override
-    @NonNull
-    List<Hotel> findAll();
-
-    // Metodo para buscar un hotel por ID
-    @Override
-    @NonNull
-    Optional<Hotel> findById(@NonNull Long hotelId);
-
-    // Metodo para guardar un hotel (crear o actualizar)
-    @Override
-    @NonNull
-    <S extends Hotel> S save(@NonNull S entity);
-
-    // Metodo para eliminar un hotel por entidad
-    @Override
-    void delete(@NonNull Hotel entity);
-
-    // Metodo para eliminar un hotel por ID
-    @Override
-    void deleteById(@NonNull Long id);
-
-//    @OneToMany(mappedBy = "hotel") // Indica el lado inverso de la relación
-//    List<Room> room =  new ArrayList<>();
 
     // Metodo personalizado para buscar hoteles por nombre
     List<Hotel> findByHotelName(String hotelName);
@@ -58,12 +33,12 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     List<Address> findAllAddressesByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
    @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms WHERE h.hotelId = :hotelId")
-//@Query("SELECT h FROM Hotel h " +
-//        "JOIN FETCH h.rooms r " +
-//        "LEFT JOIN FETCH r.medias " +  // Carga medias de cada habitación
-//        "LEFT JOIN FETCH r.amenities " + // Carga amenities de cada habitación
-//        "WHERE h.hotelId = :hotelId")
     Optional<Hotel> getHotelAndRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
+//    @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomType = :roomType")
+    @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomId IN (SELECT r2.roomId FROM Room r2 WHERE r2.hotel = h AND r2.roomType = :roomType)")
+    Optional<Hotel>  findHotelAndRoomsByHotelIdAndRoomType(
+            @Param("hotelId") @NonNull Long hotelId,
+            @Param("roomType") @NonNull RoomType roomType);
 }
 
