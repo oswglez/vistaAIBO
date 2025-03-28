@@ -22,7 +22,7 @@ public class ContactController {
     private final String messageNotFound = "Contact not found with ID: ";
 
     @Autowired
-    public ContactController(ContactService contactService) {
+    public ContactController(final ContactService contactService) {
         this.contactService = contactService;
     }
 

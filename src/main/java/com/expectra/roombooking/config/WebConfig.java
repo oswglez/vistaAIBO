@@ -13,4 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .defaultContentType(MediaType.APPLICATION_JSON)
                 .ignoreAcceptHeader(true);  // Ignora el encabezado Accept
     }
+
+    public WebConfig() {
+    }
 }

@@ -15,12 +15,15 @@ import org.springframework.context.annotation.Configuration;
 public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper() {
-        ModelMapper mapper = new ModelMapper();
+        final ModelMapper mapper = new ModelMapper();
         // Configuración personalizada (si es necesario)
         mapper.createTypeMap(Room.class, RoomOnlyDTO.class);
         mapper.createTypeMap(Room.class, RoomDTO.class);
         mapper.createTypeMap(Media.class, MediaDTO.class);
         mapper.createTypeMap(Amenity.class, AmenityDTO.class);
         return mapper;
+    }
+
+    public ModelMapperConfig() {
     }
 }

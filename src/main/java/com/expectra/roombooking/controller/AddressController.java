@@ -2,6 +2,7 @@ package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.model.Address;
 import com.expectra.roombooking.service.AddressService;
+import com.expectra.roombooking.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,9 @@ public class AddressController {
 
     @Autowired
     private AddressService addressService;
-
-//    private final String messageNotFound = "Address not found with ID: ";
-//    private final String hotelNotFound = "Hotel not found with ID: ";
-//    private final String contactNotFound = "Contact not found with ID: ";
+    public AddressController(final AddressService addressService) {
+        this.addressService = addressService;
+    }
 
     @GetMapping
     @Operation(summary = "Consulta todas las direcciones", description = "Consulta. todas las direcciones de un hotel.")

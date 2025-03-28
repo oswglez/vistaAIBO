@@ -21,7 +21,7 @@ public class MediaController {
     private final MediaService mediaService;
 
     @Autowired
-    public MediaController(MediaService mediaService) {
+    public MediaController(final MediaService mediaService) {
         this.mediaService = mediaService;
     }
     private final String mediaNotFound = "Media not found with ID: ";

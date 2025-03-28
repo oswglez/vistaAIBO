@@ -24,7 +24,7 @@ public class RoomController {
 
 
     @Autowired
-    public RoomController(RoomService roomService, HotelService hotelService) {
+    public RoomController(final RoomService roomService, final HotelService hotelService) {
         this.roomService = roomService;
         this.hotelService = hotelService;
     }

@@ -14,7 +14,7 @@ public class HomeController {
 
     @RequestMapping
     @Operation(summary = "Home Page", description = "Posible pagina de inicio")
-    public String homePage(Model model) {
+    public String homePage(final Model model) {
         model.addAttribute("appName", appName);
         return "designed-html/index";
     }
