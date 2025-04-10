@@ -15,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/amenities")
 @Tag(name = "Amenity Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")
+@CrossOrigin(origins = "http://localhost:5173")
+
 public class AmenityController {
 
     private final AmenityService amenityService;

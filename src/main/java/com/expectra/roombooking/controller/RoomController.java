@@ -16,6 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rooms")
 @Tag(name = "Room Management", description = "Endpoints para gestión de habitaciones")
+@CrossOrigin(origins = "http://localhost:5173")
+
 public class RoomController {
 
     private final RoomService roomService;

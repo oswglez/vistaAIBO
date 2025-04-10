@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/contacts")
 @Tag(name = "Contact Management", description = "Endpoints para gestión de contactos")
 
+@CrossOrigin(origins = "http://localhost:5173")
 public class ContactController {
 
     private final ContactService contactService;

@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/medias")
 @Tag(name = "Media Management", description = "Endpoints para gestión de medias de hoteles y habitaciones")
+@CrossOrigin(origins = "http://localhost:5173")
 
 public class MediaController {
 
