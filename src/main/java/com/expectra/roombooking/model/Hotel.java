@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -63,6 +65,9 @@ public class Hotel {
 
     @Column(name = "total_rooms", nullable = false,  columnDefinition = "INTEGER DEFAULT 10")
     private Integer totalRooms;
+
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FloorPlan> floorPlans = new ArrayList<>();
 
     // Relación uno a muchos con Room
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -149,4 +154,15 @@ public class Hotel {
         address.getHotels().remove(this);
     }
 
+    // Método helper para añadir un plano de piso
+    public void addFloorPlan(FloorPlan floorPlan) {
+        floorPlans.add(floorPlan);
+        floorPlan.setHotel(this);
+    }
+
+    // Método helper para eliminar un plano de piso
+    public void removeFloorPlan(FloorPlan floorPlan) {
+        floorPlans.remove(floorPlan);
+        floorPlan.setHotel(null);
+    }
 }

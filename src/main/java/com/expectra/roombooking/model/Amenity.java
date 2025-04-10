@@ -23,25 +23,16 @@ import java.util.Set;
     @Column(name="amenity_type", nullable=false)
         private AmenityType amenityType;
 
-        @Column(name="amenity_description")
-        private String amenityDescription;
+    @Column(name="amenity_description")
+    private String amenityDescription;
 
-        // Relación con Hotel a través de la tabla intermedia hotel_amenity
-        @ManyToMany(mappedBy = "amenities")
-        @JsonIgnore
-        private Set<Hotel> hotels = new HashSet<>();
+    // Relación con Hotel a través de la tabla intermedia hotel_amenity
+    @ManyToMany(mappedBy = "amenities")
+    @JsonIgnore
+    private Set<Hotel> hotels = new HashSet<>();
 
-//
-//        @ManyToMany
-//        @JoinTable(
-//                name = "hotel_amenity",
-//                joinColumns = @JoinColumn(name = "amenity_id"),
-//                inverseJoinColumns = @JoinColumn(name = "hotel_id")
-//        )
-//        private Set<Hotel> hotels = new HashSet<>();
-
-        // Relación con Room a través de la tabla intermedia room_amenity
-        @ManyToMany(mappedBy = "amenities")
-        @JsonIgnore
-        private Set<Room> rooms = new HashSet<>();
+    // Relación con Room a través de la tabla intermedia room_amenity
+    @ManyToMany(mappedBy = "amenities")
+    @JsonIgnore
+    private Set<Room> rooms = new HashSet<>();
     }

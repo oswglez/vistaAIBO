@@ -36,6 +36,9 @@ public class Room {
     @Column(name = "room_floor", nullable = false, columnDefinition = "INTEGER DEFAULT 1")
     private Integer roomFloor;
 
+    @Column(name = "room_price", nullable = false, columnDefinition = "DOUBLE DEFAULT 100.0")
+    private Double roomPrice;
+
     // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_hotel_id", nullable = false)

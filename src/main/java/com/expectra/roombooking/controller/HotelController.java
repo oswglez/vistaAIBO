@@ -52,7 +52,7 @@ public class HotelController {
     }
     // Get Hotel by ID
     @GetMapping(value = "/{hotelId}/roomsDTO", produces = "application/json")
-    @Operation(summary = "Consulta un hotel y todas sus habitacionees", description = "Consulta un hotel y rooms usando el hotelId.")
+    @Operation(summary = "Consulta un hotel y todas sus habitaciones por hotelId", description = "Consulta un hotel y rooms usando el hotelId.")
     public ResponseEntity<HotelDTO> getAllRoomsByHotelId(@PathVariable Long hotelId) {
         HotelDTO hotelDTO = hotelService.getHotelAndRoomsByHotelId(hotelId);
         return ResponseEntity.ok(hotelDTO);
@@ -114,13 +114,15 @@ public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long hotelid) {
 }
     // Get Hotel Amenities
     @GetMapping("/{hotelId}/amenities")
-    @Operation(summary = "Consulta todas las amenities", description = "Consulta las amenities de un hotel usando el hotelId.")
+    @Operation(summary = "Consulta todas las amenities por hotelId", description = "Consulta las amenities de un hotel usando el hotelId.")
     public ResponseEntity<List<Amenity>> getHotelAmenities(@PathVariable Long hotelId) {
         if (hotelService.findHotelById(hotelId).isEmpty()) {
             throw new ResourceNotFoundException(messageNotfound + hotelId);
         }
         List<Amenity> amenities = hotelService.findHotelAmenities(hotelId);
-        return ResponseEntity.ok(amenities);
+        return amenities.isEmpty()
+                ? ResponseEntity.noContent().build() // Retorna 204 si no hay amenities
+                : ResponseEntity.ok(amenities);      // Retorna 200 con la lista de amenities
     }
 
     // Get Hotel Media
@@ -130,8 +132,10 @@ public ResponseEntity<List<Room>> findHotelRooms(@PathVariable Long hotelid) {
         if (hotelService.findHotelById(hotelId).isEmpty()) {
             throw new ResourceNotFoundException(messageNotfound + hotelId);
         }
-        List<Media> media = hotelService.findHotelMedias(hotelId);
-        return ResponseEntity.ok(media);
+        List<Media> medias = hotelService.findHotelMedias(hotelId);
+        return medias.isEmpty()
+                ? ResponseEntity.noContent().build() // Retorna 204 si no hay amenities
+                : ResponseEntity.ok(medias);      // Retorna 200 con la lista de amenities
     }
     @GetMapping("/{hotelId}/contacts")
     @Operation(summary = "Consulta los contactos", description = "Consulta los contactos de un de un hotel usando el hotelId.")
