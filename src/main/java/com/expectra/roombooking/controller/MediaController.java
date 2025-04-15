@@ -1,7 +1,10 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.AmenityType;
 import com.expectra.roombooking.model.Media;
+import com.expectra.roombooking.model.MediaType;
 import com.expectra.roombooking.service.MediaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/medias")
@@ -33,13 +37,41 @@ public class MediaController {
     public ResponseEntity<Media> createMedia(
             @RequestParam(required = false) Long hotelId,
             @RequestParam(required = false) Long roomId,
-            @RequestBody Media media) {
+            @RequestBody Map<String, Object> requestBody) {
+
         if (hotelId == null && roomId == null) {
             throw new IllegalArgumentException("Either hotelId or roomId must be provided");
         }
+
+        // Creamos la entidad Media y asignamos los valores
+        Media media = new Media();
+        media.setMediaCode((Integer) requestBody.get("mediaCode"));
+        media.setMediaDescription((String) requestBody.get("mediaDescription"));
+        media.setMediaUrl((String) requestBody.get("mediaUrl"));
+
+        // Conversión del string a enum MediaType
+        String mediaTypeStr = (String) requestBody.get("mediaType");
+        media.setMediaType(MediaType.valueOf(mediaTypeStr));
+
+        // Llamamos al servicio
         Media createdMedia = mediaService.createMedia(media, hotelId, roomId);
         return new ResponseEntity<>(createdMedia, HttpStatus.CREATED);
     }
+
+
+
+//    @PostMapping
+//    @Operation(summary = "Crea una media", description = "Crea una media.")
+//    public ResponseEntity<Media> createMedia(
+//            @RequestParam(required = false) Long hotelId,
+//            @RequestParam(required = false) Long roomId,
+//            @RequestBody Media media) {
+//        if (hotelId == null && roomId == null) {
+//            throw new IllegalArgumentException("Either hotelId or roomId must be provided");
+//        }
+//        Media createdMedia = mediaService.createMedia(media, hotelId, roomId);
+//        return new ResponseEntity<>(createdMedia, HttpStatus.CREATED);
+//    }
 //    // Crear media asociada a un hotel
 //    @PostMapping("/hotels/{hotelId}")
 //    @Operation(summary = "Crear media para un hotel", description = "Crea un recurso multimedia y lo asocia a un hotel.")

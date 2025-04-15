@@ -1,5 +1,6 @@
 package com.expectra.roombooking.service;
 
+import com.expectra.roombooking.dto.AmenityDTO;
 import com.expectra.roombooking.model.Amenity;
 import java.util.List;
 import java.util.Optional;

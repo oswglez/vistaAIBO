@@ -3,6 +3,8 @@ package com.expectra.roombooking.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,8 +21,8 @@ public class Media {
     @Column(name="media_code", nullable=false)
     private Integer mediaCode;
 
-    @Enumerated(EnumType.STRING) // Almacena el valor del Enum como una cadena en la base de datos
-    @Column(name="media_type")
+    @Column(name = "media_type", nullable=false )
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private MediaType mediaType;
 
     @Column(name="media_description")

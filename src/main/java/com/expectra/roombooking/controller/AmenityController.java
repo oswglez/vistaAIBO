@@ -1,7 +1,9 @@
 package com.expectra.roombooking.controller;
 
+import com.expectra.roombooking.dto.AmenityDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.AmenityType;
 import com.expectra.roombooking.service.AmenityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,12 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/amenities")
 @Tag(name = "Amenity Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")
-@CrossOrigin(origins = "http://localhost:5173")
 
+@CrossOrigin(origins = "*")
 public class AmenityController {
 
     private final AmenityService amenityService;
@@ -29,15 +32,31 @@ public class AmenityController {
 
 //. falta perfeccionar el metodo para que verifique si la amenity existe en ese caso solo lo conecta
 
-    @PutMapping
-    @Operation(summary = "Crear una amenity", description = "Crea una amenity.")
-    public ResponseEntity<Amenity> createAmenity(
-            @RequestParam(required = false) Long hotelId,
-            @RequestBody Amenity amenity) {
-        Amenity createdAmenity = amenityService.createAmenity(hotelId, amenity);
-        return new ResponseEntity<>(createdAmenity, HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    @Operation(summary = "Crear una amenity", description = "Crea una amenity.")
+//    public ResponseEntity<Amenity> createAmenity(
+//            @RequestParam(required = false) Long hotelId,
+//            @RequestBody Amenity amenity) {
+//        Amenity createdAmenity = amenityService.createAmenity(hotelId, amenity);
+//        return new ResponseEntity<>(createdAmenity, HttpStatus.CREATED);
+//    }
+@PostMapping
+public ResponseEntity<Amenity> createAmenity(@RequestBody Map<String, Object> requestBody) {
+    Amenity amenity = new Amenity();
+    amenity.setAmenityCode((Integer) requestBody.get("amenityCode"));
+    amenity.setAmenityDescription((String) requestBody.get("amenityDescription"));
 
+    // Conversión de String a enum
+    String amenityTypeStr = (String) requestBody.get("amenityType");
+    amenity.setAmenityType(AmenityType.valueOf(amenityTypeStr));
+
+    // Si hay un hotelId en el request
+    Long hotelId = requestBody.get("hotelId") != null ?
+            Long.valueOf(requestBody.get("hotelId").toString()) : null;
+
+    Amenity createdAmenity = amenityService.createAmenity(hotelId, amenity);
+    return ResponseEntity.ok(createdAmenity);
+}
     @GetMapping
     @Operation(summary = "Obtiene todas las amenity", description = "Recupera todas las amenities de la base de datos.")
     public ResponseEntity<List<Amenity>> getAllAmenities() {

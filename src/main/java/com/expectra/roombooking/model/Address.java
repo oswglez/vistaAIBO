@@ -17,19 +17,22 @@ public class Address {
     private Long addressId;
 
     @Column(name = "country", nullable = false)
-    private Integer country;
+    private String country;
 
     @Column(name = "state", nullable = false)
-    private Integer state;
+    private String state;
 
     @Column(name = "city", nullable = false)
-    private Integer city;
+    private String city;
 
     @Column(name = "street", nullable = false)
     private String street;
 
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
+
+    @Column(name = "address_type", nullable = false)
+    private String addressType;
 
     // Relación Many-to-Many con Contact
     @ManyToMany

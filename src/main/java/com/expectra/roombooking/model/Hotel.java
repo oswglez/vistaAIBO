@@ -1,6 +1,7 @@
 package com.expectra.roombooking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -67,6 +68,7 @@ public class Hotel {
     private Integer totalRooms;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<FloorPlan> floorPlans = new ArrayList<>();
 
     // Relación uno a muchos con Room

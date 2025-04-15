@@ -1,7 +1,11 @@
 package com.expectra.roombooking.model;
 
 public enum AmenityType {
-    WIFI,
+    GENERAL,
+    ROOM_SPECIFIC,
+    HABITACION,
+    INSTALACIONES,
+    SERVICIOS,
     TV,
     AIR_CONDITIONING
 }
