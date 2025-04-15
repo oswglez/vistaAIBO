@@ -22,8 +22,7 @@ import java.util.Set;
         private Integer amenityCode;
 
     @Column(name = "amenity_type", nullable=false )
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    private AmenityType amenityType;
+    private String amenityType;
 
     @Column(name="amenity_description")
     private String amenityDescription;

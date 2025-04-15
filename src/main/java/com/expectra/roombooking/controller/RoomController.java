@@ -101,7 +101,7 @@ public class RoomController {
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
         try {
-            RoomType type = RoomType.valueOf(roomType.toUpperCase()); // Convierte String a Enum
+            String type = roomType.toUpperCase();
             List<Media> media = roomService.getRoomMediaByHotelAndRoomType(hotelId, type);
             return new ResponseEntity<>(media, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
@@ -116,7 +116,7 @@ public class RoomController {
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
         try {
-            RoomType type = RoomType.valueOf(roomType.toUpperCase()); // Convierte String a Enum
+            String type = roomType.toUpperCase(); // Convierte String a Enum
             List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoomType(hotelId, type);
             return new ResponseEntity<>(amenities, HttpStatus.OK);
         } catch (IllegalArgumentException e) {

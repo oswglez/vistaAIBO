@@ -22,8 +22,7 @@ public class Media {
     private Integer mediaCode;
 
     @Column(name = "media_type", nullable=false )
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    private MediaType mediaType;
+    private String mediaType;
 
     @Column(name="media_description")
     private String mediaDescription;

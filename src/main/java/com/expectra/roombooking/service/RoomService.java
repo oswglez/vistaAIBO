@@ -17,8 +17,8 @@ public interface RoomService {
 //    List<Room> getRoomsByHotelId(Long hotelId);
 //    List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId);
 //    List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId);
-    List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, RoomType roomType);
-    List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, RoomType roomType);
+    List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType);
+    List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType);
     Optional<Room> getRoomById(Long roomId);
     List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId);
     List<Amenity> getAllAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId);

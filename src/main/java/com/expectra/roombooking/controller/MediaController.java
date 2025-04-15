@@ -48,10 +48,10 @@ public class MediaController {
         media.setMediaCode((Integer) requestBody.get("mediaCode"));
         media.setMediaDescription((String) requestBody.get("mediaDescription"));
         media.setMediaUrl((String) requestBody.get("mediaUrl"));
-
-        // Conversión del string a enum MediaType
-        String mediaTypeStr = (String) requestBody.get("mediaType");
-        media.setMediaType(MediaType.valueOf(mediaTypeStr));
+        media.setMediaType((String) requestBody.get("mediaType"));
+//        // Conversión del string a enum MediaType
+//        String mediaTypeStr = (String) requestBody.get("mediaType");
+//        media.setMediaType(MediaType.valueOf(mediaTypeStr));
 
         // Llamamos al servicio
         Media createdMedia = mediaService.createMedia(media, hotelId, roomId);

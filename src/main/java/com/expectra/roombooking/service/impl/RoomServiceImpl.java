@@ -53,12 +53,12 @@ public class RoomServiceImpl implements RoomService {
 //    }
 
     @Override
-    public List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, RoomType roomType) {
+    public List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType) {
         return roomRepository.getAllMediasByHotelIdAndRoomType(hotelId, roomType);
     }
 
     @Override
-    public List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, RoomType roomType) {
+    public List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType) {
         return roomRepository.getAllAmenitiesByHotelIdAndRoomType(hotelId, roomType);
     }
 

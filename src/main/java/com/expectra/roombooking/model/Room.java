@@ -23,9 +23,8 @@ public class Room {
     @Column(name="room_number", nullable=false)
     private Integer roomNumber;
 
-    @Enumerated(EnumType.STRING) // Almacena el valor del Enum como una cadena en la base de datos
     @Column(name="room_type", nullable=false) // Tipo de habitación, puedes definir un Enum si es necesario.
-    private RoomType roomType;
+    private String roomType;
 
     @Column(name="room_name")
     private String roomName;

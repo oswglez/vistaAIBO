@@ -20,7 +20,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     // Metodo personalizado para encontrar todas las medias de un tipo de habitacion específica
     @Query("SELECT m FROM Media m JOIN m.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomType = :roomType")
-    List<Media> getAllMediasByHotelIdAndRoomType(@Param("hotelId") Long hotelId, @Param("roomType") RoomType roomType);
+    List<Media> getAllMediasByHotelIdAndRoomType(@Param("hotelId") Long hotelId, @Param("roomType") String roomType);
 
     // Metodo personalizado para encontrar todas las amenities de una habitacion específica
  //   @Query("SELECT a FROM Amenity a JOIN a.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomId = :roomId")
@@ -32,5 +32,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     // Metodo personalizado para encontrar todas las amenities de un tipo de habitacion específica
     @Query("SELECT a FROM Amenity a JOIN a.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomType = :roomType")
-    List<Amenity> getAllAmenitiesByHotelIdAndRoomType(Long hotelId, RoomType roomType);
+    List<Amenity> getAllAmenitiesByHotelIdAndRoomType(Long hotelId, String roomType);
 }

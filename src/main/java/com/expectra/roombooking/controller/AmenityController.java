@@ -45,10 +45,11 @@ public ResponseEntity<Amenity> createAmenity(@RequestBody Map<String, Object> re
     Amenity amenity = new Amenity();
     amenity.setAmenityCode((Integer) requestBody.get("amenityCode"));
     amenity.setAmenityDescription((String) requestBody.get("amenityDescription"));
+    amenity.setAmenityType((String) requestBody.get("amenityType"));
 
-    // Conversión de String a enum
-    String amenityTypeStr = (String) requestBody.get("amenityType");
-    amenity.setAmenityType(AmenityType.valueOf(amenityTypeStr));
+//    // Conversión de String a enum
+//    String amenityTypeStr = (String) requestBody.get("amenityType");
+//    amenity.setAmenityType(AmenityType.valueOf(amenityTypeStr));
 
     // Si hay un hotelId en el request
     Long hotelId = requestBody.get("hotelId") != null ?

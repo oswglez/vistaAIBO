@@ -11,26 +11,26 @@ import java.util.Optional;
 
 @Repository
     public interface  AmenityRepository extends JpaRepository<Amenity, Long> {
-
-    // Metodo para buscar todas las amenidades
-    @Override
-    List<Amenity> findAll();
-
-    // Metodo para buscar una amenidad por ID
-    @Override
-    Optional<Amenity> findById(Long id);
-
-    // Metodo para guardar una amenidad (crear o actualizar)
-    @Override
-    <S extends Amenity> S save(S entity);
-
-    // Metodo para eliminar una amenidad por entidad
-    @Override
-    void delete(Amenity entity);
-
-    // Metodo para eliminar una amenidad por ID
-    @Override
-    void deleteById(Long amenityId);
+//
+//    // Metodo para buscar todas las amenidades
+//    @Override
+//    List<Amenity> findAll();
+//
+//    // Metodo para buscar una amenidad por ID
+//    @Override
+//    Optional<Amenity> findById(Long id);
+//
+//    // Metodo para guardar una amenidad (crear o actualizar)
+//    @Override
+//    <S extends Amenity> S save(S entity);
+//
+//    // Metodo para eliminar una amenidad por entidad
+//    @Override
+//    void delete(Amenity entity);
+//
+//    // Metodo para eliminar una amenidad por ID
+//    @Override
+//    void deleteById(Long amenityId);
 
 
     // Método personalizado para encontrar todas las medias de una habitación específica
