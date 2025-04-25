@@ -3,7 +3,6 @@ package com.expectra.roombooking.repository;
 import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
-import com.expectra.roombooking.model.RoomType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -21,7 +21,7 @@ public interface HotelService {
     List<Contact> findAllContactsByHotelId(Long hotelId);
     List<Address> findAllAddressesByHotelId(Long hotelId);
     HotelDTO getHotelAndRoomsByHotelId(Long hotelId);
-    HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, RoomType roomType);
+    HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, RoomTypes roomTypes);
  //   List<String> getFloorPlansByHotelId(Long hotelId);
 
 }

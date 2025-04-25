@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name="media_type")
+@Table(name="media_types")
 @Data
-public class MediaType {
+public class MediaTypes {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="media_type_id")
+    @Column(name="media_types_id")
     private Long mediaTypeId;
 
-    @Column(name="media_name", nullable=false)
+    @Column(name="media_types_name", nullable=false)
     private String mediaTypeName;
 }

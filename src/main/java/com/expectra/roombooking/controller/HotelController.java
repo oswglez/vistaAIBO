@@ -60,8 +60,8 @@ public class HotelController {
     // Get Hotel by ID
     @GetMapping(value = "/{hotelId}/roomType/{roomType}/roomsDTO", produces = "application/json")
     @Operation(summary = "Consulta un hotel y todas sus habitaciones por roomType", description = "Consulta un hotel y rooms usando el hotelId y roomType.")
-    public ResponseEntity<HotelDTO> getHotelAndRoomsByHotelIdAndRoomType(@PathVariable Long hotelId, @PathVariable RoomType roomType) {
-        HotelDTO hotelDTO = hotelService.findHotelAndRoomsByHotelIdAndRoomType(hotelId, roomType);
+    public ResponseEntity<HotelDTO> getHotelAndRoomsByHotelIdAndRoomType(@PathVariable Long hotelId, @PathVariable RoomTypes roomTypes) {
+        HotelDTO hotelDTO = hotelService.findHotelAndRoomsByHotelIdAndRoomType(hotelId, roomTypes);
         return ResponseEntity.ok(hotelDTO);
     }
     // Update Hotel

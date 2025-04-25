@@ -1,10 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Amenity;
-import com.expectra.roombooking.model.AmenityType;
 import com.expectra.roombooking.model.Media;
-import com.expectra.roombooking.model.MediaType;
 import com.expectra.roombooking.service.MediaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

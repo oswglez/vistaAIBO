@@ -3,7 +3,6 @@ package com.expectra.roombooking.service.impl;
         import com.expectra.roombooking.model.Amenity;
         import com.expectra.roombooking.model.Media;
         import com.expectra.roombooking.model.Room;
-        import com.expectra.roombooking.model.RoomType;
         import com.expectra.roombooking.repository.RoomRepository;
         import com.expectra.roombooking.service.RoomService;
         import jakarta.transaction.Transactional;

@@ -39,6 +39,6 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomId IN (SELECT r2.roomId FROM Room r2 WHERE r2.hotel = h AND r2.roomType = :roomType)")
     Optional<Hotel>  findHotelAndRoomsByHotelIdAndRoomType(
             @Param("hotelId") @NonNull Long hotelId,
-            @Param("roomType") @NonNull RoomType roomType);
+            @Param("roomType") @NonNull RoomTypes roomType);
 }
 

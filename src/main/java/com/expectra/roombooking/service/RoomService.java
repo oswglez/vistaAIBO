@@ -3,7 +3,6 @@ package com.expectra.roombooking.service;
 import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.Media;
 import com.expectra.roombooking.model.Room;
-import com.expectra.roombooking.model.RoomType;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,11 +11,7 @@ import java.util.Optional;
 
 public interface RoomService {
     Room saveRoom(Room room);
-//    void deleteRoom(Room room);
     void deleteRoomById(Long roomId);
-//    List<Room> getRoomsByHotelId(Long hotelId);
-//    List<Media> getRoomMediaByHotelAndRoom(Long hotelId, Long roomId);
-//    List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId);
     List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType);
     List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType);
     Optional<Room> getRoomById(Long roomId);

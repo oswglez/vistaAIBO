@@ -101,7 +101,7 @@ public class HotelServiceImpl implements HotelService {
     }
     @Override
     @Transactional(readOnly = true)
-    public HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, RoomType roomType) {
+    public HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, RoomTypes roomType) {
         Hotel hotel = hotelRepository.findHotelAndRoomsByHotelIdAndRoomType(hotelId, roomType)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel no encontrado"));
         HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);

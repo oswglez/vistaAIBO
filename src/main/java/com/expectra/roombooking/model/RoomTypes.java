@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name="room_type")
+@Table(name="room_types")
 @Data
-public class RoomType {
+public class RoomTypes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "room_type_id")
+    @Column(name = "room_types_id")
     private Long roomTypeId;
 
-    @Column(name = "media_name", nullable = false)
+    @Column(name = "room_types_name", nullable = false)
     private String roomTypeName;
 }

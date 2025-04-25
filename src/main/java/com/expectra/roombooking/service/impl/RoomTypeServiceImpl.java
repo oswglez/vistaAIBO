@@ -1,9 +1,10 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.RoomType;
+import com.expectra.roombooking.model.RoomTypes;
 import com.expectra.roombooking.repository.RoomTypeRepository;
 import com.expectra.roombooking.service.RoomTypeService;
+import com.expectra.roombooking.service.RoomTypeValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,42 +16,48 @@ import java.util.Optional;
 public class RoomTypeServiceImpl implements RoomTypeService {
 
     private final RoomTypeRepository roomTypeRepository;
+    private final RoomTypeValidationService roomTypeValidator;
+
 
     @Autowired
-    public RoomTypeServiceImpl(RoomTypeRepository roomTypeRepository) {
+    public RoomTypeServiceImpl(RoomTypeRepository roomTypeRepository, RoomTypeValidationService roomTypeValidator) {
         this.roomTypeRepository = roomTypeRepository;
+        this.roomTypeValidator = roomTypeValidator;
     }
 
     @Override
     @Transactional
-    public RoomType createRoomType(RoomType roomType) {
-        return roomTypeRepository.save(roomType);
+    public RoomTypes createRoomType(RoomTypes roomTypes) {
+    //    roomTypeValidator.validateType(roomTypes.getRoomTypeName());
+        return roomTypeRepository.save(roomTypes);
     }
 
     @Override
-    public Optional<RoomType> getRoomTypeById(Long id) {
+    public Optional<RoomTypes> getRoomTypeById(Long id) {
         return roomTypeRepository.findById(id);
     }
 
     @Override
-    public List<RoomType> getAllRoomType() {
-        return (List<RoomType>) roomTypeRepository.findAll();
+    public List<RoomTypes> getAllRoomType() {
+        return (List<RoomTypes>) roomTypeRepository.findAll();
     }
 
     @Override
     @Transactional
-    public RoomType updateRoomType(Long id, RoomType roomTypeDetails) {
-        RoomType roomType = roomTypeRepository.findById(id)
+    public RoomTypes updateRoomType(Long id, RoomTypes roomTypeDetails) {
+        roomTypeValidator.validateType(roomTypeDetails.getRoomTypeName());
+
+        RoomTypes roomTypes = roomTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("RoomType not found with id: " + id));
 
-        roomType.setRoomTypeName(roomTypeDetails.getRoomTypeName());
-        return roomTypeRepository.save(roomType);
+        roomTypes.setRoomTypeName(roomTypeDetails.getRoomTypeName());
+        return roomTypeRepository.save(roomTypes);
     }
 
     @Override
     @Transactional
     public void deleteRoomType(Long id) {
-        RoomType roomType = roomTypeRepository.findById(id)
+        RoomTypes roomType = roomTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("RoomType not found with id: " + id));
         roomTypeRepository.delete(roomType);
     }

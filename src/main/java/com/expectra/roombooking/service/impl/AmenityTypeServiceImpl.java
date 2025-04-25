@@ -1,9 +1,10 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.AmenityType;
+import com.expectra.roombooking.model.AmenityTypes;
 import com.expectra.roombooking.repository.AmenityTypeRepository;
 import com.expectra.roombooking.service.AmenityTypeService;
+import com.expectra.roombooking.service.AmenityTypeValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,43 +16,51 @@ import java.util.Optional;
 public class AmenityTypeServiceImpl implements AmenityTypeService {
 
     private final AmenityTypeRepository amenityTypeRepository;
+    private final AmenityTypeValidationService amenityTypeValidator;
+
+
 
     @Autowired
-    public AmenityTypeServiceImpl(AmenityTypeRepository amenityTypeRepository) {
+    public AmenityTypeServiceImpl(AmenityTypeRepository amenityTypeRepository, AmenityTypeValidationService amenityTypeValidator) {
         this.amenityTypeRepository = amenityTypeRepository;
+        this.amenityTypeValidator = amenityTypeValidator;
     }
 
     @Override
     @Transactional
-    public AmenityType createAmenityType(AmenityType amenityType) {
-        return amenityTypeRepository.save(amenityType);
+    public AmenityTypes createAmenityTypes(AmenityTypes amenityTypes) {
+     //   amenityTypeValidator.validateType(amenityTypes.getAmenityTypeName());
+
+        return amenityTypeRepository.save(amenityTypes);
     }
 
     @Override
-    public Optional<AmenityType> getAmenityTypeById(Long id) {
+    public Optional<AmenityTypes> getAmenityTypesById(Long id) {
         return amenityTypeRepository.findById(id);
     }
 
     @Override
-    public List<AmenityType> getAllAmenitieType() {
-        return (List<AmenityType>) amenityTypeRepository.findAll();
+    public List<AmenityTypes> getAllAmenityTypes() {
+        return (List<AmenityTypes>) amenityTypeRepository.findAll();
     }
 
     @Override
     @Transactional
-    public AmenityType updateAmenityType(Long id, AmenityType amenityTypeDetails) {
-        AmenityType amenityType = amenityTypeRepository.findById(id)
+    public AmenityTypes updateAmenityTypes(Long id, AmenityTypes amenityTypesDetails) {
+        amenityTypeValidator.validateType(amenityTypesDetails.getAmenityTypeName());
+
+        AmenityTypes amenityTypes = amenityTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("AmenityType not found with id: " + id));
 
-        amenityType.setAmenityTypeName(amenityTypeDetails.getAmenityTypeName());
-        return amenityTypeRepository.save(amenityType);
+        amenityTypes.setAmenityTypeName(amenityTypesDetails.getAmenityTypeName());
+        return amenityTypeRepository.save(amenityTypes);
     }
 
     @Override
     @Transactional
-    public void deleteAmenityType(Long id) {
-        AmenityType amenityType = amenityTypeRepository.findById(id)
+    public void deleteAmenityTypes(Long id) {
+        AmenityTypes amenityTypes = amenityTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("AmenityType not found with id: " + id));
-        amenityTypeRepository.delete(amenityType);
+        amenityTypeRepository.delete(amenityTypes);
     }
 }

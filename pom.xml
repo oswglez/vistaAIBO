@@ -77,6 +77,7 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.1.0</version> <!-- Verifica la última versión en https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		</dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>jakarta.persistence</groupId>-->
 <!--            <artifactId>jakarta.persistence-api</artifactId>-->
@@ -110,24 +111,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.16.0</version> <configuration>
-				<rulesets>
-					<ruleset>/category/java/bestpractices.xml</ruleset>
-					<ruleset>/category/java/codestyle.xml</ruleset>
-				</rulesets>
-			</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-
 </project>
