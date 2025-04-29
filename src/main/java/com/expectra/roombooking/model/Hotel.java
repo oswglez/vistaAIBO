@@ -16,7 +16,7 @@ import java.util.Set;
 @Data
 @ToString(exclude = {"medias", "amenities", "rooms", "contacts", "addresses"})
 @EqualsAndHashCode(exclude = {"medias", "amenities", "rooms", "contacts", "addresses"})
-public class Hotel {
+public class    Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hotel_id")
