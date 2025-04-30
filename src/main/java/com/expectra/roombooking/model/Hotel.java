@@ -14,8 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "hotel")
 @Data
-@ToString(exclude = {"medias", "amenities", "rooms", "contacts", "addresses"})
-@EqualsAndHashCode(exclude = {"medias", "amenities", "rooms", "contacts", "addresses"})
+@ToString(exclude = {"medias", "amenities", "rooms", "contacts", "addresses", "brand"})
+@EqualsAndHashCode(exclude = {"medias", "amenities", "rooms", "contacts", "addresses", "brand"})
 public class    Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,9 @@ public class    Hotel {
     @Column(name = "hotel_chain", nullable = false, columnDefinition = "VARCHAR DEFAULT 'Hilton'")
     private String hotelChain;
 
-    @NotBlank(message = "El hotel brand no puede estar vacío")
-    @Column(name = "hotel_brand", nullable = false, columnDefinition = "VARCHAR DEFAULT 'Sandals Resorts'")
-    private String hotelBrand;
+//    @NotBlank(message = "El hotel brand no puede estar vacío")
+//    @Column(name = "hotel_brand", nullable = false, columnDefinition = "VARCHAR DEFAULT 'Sandals Resorts'")
+//    private String hotelBrand;
 
     @NotBlank(message = "El nombre del hotel no puede estar vacío")
     @Column(name = "hotel_name", nullable = false)
@@ -83,6 +83,11 @@ public class    Hotel {
     )
     @JsonIgnore
     private Set<Contact> contacts = new HashSet<>();
+
+    // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_brand_id", nullable = false)
+    private Brand brand;
 
     // Métodos de utilidad para manejar la relación con Contact
     public void addContact(Contact contact) {

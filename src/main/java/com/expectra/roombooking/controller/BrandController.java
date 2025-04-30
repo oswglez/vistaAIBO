@@ -1,6 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.dto.BrandDTO;
+import com.expectra.roombooking.dto.HotelDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Brand;
 import com.expectra.roombooking.model.Chain;
@@ -57,6 +58,13 @@ public class BrandController {
         return brandService.getBrandById(brandId)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(messageNotFound + brandId));
+    }
+
+    @GetMapping("/{brandId}/hotels")
+    @Operation(summary = "Obtiene los hoteles de una brand", description = "Recupera todos los hoteles de    una brand usando su ID.")
+    public ResponseEntity<BrandDTO> getAllHotelsBrandId(@PathVariable Long brandId) {
+        BrandDTO brand = brandService.getAllHotelsByBrandId(brandId);
+        return ResponseEntity.ok(brand);
     }
 
     @GetMapping

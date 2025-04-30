@@ -4,6 +4,9 @@ package com.expectra.roombooking.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name="brand")
 @Data
@@ -24,4 +27,8 @@ public class Brand {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_chain_id", nullable = false)
     private Chain chain;
+
+    // Relacion uno-a-muchos con Hotel
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Hotel> hotels = new HashSet<>();
 }

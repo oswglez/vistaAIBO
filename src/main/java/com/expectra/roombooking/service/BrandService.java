@@ -1,6 +1,7 @@
 package com.expectra.roombooking.service;
 
 import com.expectra.roombooking.dto.BrandDTO;
+
 import com.expectra.roombooking.model.Brand;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface BrandService {
     List<BrandDTO> getAllBrands();
     BrandDTO updateBrand(Long brandId, BrandDTO brandDetails);
     void deleteBrand(Long brandId);
+    BrandDTO getAllHotelsByBrandId(Long brandId);
 }

@@ -3,6 +3,8 @@ package com.expectra.roombooking.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Set;
+
 @Data
 public class BrandDTO implements Serializable {
     private Long brandId;
@@ -10,4 +12,6 @@ public class BrandDTO implements Serializable {
     private String brandName;
 
     private String brandDescription;
+
+    private Set<HotelOnlyDTO> hotels;
 }

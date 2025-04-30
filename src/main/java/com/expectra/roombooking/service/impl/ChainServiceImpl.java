@@ -36,15 +36,12 @@ public class ChainServiceImpl implements ChainService {
     public Optional<Chain> getChainById(Long chainId) {
         return chainRepository.findById(chainId);
     }
-//    @Override
-//    @Transactional
-//    public  List<Brand> getAllBrandsByChainId(Long chainId) {
-//        return chainRepository.getAllBrandsByChainId(chainId);
-//
-//    }
     @Override
     @Transactional
     public List<BrandDTO> getAllBrandsByChainId(Long chainId) {
+        if (chainRepository.findById(chainId).isEmpty()) {
+            throw new ResourceNotFoundException("Chain not found with id: " + chainId);
+        };
         List<Brand> brands = chainRepository.getAllBrandsByChainId(chainId);
         return brands.stream()
                 .map(brand -> {
