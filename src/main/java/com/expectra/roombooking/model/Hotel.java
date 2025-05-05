@@ -22,13 +22,9 @@ public class    Hotel {
     @Column(name = "hotel_id")
     private Long hotelId;
 
-    @NotBlank(message = "El hotel chain no puede estar vacío")
-    @Column(name = "hotel_chain", nullable = false, columnDefinition = "VARCHAR DEFAULT 'Hilton'")
-    private String hotelChain;
-
-//    @NotBlank(message = "El hotel brand no puede estar vacío")
-//    @Column(name = "hotel_brand", nullable = false, columnDefinition = "VARCHAR DEFAULT 'Sandals Resorts'")
-//    private String hotelBrand;
+    @NotBlank(message = "El codigo del hotel no puede estar vacío")
+    @Column(name = "hotel_code", nullable = false)
+    private String hotelCode;
 
     @NotBlank(message = "El nombre del hotel no puede estar vacío")
     @Column(name = "hotel_name", nullable = false)
@@ -61,11 +57,14 @@ public class    Hotel {
     @Column(name = "disclaimer")
     private String disclaimer;
 
-    @Column(name = "total_floors", nullable = false, columnDefinition = "INTEGER DEFAULT 1")
+    @Column(name = "total_floors", nullable = false)
     private Integer totalFloors;
 
-    @Column(name = "total_rooms", nullable = false,  columnDefinition = "INTEGER DEFAULT 10")
+    @Column(name = "total_rooms", nullable = false)
     private Integer totalRooms;
+
+    @Column(name = "hotel_website_url", nullable = false)
+    private String hotelWebsiteUrl;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -84,7 +83,7 @@ public class    Hotel {
     @JsonIgnore
     private Set<Contact> contacts = new HashSet<>();
 
-    // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
+    // Relación con Hotel (1:N) - cada hotel pertenece a una sola brand.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_brand_id", nullable = false)
     private Brand brand;
@@ -107,6 +106,16 @@ public class    Hotel {
     )
     @JsonIgnore
     private Set<Amenity> amenities = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @JoinTable(
+            name = "hotel_provider",
+            joinColumns = @JoinColumn(name = "hotel_id"),
+            inverseJoinColumns = @JoinColumn(name = "provider_id")
+    )
+    @JsonIgnore
+    private Set<Provider> providers = new HashSet<>();
+
 
     // Métodos de utilidad para manejar la relación con Amenity
     public void addAmenity(Amenity amenity) {

@@ -13,6 +13,7 @@ public class ModelMapperConfig {
         final ModelMapper mapper = new ModelMapper();
         // Configuración personalizada (si es necesario)
         mapper.createTypeMap(Brand.class, BrandDTO.class);
+        mapper.createTypeMap(Provider.class, ProviderDTO.class);
         mapper.createTypeMap(Hotel.class, HotelOnlyDTO.class);
         mapper.createTypeMap(Room.class, RoomOnlyDTO.class);
         mapper.createTypeMap(Room.class, RoomDTO.class);

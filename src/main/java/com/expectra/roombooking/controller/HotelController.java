@@ -6,6 +6,7 @@ import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,13 @@ import java.util.List;
 public class HotelController {
     private final String messageNotfound = "Hotel not found by Id" ;
     private final HotelService hotelService;
+    private final ModelMapper modelMapper; // Autowire ModelMapper
+
 
     @Autowired
-    public HotelController(final HotelService hotelService) {
+    public HotelController(final HotelService hotelService, ModelMapper modelMapper) {
         this.hotelService = hotelService;
+        this.modelMapper = modelMapper;
     }
 
     // Create a new Hotel

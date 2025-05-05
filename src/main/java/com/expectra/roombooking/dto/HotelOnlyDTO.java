@@ -11,6 +11,7 @@ import java.util.Set;
 public class HotelOnlyDTO implements Serializable {
     private Long hotelId;
     private String hotelName;
+    private String hotelCode;
     private String localPhone;
     private String celularPhone;
     private String pmsVendor;

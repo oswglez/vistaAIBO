@@ -1,8 +1,12 @@
 package com.expectra.roombooking.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +14,10 @@ import java.util.Set;
 @Entity
 @Table(name="brand")
 @Data
+@ToString(exclude = {"hotels", "chain"})
+@EqualsAndHashCode(exclude = {"hotels", "chain"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class Brand {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
