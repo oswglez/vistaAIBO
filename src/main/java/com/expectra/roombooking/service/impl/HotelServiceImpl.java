@@ -49,6 +49,10 @@ public class HotelServiceImpl implements HotelService {
     public void deleteHotelById(Long hotelId) {
         hotelRepository.deleteById(hotelId);
     }
+    @Override
+    public void logicalDeleteHotel(Long hotelId) {
+        hotelRepository.markHotelAsDeleted(hotelId);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -101,7 +105,7 @@ public class HotelServiceImpl implements HotelService {
     }
     @Override
     @Transactional(readOnly = true)
-    public HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, RoomTypes roomType) {
+    public HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomType) {
         Hotel hotel = hotelRepository.findHotelAndRoomsByHotelIdAndRoomType(hotelId, roomType)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel no encontrado"));
         HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);

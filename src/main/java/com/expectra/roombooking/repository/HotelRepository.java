@@ -1,8 +1,10 @@
 package com.expectra.roombooking.repository;
 
 import com.expectra.roombooking.model.*;
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,9 +14,22 @@ import java.util.Optional;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
+    @Query("SELECT h FROM Hotel h WHERE h.hotelId = :hotelId AND h.hotelDeleted = false")
+    Optional<Hotel> findHotelById(@Param("hotelId") Long hotelId);
 
+    @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.rooms WHERE h.hotelId = :hotelId AND h.hotelDeleted = false")
+    Optional<Hotel> getHotelAndRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
     // Metodo personalizado para buscar hoteles por nombre
     List<Hotel> findByHotelName(String hotelName);
+
+    @Query("SELECT h FROM Hotel h WHERE h.hotelDeleted = false")
+    List<Hotel> findAllHotels();
+
+    // Metodo personalizado para buscar hoteles por nombre
+    @Transactional
+    @Modifying
+    @Query("UPDATE Hotel h SET h.hotelDeleted = true WHERE h.hotelId = :hotelId")
+    void markHotelAsDeleted(@Param("hotelId") Long hotelId);
 
     // Metodo personalizado para encontrar todas las amenities de un hotel específico
     @Query("SELECT a FROM Amenity a JOIN a.hotels h WHERE h.hotelId = :hotelId")
@@ -32,13 +47,10 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT a FROM Address a JOIN a.hotels h WHERE h.hotelId = :hotelId")
     List<Address> findAllAddressesByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-   @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms WHERE h.hotelId = :hotelId")
-    Optional<Hotel> getHotelAndRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
 //    @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomType = :roomType")
-    @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomId IN (SELECT r2.roomId FROM Room r2 WHERE r2.hotel = h AND r2.roomType = :roomType)")
+    @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomId IN (SELECT r2.roomId FROM Room r2 WHERE r2.hotel = h AND r2.roomType = :roomType)")
     Optional<Hotel>  findHotelAndRoomsByHotelIdAndRoomType(
             @Param("hotelId") @NonNull Long hotelId,
-            @Param("roomType") @NonNull RoomTypes roomType);
+            @Param("roomType") @NonNull String roomType);
 }
-

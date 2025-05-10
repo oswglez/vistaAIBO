@@ -66,6 +66,8 @@ public class    Hotel {
     @Column(name = "hotel_website_url", nullable = false)
     private String hotelWebsiteUrl;
 
+    @Column(name = "hotel_deleted", nullable = false)
+    private Boolean hotelDeleted;
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<FloorPlan> floorPlans = new ArrayList<>();

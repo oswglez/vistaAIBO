@@ -1,6 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.dto.BrandDTO;
+import com.expectra.roombooking.dto.ChainDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Brand;
 import com.expectra.roombooking.model.Chain;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/chain")
@@ -22,7 +24,7 @@ import java.util.Map;
 public class ChainController {
 
     private final ChainService chainService;
-    private final String messageNotFound = "Room not found with ID: ";
+    private final String messageNotFound = "Chain not found with ID: ";
 
     @Autowired
     public ChainController(final ChainService chainService) {
@@ -31,28 +33,42 @@ public class ChainController {
 
     @PostMapping
     @Operation(summary = "Crea una Chain", description = "Crea una Chain usando su ID.")
-    public ResponseEntity<Chain> createChain(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<ChainDTO> createChain(@RequestBody Map<String, Object> requestBody) {
         Chain chain = new Chain();
         chain.setChainName((String) requestBody.get("chainName"));
         chain.setChainDescription((String) requestBody.get("chainDescription"));
 
-        Chain createdChain = chainService.createChain(chain);
+        ChainDTO createdChain = chainService.createChain(chain);
         return ResponseEntity.ok(createdChain);
     }
 
     @GetMapping("/{chainId}")
     @Operation(summary = "Obtiene una Chain", description = "Recupera una Chain usando su ID.")
-    public ResponseEntity<Chain> getChainByIdById(@PathVariable Long chainId) {
-        return chainService.getChainById(chainId)
-                .map(ResponseEntity::ok)
+    public ResponseEntity<ChainDTO> getChainById(@PathVariable Long chainId) {
+        Optional<ChainDTO> chainDTO = chainService.getChainById(chainId);
+        return chainDTO.map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(messageNotFound + chainId));
     }
 
     @GetMapping
     @Operation(summary = "Obtiene todos los Chains", description = "Recupera todos los Chains de la base de datos.")
-    public ResponseEntity<List<Chain>> getAllChains() {
-        List<Chain> chains = chainService.getAllChains();
+    public ResponseEntity<List<ChainDTO>> getAllChains() {
+        List<ChainDTO> chains = chainService.getAllChains();
         return ResponseEntity.ok(chains);
+    }
+
+    @PutMapping("/{chainId}")
+    @Operation(summary = "Actualiza una Chain", description = "Actualiza los datos de una Chain existente usando su Id.")
+    public ResponseEntity<ChainDTO> updateChain(@PathVariable Long chainId, @RequestBody Chain chainDetails) {
+        ChainDTO updatedChain = chainService.updateChain(chainId, chainDetails);
+        return ResponseEntity.ok(updatedChain);
+    }
+
+    @DeleteMapping("/{chainId}")
+    @Operation(summary = "Elimina una Chain", description = "Elimina una Chain existente usando su Id.")
+    public ResponseEntity<Void> deleteChain(@PathVariable Long chainId) {
+        chainService.deleteChain(chainId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{chainId}/brands")
@@ -62,19 +78,5 @@ public class ChainController {
         List<BrandDTO> brand = chainService.getAllBrandsByChainId(chainId);
         System.out.println("salida");
         return ResponseEntity.ok(brand);
-    }
-
-    @PutMapping("/{chainId}")
-    @Operation(summary = "Actualiza una Chain", description = "Actualiza los datos de una Chain existente usando su Id.")
-    public ResponseEntity<Chain> updateChain(@PathVariable Long chainId, @RequestBody Chain ChainsDetails) {
-        Chain updatedChain = chainService.updateChain(chainId, ChainsDetails);
-        return ResponseEntity.ok(updatedChain);
-    }
-
-    @DeleteMapping("/{chainId}")
-    @Operation(summary = "Elimina una Chain", description = "Elimina una Chain existente usando su Id.")
-    public ResponseEntity<Chain> deleteChain(@PathVariable Long chainId) {
-        chainService.deleteChain(chainId);
-        return ResponseEntity.noContent().build();
     }
 }

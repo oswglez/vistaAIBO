@@ -1,6 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.dto.BrandDTO;
+import com.expectra.roombooking.dto.ChainDTO;
 import com.expectra.roombooking.dto.HotelDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Brand;
@@ -40,12 +41,16 @@ public class BrandController {
     public ResponseEntity<Brand> createbrand(@RequestBody Map<String, Object> requestBody) {
         Long chainId = ((Number) requestBody.get("chainId")).longValue();
 
-        Chain chain = chainService.getChainById(chainId)
+        ChainDTO chainDto = chainService.getChainById(chainId)
                 .orElseThrow(() -> new ResourceNotFoundException("Chain not found with id: " + requestBody.get("chainId")));
 
         Brand brand = new Brand();
         brand.setBrandName((String) requestBody.get("brandName"));
         brand.setBrandDescription((String) requestBody.get("brandDescription"));
+        Chain chain = new Chain();
+        chain.setChainId(chainDto.getChainId());
+        chain.setChainDescription(chainDto.getChainDescription());
+        chain.setChainName(chainDto.getChainName());
         brand.setChain(chain);
 
         Brand createdbrand = brandService.createBrand(brand);

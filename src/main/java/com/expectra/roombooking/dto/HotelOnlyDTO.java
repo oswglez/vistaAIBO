@@ -1,6 +1,8 @@
 package com.expectra.roombooking.dto;
 
 import com.expectra.roombooking.model.FloorPlan;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,4 +23,8 @@ public class HotelOnlyDTO implements Serializable {
     private Long crsHotelId;
     private String crsToken; //
     private String disclaimer;
+    private Integer totalFloors;
+    private Integer totalRooms;
+    private String hotelWebsiteUrl;
+    private Boolean hotelDeleted;
 }

@@ -12,7 +12,7 @@ public interface HotelService {
     Optional<Hotel> findHotelById(Long hotelId);
     Hotel saveHotel(Hotel hotel);
     void deleteHotelById(Long hotelId);
-
+    void logicalDeleteHotel(Long hotelId);
     // Operaciones específicas
     List<Hotel> findHotelsByName(String hotelName);
     List<Amenity> findHotelAmenities(Long hotelId);
@@ -21,7 +21,7 @@ public interface HotelService {
     List<Contact> findAllContactsByHotelId(Long hotelId);
     List<Address> findAllAddressesByHotelId(Long hotelId);
     HotelDTO getHotelAndRoomsByHotelId(Long hotelId);
-    HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, RoomTypes roomTypes);
+    HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomTypes);
  //   List<String> getFloorPlansByHotelId(Long hotelId);
 
 }

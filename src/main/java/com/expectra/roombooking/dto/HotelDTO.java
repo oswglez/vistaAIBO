@@ -16,11 +16,15 @@ public class HotelDTO implements Serializable {
     private String celularPhone;
     private String pmsVendor;
     private Long pmsHotelId;
-    private String pmsToken; //
+    private String pmsToken;
     private String crsVendor;
     private Long crsHotelId;
-    private String crsToken; //
+    private String crsToken;
     private String disclaimer;
+    private Integer totalFloors;
+    private Integer totalRooms;
+    private String hotelWebsiteUrl;
+    private Boolean hotelDeleted;
     private List<FloorPlan> floorPlans;
     // Colección de habitaciones asociadas
     private Set<RoomDTO> rooms;
