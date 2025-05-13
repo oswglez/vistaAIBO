@@ -1,6 +1,7 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.dto.HotelDTO;
+import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.dto.RoomDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.*;
@@ -116,5 +117,10 @@ public class HotelServiceImpl implements HotelService {
                 })
                 .collect(Collectors.toSet()));
         return dto;
+    }
+
+    @Override
+    public List<HotelListDTO> findConsolidatedHotelData() {
+        return hotelRepository.findConsolidatedHotelData();
     }
 }

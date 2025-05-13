@@ -77,8 +77,13 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.1.0</version> <!-- Verifica la última versión en https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-<!--        <dependency>-->
+        <!--        <dependency>-->
 <!--            <groupId>jakarta.persistence</groupId>-->
 <!--            <artifactId>jakarta.persistence-api</artifactId>-->
 <!--            <version>8.0.28</version>-->

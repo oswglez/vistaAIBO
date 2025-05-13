@@ -36,6 +36,9 @@ public class Contact {
     @Column(name = "contact_email", nullable = false)
     private String contactEmail;
 
+    @Column(name = "contact_type", nullable = false)
+    private String contactType;
+
     // Relación Many-to-Many con Hotel
 
     @ManyToMany(mappedBy = "contacts")

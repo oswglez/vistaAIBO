@@ -1,6 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.dto.HotelDTO;
+import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.dto.HotelOnlyDTO; // Import HotelOnlyDTO
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.*;
@@ -53,6 +54,14 @@ public class HotelController {
                 .map(hotel -> modelMapper.map(hotel, HotelOnlyDTO.class)) // Use ModelMapper
                 .collect(Collectors.toList());
         return ResponseEntity.ok(hotelDTOs);
+    }
+
+    // Get all Hotels
+    @GetMapping("/hotelList")
+    @Operation(summary = "HotelList creation", description = "Query to create the hotel list")
+    public ResponseEntity<List<HotelListDTO>> getAllHotelsAndRelationships() { // Return HotelOnlyDTO
+        List<HotelListDTO> hotels = hotelService.findConsolidatedHotelData();
+        return ResponseEntity.ok(hotels);
     }
 
     // Get Hotel by ID

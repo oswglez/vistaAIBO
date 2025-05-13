@@ -1,5 +1,6 @@
 package com.expectra.roombooking.repository;
 
+import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.model.*;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
@@ -53,4 +54,30 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     Optional<Hotel>  findHotelAndRoomsByHotelIdAndRoomType(
             @Param("hotelId") @NonNull Long hotelId,
             @Param("roomType") @NonNull String roomType);
+
+    @Query("SELECT new com.expectra.roombooking.dto.HotelListDTO(" +
+            "    h.hotelId, " +
+            "    h.hotelCode, " +         // Asume que la entidad Hotel tiene un campo 'hotelCode'
+            "    h.hotelName, " +
+            "    h.hotelWebsiteUrl, " +      // Asume que la entidad Hotel tiene un campo 'websiteUrl'
+            "    h.hotelStatus, " +            // Asume que la entidad Hotel tiene un campo 'status'
+            "    b.brandName, " +         // Asume que la entidad Hotel tiene 'brand' y Brand tiene 'brandName'
+            "    c.chainName, " +         // Asume que Brand tiene 'chain' y Chain tiene 'chainName'
+            "    a.street, " +     // Asume que Hotel tiene 'addresses' y Address tiene 'streetAddress'
+            "    a.city, " +
+            "    a.state, " +     // Asume que Address tiene 'stateProvince'
+            "    a.country, " +
+            "    ct.firstName, " +        // Asume que Hotel tiene 'contacts' y Contact tiene 'firstName'
+            "    ct.lastName, " +         // y 'lastName'
+            "    ct.contactTitle " +             // y 'title'
+            ") " +
+            "FROM Hotel h " + // 'Hotel' es el nombre de tu Entidad JPA
+            "LEFT JOIN h.brand b " +     // 'brand' es el campo de relación en la entidad Hotel
+            "LEFT JOIN b.chain c " +     // 'chain' es el campo de relación en la entidad Brand
+            "LEFT JOIN h.addresses a WITH a.addressType = 'MAIN' " + // 'addresses' es la colección en Hotel, filtra por tipo
+            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " + // 'contacts' es la colección en Hotel, filtra por tipo
+            // "WHERE h.user = :user " + // Ejemplo si filtras por usuario y Hotel tiene una relación 'user'
+            "ORDER BY h.hotelId ASC")
+    List<HotelListDTO> findConsolidatedHotelData(); // Ajusta parámetros si es necesario (ej: Pageable, @Param("user") UserEntity user)
+
 }

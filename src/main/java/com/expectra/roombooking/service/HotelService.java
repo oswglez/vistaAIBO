@@ -1,6 +1,7 @@
 package com.expectra.roombooking.service;
 
 import com.expectra.roombooking.dto.HotelDTO;
+import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.model.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public interface HotelService {
     List<Address> findAllAddressesByHotelId(Long hotelId);
     HotelDTO getHotelAndRoomsByHotelId(Long hotelId);
     HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomTypes);
+    List<HotelListDTO> findConsolidatedHotelData();
  //   List<String> getFloorPlansByHotelId(Long hotelId);
 
 }
