@@ -9,6 +9,8 @@ import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.service.HotelService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -120,7 +122,8 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<HotelListDTO> findConsolidatedHotelData() {
-        return hotelRepository.findConsolidatedHotelData();
+    @Transactional(readOnly = true) // Es buena práctica marcar como readOnly las consultas
+    public Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable) {
+        return hotelRepository.findConsolidatedHotelData(pageable);
     }
 }

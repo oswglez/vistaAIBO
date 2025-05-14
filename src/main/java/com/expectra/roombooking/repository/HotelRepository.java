@@ -4,6 +4,8 @@ import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.model.*;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -57,27 +59,27 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     @Query("SELECT new com.expectra.roombooking.dto.HotelListDTO(" +
             "    h.hotelId, " +
-            "    h.hotelCode, " +         // Asume que la entidad Hotel tiene un campo 'hotelCode'
-            "    h.hotelName, " +
-            "    h.hotelWebsiteUrl, " +      // Asume que la entidad Hotel tiene un campo 'websiteUrl'
-            "    h.hotelStatus, " +            // Asume que la entidad Hotel tiene un campo 'status'
-            "    b.brandName, " +         // Asume que la entidad Hotel tiene 'brand' y Brand tiene 'brandName'
-            "    c.chainName, " +         // Asume que Brand tiene 'chain' y Chain tiene 'chainName'
-            "    a.street, " +     // Asume que Hotel tiene 'addresses' y Address tiene 'streetAddress'
-            "    a.city, " +
-            "    a.state, " +     // Asume que Address tiene 'stateProvince'
-            "    a.country, " +
-            "    ct.firstName, " +        // Asume que Hotel tiene 'contacts' y Contact tiene 'firstName'
-            "    ct.lastName, " +         // y 'lastName'
-            "    ct.contactTitle " +             // y 'title'
+            "    h.hotelCode AS hotelCode, " +            // Alias coincide
+            "    h.hotelName AS hotelName, " +            // Alias coincide
+            "    h.hotelWebsiteUrl AS hotelWebsiteUrl, " +// Alias coincide
+            "    h.hotelStatus AS hotelStatus, " +        // Alias coincide
+            "    b.brandName AS hotelBrand, " +           // ALIAS 'hotelBrand' para b.brandName
+            "    c.chainName AS hotelChain, " +           // ALIAS 'hotelChain' para c.chainName
+            "    a.street AS hotelStreet, " +             // ALIAS 'hotelStreet' para a.street
+            "    a.city AS hotelCity, " +                 // ALIAS 'hotelCity' para a.city
+            "    a.state AS hotelState, " +               // ALIAS 'hotelState' para a.state
+            "    a.country AS hotelCountry, " +           // ALIAS 'hotelCountry' para a.country
+            "    ct.firstName AS contactFirstName, " +    // ALIAS 'contactFirstName' para ct.firstName
+            "    ct.lastName AS contactLastName, " +      // ALIAS 'contactLastName' para ct.lastName
+            "    ct.contactTitle AS contactTitle" +           // y 'title'
             ") " +
             "FROM Hotel h " + // 'Hotel' es el nombre de tu Entidad JPA
             "LEFT JOIN h.brand b " +     // 'brand' es el campo de relación en la entidad Hotel
             "LEFT JOIN b.chain c " +     // 'chain' es el campo de relación en la entidad Brand
             "LEFT JOIN h.addresses a WITH a.addressType = 'MAIN' " + // 'addresses' es la colección en Hotel, filtra por tipo
-            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " + // 'contacts' es la colección en Hotel, filtra por tipo
-            // "WHERE h.user = :user " + // Ejemplo si filtras por usuario y Hotel tiene una relación 'user'
-            "ORDER BY h.hotelId ASC")
-    List<HotelListDTO> findConsolidatedHotelData(); // Ajusta parámetros si es necesario (ej: Pageable, @Param("user") UserEntity user)
+            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " )
+//            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " + // 'contacts' es la colección en Hotel, filtra por tipo
+//            "ORDER BY h.hotelId ASC")
+    Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable);
 
 }

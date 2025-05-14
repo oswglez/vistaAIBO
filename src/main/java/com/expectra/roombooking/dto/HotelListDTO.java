@@ -20,7 +20,8 @@ public class HotelListDTO implements Serializable {
     private String hotelCity;
     private String hotelState;
     private String hotelCountry;
-    private String contactName;
+    private String contactFirstName;
+    private String contactLastName;
     private String contactTitle;
     private String hotelWebsiteUrl;
     private String hotelStatus;
@@ -41,7 +42,8 @@ public class HotelListDTO implements Serializable {
         this.hotelCity = city;
         this.hotelState = state;
         this.hotelCountry = country;
-        this.contactName = (contactFirstName != null ? contactFirstName : "") + (contactLastName != null ? " " + contactLastName : "");
+        this.contactFirstName = contactFirstName;
+        this.contactLastName = contactLastName;
         this.contactTitle = contactTitle;
     }
 

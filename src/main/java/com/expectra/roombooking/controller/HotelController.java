@@ -12,9 +12,17 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Parameters;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,12 +64,32 @@ public class HotelController {
         return ResponseEntity.ok(hotelDTOs);
     }
 
-    // Get all Hotels
+    // Get a Hotel list
     @GetMapping("/hotelList")
-    @Operation(summary = "HotelList creation", description = "Query to create the hotel list")
-    public ResponseEntity<List<HotelListDTO>> getAllHotelsAndRelationships() { // Return HotelOnlyDTO
-        List<HotelListDTO> hotels = hotelService.findConsolidatedHotelData();
-        return ResponseEntity.ok(hotels);
+    @Operation(summary = "HotelList creation", description = "Query to create the hotel list with pagination.")
+    @Parameters({
+            @Parameter(name = "page", description = "Número de página (0-indexado)", schema = @Schema(type = "integer", defaultValue = "0")),
+            @Parameter(name = "size", description = "Tamaño de la página", schema = @Schema(type = "integer", defaultValue = "25")),
+            @Parameter(name = "sort", description = "Criterio de ordenación (ej. hotelName,asc o hotelId,desc)", schema = @Schema(type = "string"))
+    })
+    public ResponseEntity<Page<HotelListDTO>> getAllHotelsAndRelationships(
+            @Parameter(hidden = true) Pageable pageable // Spring inyectará el Pageable a partir de los parámetros ?page, ?size, ?sort
+    ) {
+        // Si no se proveen parámetros de paginación en la URL, Pageable por defecto puede ser configurado
+        // o puedes establecerlo aquí si es necesario. Por ejemplo, para asegurar un tamaño de página por defecto:
+        if (pageable.getPageSize() > 200) { // Limitar el tamaño máximo de página
+            pageable = PageRequest.of(pageable.getPageNumber(), 25, pageable.getSort());
+        } else if (pageable.getPageSize() < 1) {
+            pageable = PageRequest.of(pageable.getPageNumber(), 25, pageable.getSort());
+        }
+
+        // Por defecto, si no se especifica sort en la URL, podrías querer un ordenamiento por defecto
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("hotelId").ascending());
+        }
+
+        Page<HotelListDTO> hotelsPage = hotelService.findConsolidatedHotelData(pageable);
+        return ResponseEntity.ok(hotelsPage);
     }
 
     // Get Hotel by ID

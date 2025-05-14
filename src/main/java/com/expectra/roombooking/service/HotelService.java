@@ -3,6 +3,8 @@ package com.expectra.roombooking.service;
 import com.expectra.roombooking.dto.HotelDTO;
 import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.model.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,7 @@ public interface HotelService {
     List<Address> findAllAddressesByHotelId(Long hotelId);
     HotelDTO getHotelAndRoomsByHotelId(Long hotelId);
     HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomTypes);
-    List<HotelListDTO> findConsolidatedHotelData();
+    Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable); // Cambiado List a Page y añadido Pageable
  //   List<String> getFloorPlansByHotelId(Long hotelId);
 
 }
