@@ -1,5 +1,6 @@
 package com.expectra.roombooking.controller;
 
+import com.expectra.roombooking.dto.HotelCreationRequestDTO;
 import com.expectra.roombooking.dto.HotelDTO;
 import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.dto.HotelOnlyDTO; // Import HotelOnlyDTO
@@ -8,6 +9,7 @@ import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,15 @@ public class HotelController {
         return new ResponseEntity<>(savedHotel, HttpStatus.CREATED);
     }
 
+    // Create a new Hotel (AHORA CON EL DTO COMPUESTO)
+    @PostMapping("/createFull") // O simplemente @PostMapping si base-path es /api/hotels
+    @Operation(summary = "Crea un hotel completo con contacto y dirección principal",
+            description = "Crea un hotel, su contacto principal y su dirección principal en una sola operación.")
+    public ResponseEntity<HotelOnlyDTO> createFullHotel(@Valid @RequestBody HotelCreationRequestDTO hotelRequest) {
+        Hotel createdHotel = hotelService.createHotelWithDetails(hotelRequest);
+        HotelOnlyDTO hotelOnlyDTO = modelMapper.map(createdHotel, HotelOnlyDTO.class);
+        return new ResponseEntity<>(hotelOnlyDTO, HttpStatus.CREATED);
+    }
     // Get all Hotels
     @GetMapping
     @Operation(summary = "Consulta todos los hoteles", description = "Consulta de todos los hoteles.")

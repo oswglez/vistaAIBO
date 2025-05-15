@@ -1,5 +1,6 @@
 package com.expectra.roombooking.service;
 
+import com.expectra.roombooking.dto.HotelCreationRequestDTO;
 import com.expectra.roombooking.dto.HotelDTO;
 import com.expectra.roombooking.dto.HotelListDTO;
 import com.expectra.roombooking.model.*;
@@ -14,6 +15,7 @@ public interface HotelService {
     List<Hotel> findAllHotels();
     Optional<Hotel> findHotelById(Long hotelId);
     Hotel saveHotel(Hotel hotel);
+    Hotel createHotelWithDetails(HotelCreationRequestDTO hotelRequest);
     void deleteHotelById(Long hotelId);
     void logicalDeleteHotel(Long hotelId);
     // Operaciones específicas

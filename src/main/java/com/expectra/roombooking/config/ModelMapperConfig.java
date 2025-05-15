@@ -19,6 +19,8 @@ public class ModelMapperConfig {
         mapper.createTypeMap(Room.class, RoomDTO.class);
         mapper.createTypeMap(Media.class, MediaDTO.class);
         mapper.createTypeMap(Amenity.class, AmenityDTO.class);
+        mapper.createTypeMap(ContactInfoDTO.class, Contact.class);
+        mapper.createTypeMap(AddressInfoDTO.class, Address.class);
         return mapper;
     }
 

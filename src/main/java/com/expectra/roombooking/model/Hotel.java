@@ -80,7 +80,7 @@ public class    Hotel {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Room> rooms = new HashSet<>(); // Representa las habitaciones asociadas
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "hotel_contact",
             joinColumns = @JoinColumn(name = "hotel_id"),
