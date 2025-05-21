@@ -5,10 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     // Métodos personalizados si son necesarios
     // Metodo personalizado para buscar hoteles por nombre
     List<Contact> findContactByLastName(String lastName);
+    Optional<Contact> findByContactEmailIgnoreCase(String contactEmail);
+
 }

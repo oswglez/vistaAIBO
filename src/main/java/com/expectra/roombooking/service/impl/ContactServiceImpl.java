@@ -43,6 +43,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public Optional<Contact> findByContactEmailIgnoreCase(String contactEmail) {
+        return contactRepository.findByContactEmailIgnoreCase(contactEmail);
+    }
+
+    @Override
     public Contact save(Contact contact) {
         return contactRepository.save(contact);
     }

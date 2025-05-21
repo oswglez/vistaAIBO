@@ -2,6 +2,7 @@ package com.expectra.roombooking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.HashSet;
@@ -32,6 +33,7 @@ public class Address {
     private String postalCode;
 
     @Column(name = "address_type", nullable = false)
+    @NotNull
     private String addressType;
 
     // Relación Many-to-Many con Contact

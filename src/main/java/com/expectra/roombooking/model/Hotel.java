@@ -23,7 +23,7 @@ public class    Hotel {
     private Long hotelId;
 
     @NotBlank(message = "El codigo del hotel no puede estar vacío")
-    @Column(name = "hotel_code", nullable = false)
+    @Column(name = "hotel_code", nullable = true)
     private String hotelCode;
 
     @NotBlank(message = "El nombre del hotel no puede estar vacío")
@@ -57,19 +57,19 @@ public class    Hotel {
     @Column(name = "disclaimer")
     private String disclaimer;
 
-    @Column(name = "total_floors", nullable = false)
+    @Column(name = "total_floors", nullable = true)
     private Integer totalFloors;
 
-    @Column(name = "total_rooms", nullable = false)
+    @Column(name = "total_rooms", nullable = true)
     private Integer totalRooms;
 
-    @Column(name = "hotel_website_url", nullable = false)
+    @Column(name = "hotel_website_url", nullable = true)
     private String hotelWebsiteUrl;
 
-    @Column(name = "hotel_deleted", nullable = false)
+    @Column(name = "hotel_deleted", nullable = true)
     private Boolean hotelDeleted;
 
-    @Column(name = "hotel_status", nullable = false)
+    @Column(name = "hotel_status", nullable = true)
     private String hotelStatus;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)

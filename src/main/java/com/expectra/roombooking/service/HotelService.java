@@ -28,6 +28,9 @@ public interface HotelService {
     HotelDTO getHotelAndRoomsByHotelId(Long hotelId);
     HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomTypes);
     Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable); // Cambiado List a Page y añadido Pageable
- //   List<String> getFloorPlansByHotelId(Long hotelId);
+    HotelCreationRequestDTO findHotelByIdWithFullRelations(Long HotelId);
+    HotelCreationRequestDTO updateHotelWithDetails(Long hotelId, HotelCreationRequestDTO hotelDetails);
+
+    //   List<String> getFloorPlansByHotelId(Long hotelId);
 
 }

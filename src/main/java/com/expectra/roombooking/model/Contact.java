@@ -27,7 +27,7 @@ public class Contact {
     @Column(name = "contact_local_number", nullable = true)
     private String contactLocalNumber;
 
-    @Column(name = "contact_mobile_number", nullable = true)
+    @Column(name = "contact_mobile_number", nullable = false)
     private String contactMobileNumber;
 
     @Column(name = "contact_fax_number")

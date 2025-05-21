@@ -5,26 +5,25 @@ package com.expectra.roombooking.dto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HotelCreationRequestDTO {
+public class HotelCreationRequestDTOCoppy {
+
     // Campos del Hotel
-    private Long hotelId;
     private String hotelCode;
+    @NotBlank(message = "Hotel name cannot be blank")
     private String hotelName;
     private String hotelStatus; // 'A', 'P', 'I'
-    private Long brandId;
-    private String brandName;
+    private Long brandId; // ID de la marca seleccionada
+
     private String localPhone;
     private String disclaimer;
     private String hotelWebsiteUrl;
-    private Long chainId;
-    private String chainName;
 
     // Información del Contacto Principal (anidada)
     @Valid // Para que se validen las anotaciones dentro de ContactInfoDTO

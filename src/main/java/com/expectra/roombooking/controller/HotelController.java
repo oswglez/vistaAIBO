@@ -86,8 +86,6 @@ public class HotelController {
     public ResponseEntity<Page<HotelListDTO>> getAllHotelsAndRelationships(
             @Parameter(hidden = true) Pageable pageable // Spring inyectará el Pageable a partir de los parámetros ?page, ?size, ?sort
     ) {
-        // Si no se proveen parámetros de paginación en la URL, Pageable por defecto puede ser configurado
-        // o puedes establecerlo aquí si es necesario. Por ejemplo, para asegurar un tamaño de página por defecto:
         if (pageable.getPageSize() > 200) { // Limitar el tamaño máximo de página
             pageable = PageRequest.of(pageable.getPageNumber(), 25, pageable.getSort());
         } else if (pageable.getPageSize() < 1) {
@@ -258,4 +256,27 @@ public ResponseEntity<Void> deleteHotel(@PathVariable Long hotelId) {
         List<Address> addresses = hotelService.findAllAddressesByHotelId(hotelId);
         return ResponseEntity.ok(addresses);
     }
+
+    @GetMapping("/{hotelId}/withRelations")
+    @Operation(summary = "Consulta hotel/contact/address", description = "Consulta los contactos y direcciones de un de un hotel usando el hotelId.")
+    public ResponseEntity<HotelCreationRequestDTO > getHotelWithRelations(@PathVariable Long hotelId) {
+//        if (hotelService.findHotelByIdWithFullRelations(hotelId).getHotelCode().isEmpty()) {
+//            throw new ResourceNotFoundException(messageNotfound + hotelId);
+//        }
+        return ResponseEntity.ok(hotelService.findHotelByIdWithFullRelations(hotelId));
+    }
+
+    @PutMapping("/updateWithDetails/{id}")
+    public ResponseEntity<HotelCreationRequestDTO> updateHotelWithDetails(
+            @PathVariable Long id,
+            @Valid @RequestBody HotelCreationRequestDTO hotelDetails) {
+        HotelCreationRequestDTO updatedHotel = hotelService.updateHotelWithDetails(id, hotelDetails);
+        return ResponseEntity.ok(updatedHotel);
+    }
+//
+//    @GetMapping("/{hotelId}/withRelations") // El endpoint que corregiste en el frontend
+//    public ResponseEntity<HotelCreationRequestDTO > getHotelForEdit(@PathVariable Long hotelId) { // Devolver HotelForEditDTO
+//        HotelCreationRequestDTO  hotelDetails = hotelService.findHotelByIdWithFullRelations(hotelId);
+//        return ResponseEntity.ok(hotelDetails);
+//    }
 }

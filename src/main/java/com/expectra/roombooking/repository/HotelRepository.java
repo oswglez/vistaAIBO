@@ -28,7 +28,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT h FROM Hotel h WHERE h.hotelDeleted = false")
     List<Hotel> findAllHotels();
 
-    // Metodo personalizado para buscar hoteles por nombre
+    // Metodo personalizado para eliminar logicamente un hotel
     @Transactional
     @Modifying
     @Query("UPDATE Hotel h SET h.hotelDeleted = true WHERE h.hotelId = :hotelId")
@@ -82,4 +82,11 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 //            "ORDER BY h.hotelId ASC")
     Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable);
 
+    @Query("SELECT h FROM Hotel h " +
+            "LEFT JOIN FETCH h.brand b " +        // JOIN FETCH para Brand
+            "LEFT JOIN FETCH b.chain " +          // JOIN FETCH para Chain (a través de Brand)
+            "LEFT JOIN FETCH h.contacts " +       // JOIN FETCH para Contacts
+            "LEFT JOIN FETCH h.addresses " +      // JOIN FETCH para Addresses
+            "WHERE h.hotelId = :hotelId")
+    Optional<Hotel> findHotelByIdWithFullRelations(@Param("hotelId") Long id);
 }

@@ -12,5 +12,7 @@ public interface ContactService {
     void delete(Long id);
     void removeContactFromHotel(Long contactId, Long hotelId);
     List<Contact> findContactByLastName(String lastName);
+    Optional<Contact> findByContactEmailIgnoreCase(String contactEmail);
+
 
 }

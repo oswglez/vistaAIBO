@@ -18,7 +18,6 @@ public class ContactInfoDTO {
     private String contactEmail;
     private String contactLocalNumber;
     private String contactMobileNumber;
-    private String contactFaxNumber;
     @NotBlank
     private String contactType; // e.g., "MAIN", "BILLING"
 }
