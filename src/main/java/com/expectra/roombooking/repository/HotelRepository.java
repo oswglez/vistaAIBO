@@ -47,7 +47,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT c FROM Contact c JOIN c.hotels h WHERE h.hotelId = :hotelId")
     List<Contact> findAllContactsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-    @Query("SELECT a FROM Address a JOIN a.hotels h WHERE h.hotelId = :hotelId")
+    @Query("SELECT a FROM Address a  WHERE a.hotel.hotelId = :hotelId")
     List<Address> findAllAddressesByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
 
@@ -77,7 +77,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "LEFT JOIN h.brand b " +     // 'brand' es el campo de relación en la entidad Hotel
             "LEFT JOIN b.chain c " +     // 'chain' es el campo de relación en la entidad Brand
             "LEFT JOIN h.addresses a WITH a.addressType = 'MAIN' " + // 'addresses' es la colección en Hotel, filtra por tipo
-            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " )
+            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " +
+            "WHERE h.hotelDeleted = false ") // Excluye hoteles eliminados lógicamente
 //            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " + // 'contacts' es la colección en Hotel, filtra por tipo
 //            "ORDER BY h.hotelId ASC")
     Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable);

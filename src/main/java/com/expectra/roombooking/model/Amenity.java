@@ -18,8 +18,8 @@ import java.util.Set;
         @Column(name="amenity_id")
         private Long amenityId;
 
-        @Column(name="amenity_code", nullable=false)
-        private Integer amenityCode;
+    @Column(name="amenity_code", nullable=false)
+    private String amenityCode;
 
     @Column(name = "amenity_type", nullable=false )
     private String amenityType;

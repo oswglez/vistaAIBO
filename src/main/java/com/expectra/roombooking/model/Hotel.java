@@ -154,13 +154,8 @@ public class    Hotel {
         media.getHotels().remove(this);
     }
 
-    // Relación Many-to-Many con Address
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    @JoinTable(
-            name = "hotel_address",
-            joinColumns = @JoinColumn(name = "hotel_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id")
-    )
+    // Relación uno a muchos con Address
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Address> addresses = new HashSet<>();
 
@@ -168,12 +163,12 @@ public class    Hotel {
     // Métodos de utilidad para manejar la relación con Address
     public void addAddress(Address address) {
         this.addresses.add(address);
-        address.getHotels().add(this);
+        address.setHotel(this); // Establece la relación inversa
     }
 
     public void removeAddress(Address address) {
         this.addresses.remove(address);
-        address.getHotels().remove(this);
+        address.setHotel(null); // Limpia la relación inversa
     }
 
     // Método helper para añadir un plano de piso

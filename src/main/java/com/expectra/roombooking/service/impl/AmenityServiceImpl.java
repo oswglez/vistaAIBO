@@ -9,6 +9,8 @@ import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.repository.RoomRepository;
 import com.expectra.roombooking.service.AmenityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +36,14 @@ public class AmenityServiceImpl implements AmenityService {
 
     @Override
     @Transactional
-    public Amenity createAmenity(Long hotelId, Amenity amenity) {
-        if (hotelId != null) {
-            Hotel hotel = hotelRepository.findById(hotelId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
-            amenity.getHotels().add(hotel);
-        }
+    public Amenity createAmenity(Amenity amenity) {
+////        if (hotelId != null) {
+///
+///
+////            Hotel hotel = hotelRepository.findById(hotelId)
+////                    .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
+////            amenity.getHotels().add(hotel);
+////        }
         return amenityRepository.save(amenity);
     }
 
@@ -48,9 +52,14 @@ public class AmenityServiceImpl implements AmenityService {
         return amenityRepository.findById(id);
     }
 
+//    @Override
+//    public List<Amenity> getAllAmenities() {
+//        return amenityRepository.findAll();
+//    }
+
     @Override
-    public List<Amenity> getAllAmenities() {
-        return amenityRepository.findAll();
+    public Page<Amenity> getAllAmenities(Pageable pageable) {
+        return amenityRepository.findAll(pageable);
     }
 
     @Override

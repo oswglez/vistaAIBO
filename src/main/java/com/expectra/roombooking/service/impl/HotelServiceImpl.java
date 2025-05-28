@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -258,12 +259,12 @@ public class HotelServiceImpl implements HotelService {
         // 1. Actualizar campos básicos del hotel
         hotel.setHotelCode(hotelDetailsDTO.getHotelCode());
         hotel.setHotelName(hotelDetailsDTO.getHotelName());
-        hotel.setHotelStatus(hotelDetailsDTO.getHotelStatus()); // Status viene del form de edición
+        hotel.setHotelStatus(hotelDetailsDTO.getHotelStatus());
         hotel.setLocalPhone(hotelDetailsDTO.getLocalPhone());
         hotel.setHotelWebsiteUrl(hotelDetailsDTO.getHotelWebsiteUrl());
         hotel.setDisclaimer(hotelDetailsDTO.getDisclaimer());
 
-        // 2. Actualizar Brand (corregido para no desasociar si el DTO no trae brandId)
+        // 2. Actualizar Brand
         Long requestedBrandId = hotelDetailsDTO.getBrandId();
         if (requestedBrandId != null) {
             if (hotel.getBrand() == null || !hotel.getBrand().getBrandId().equals(requestedBrandId)) {
@@ -273,21 +274,40 @@ public class HotelServiceImpl implements HotelService {
             }
         } else {
             if (hotel.getBrand() == null) {
-                log.error("CRITICAL: Hotel (ID: {}) must have an associated brand. BrandId was null in request and hotel had no existing brand. Assign a default brand.", hotelId);
-                throw new IllegalStateException("Hotel (ID: " + hotelId + ") must have an associated brand. Default brand assignment logic needed if brandId is null.");
+                log.error("CRITICAL: Hotel (ID: {}) must have an associated brand.", hotelId);
+                throw new IllegalStateException("Hotel must have an associated brand.");
             }
         }
 
-        // 3. Actualizar Contacto Principal (Estrategia "Reemplazar el Principal")
-        if (hotel.getContacts() == null) hotel.setContacts(new HashSet<>()); // Asegurar inicialización
-        hotel.getContacts().removeIf(c -> "MAIN".equalsIgnoreCase(c.getContactType()));
-        if (hotelDetailsDTO.getMainContact() != null && StringUtils.hasText(hotelDetailsDTO.getMainContact().getContactEmail())) {
+        // 3. Actualizar Contacto Principal
+        if (hotel.getContacts() == null) hotel.setContacts(new HashSet<>());
+
+        Set<Contact> nonMainContacts = hotel.getContacts().stream()
+                .filter(c -> !"MAIN".equalsIgnoreCase(c.getContactType()))
+                .collect(Collectors.toSet());
+
+        // Remover contactos principales existentes usando el método helper
+        hotel.getContacts().stream()
+                .filter(c -> "MAIN".equalsIgnoreCase(c.getContactType()))
+                .forEach(mainContact -> {
+                    mainContact.getHotels().remove(hotel); // Remover hotel del contacto
+                });
+
+        hotel.setContacts(new HashSet<>(nonMainContacts));
+
+        // Agregar nuevo contacto principal si se proporciona
+        if (hotelDetailsDTO.getMainContact() != null &&
+                StringUtils.hasText(hotelDetailsDTO.getMainContact().getContactEmail())) {
+
             ContactInfoDTO contactRequestDTO = hotelDetailsDTO.getMainContact();
             Contact contactToAssociate;
+
             Optional<Contact> existingContactOpt = contactRepository.findByContactEmailIgnoreCase(contactRequestDTO.getContactEmail());
             if (existingContactOpt.isPresent()) {
                 contactToAssociate = existingContactOpt.get();
-                log.info("Updating existing contact (ID: {}) for email: {}", contactToAssociate.getContactId(), contactRequestDTO.getContactEmail());
+                log.info("Updating existing contact (ID: {}) for email: {}",
+                        contactToAssociate.getContactId(), contactRequestDTO.getContactEmail());
+
                 // Actualizar campos del contacto existente
                 contactToAssociate.setFirstName(contactRequestDTO.getFirstName());
                 contactToAssociate.setLastName(contactRequestDTO.getLastName());
@@ -296,54 +316,56 @@ public class HotelServiceImpl implements HotelService {
             } else {
                 log.info("Creating new contact for email: {}", contactRequestDTO.getContactEmail());
                 contactToAssociate = modelMapper.map(contactRequestDTO, Contact.class);
-                contactToAssociate.setContactId(null); // Asegurar que sea tratado como nuevo si no se encontró
+                contactToAssociate.setContactId(null);
             }
-            contactToAssociate.setContactType("MAIN"); // Establecer el tipo
-            hotel.getContacts().add(contactToAssociate); // Añadir a la colección del hotel
-        } else if (hotelDetailsDTO.getMainContact() != null) {
-            // Si se envió un DTO de contacto pero sin email, ¿qué hacer?
-            log.warn("MainContact DTO provided without an email for hotel ID: {}. Contact will not be processed.", hotelId);
+
+            contactToAssociate.setContactType("MAIN");
+            final Long contactIdToCheck = contactToAssociate.getContactId();
+
+            boolean alreadyExists = hotel.getContacts().stream()
+                    .anyMatch(c -> contactIdToCheck != null &&
+                            contactIdToCheck.equals(c.getContactId()));
+
+            if (!alreadyExists) {
+                hotel.addContact(contactToAssociate);
+                log.info("Contact added to hotel. Contact ID: {}, Type: {}",
+                        contactToAssociate.getContactId(), contactToAssociate.getContactType());
+            } else {
+                log.warn("Contact already exists in hotel collection, skipping addition");
+            }
         }
 
-        // --- Actualizar Dirección Principal ---
-        // 1. Limpiar las asociaciones 'MAIN' existentes del hotel
-        if (hotel.getAddresses() == null) {
+        // 4. Actualizar Dirección Principal
+        if (hotel.getAddresses() != null) {
+            // Remover direcciones principales existentes
+            new HashSet<>(hotel.getAddresses()).stream()
+                    .filter(a -> "MAIN".equalsIgnoreCase(a.getAddressType()))
+                    .forEach(addressToRemove -> hotel.removeAddress(addressToRemove));
+        } else {
             hotel.setAddresses(new HashSet<>());
         }
-        hotel.getAddresses().stream()
-                .filter(a -> "MAIN".equalsIgnoreCase(a.getAddressType()))
-                .collect(Collectors.toSet()) // Crear una copia para evitar ConcurrentModificationException
-                .forEach(hotel::removeAddress); // Usa tu método helper
 
-        // 2. Preparar y guardar la nueva dirección principal
+        // Agregar nueva dirección principal si se proporciona
         if (hotelDetailsDTO.getMainAddress() != null) {
             AddressInfoDTO addressRequestDTO = hotelDetailsDTO.getMainAddress();
             Address newMainAddress = modelMapper.map(addressRequestDTO, Address.class);
-            newMainAddress.setAddressId(null); // Asegurar que sea tratado como nuevo
+            newMainAddress.setAddressId(null);
             newMainAddress.setAddressType("MAIN");
 
-            // Guardar la nueva dirección principal
-            newMainAddress = addressRepository.save(newMainAddress);
-
-            // Verificar si ya existe una dirección con el mismo ID
-            Address finalNewMainAddress = newMainAddress;
-            boolean alreadyExists = hotel.getAddresses().stream()
-                    .anyMatch(a -> a.getAddressId().equals(finalNewMainAddress.getAddressId()));
-            if (!alreadyExists) {
-                hotel.addAddress(newMainAddress); // Usar método helper para añadir al hotel
-            }
+            hotel.addAddress(newMainAddress);
+            log.info("Nueva dirección MAIN preparada para Hotel ID {}: {}", hotelId, newMainAddress.getStreet());
         }
 
         // Logs para depuración
-        log.info("Antes de hotelRepository.save(hotel) en updateHotelWithDetails. Hotel ID: {}. Addresses: {}, Contacts: {}",
+        log.info("Antes de hotelRepository.save(hotel). Hotel ID: {}. Addresses: {}, Contacts: {}",
                 hotelId,
                 hotel.getAddresses().stream().map(a -> "ID:" + a.getAddressId() + " T:" + a.getAddressType()).collect(Collectors.toList()),
                 hotel.getContacts().stream().map(c -> "ID:" + c.getContactId() + " T:" + c.getContactType()).collect(Collectors.toList()));
 
-        // Guardar el hotel actualizado
+        // 5. Guardar el hotel actualizado (esto guardará todas las relaciones en cascada)
         Hotel updatedHotelEntity = hotelRepository.save(hotel);
 
-        log.info("Despues de hotelRepository.save(hotel) en updateHotelWithDetails. Hotel ID: {}. Addresses: {}, Contacts: {}",
+        log.info("Después de hotelRepository.save(hotel). Hotel ID: {}. Addresses: {}, Contacts: {}",
                 updatedHotelEntity.getHotelId(),
                 updatedHotelEntity.getAddresses().stream().map(a -> "ID:" + a.getAddressId() + " T:" + a.getAddressType()).collect(Collectors.toList()),
                 updatedHotelEntity.getContacts().stream().map(c -> "ID:" + c.getContactId() + " T:" + c.getContactType()).collect(Collectors.toList()));
@@ -351,6 +373,8 @@ public class HotelServiceImpl implements HotelService {
         // Devolver los detalles actualizados del hotel
         return getHotelDetailsForEditForm(updatedHotelEntity.getHotelId());
     }
+
+
 
     @Transactional(readOnly = true)
     public HotelCreationRequestDTO getHotelDetailsForEditForm(Long hotelId) {

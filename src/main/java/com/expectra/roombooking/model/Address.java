@@ -56,21 +56,22 @@ public class Address {
         contact.getAddresses().remove(this);
     }
 
-    // Relación Many-to-Many con Hotel
-    @ManyToMany(mappedBy = "addresses")
+    // Relación muchos a uno con Hotel
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
     @JsonIgnore
-    private Set<Hotel> hotels = new HashSet<>();
+    private Hotel hotel;
 
 
     // Métodos de utilidad para manejar la relación con Hotel
-    public void addHotel(Hotel hotel) {
-        this.hotels.add(hotel);
-        hotel.getAddresses().add(this);
-    }
-
-    public void removeHotel(Hotel hotel) {
-        this.hotels.remove(hotel);
-        hotel.getAddresses().remove(this);
+    public void setHotel(Hotel hotel) {
+        if (this.hotel != null) {
+            this.hotel.getAddresses().remove(this); // Limpia la relación anterior
+        }
+        this.hotel = hotel;
+        if (hotel != null) {
+            hotel.getAddresses().add(this); // Establece la nueva relación
+        }
     }
 
 }
