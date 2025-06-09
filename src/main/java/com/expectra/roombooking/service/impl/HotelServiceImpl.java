@@ -119,13 +119,11 @@ public class HotelServiceImpl implements HotelService {
     @Transactional(readOnly = true)
     public HotelDTO getHotelAndRoomsByHotelId(Long hotelId) {
         Hotel hotel = hotelRepository.getHotelAndRoomsByHotelId(hotelId)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found"));
         HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);
 
         dto.setRooms(hotel.getRooms().stream()
-                .map(room -> {
-                    return modelMapper.map(room, RoomDTO.class);
-                })
+                .map(room -> modelMapper.map(room, RoomDTO.class))
                 .collect(Collectors.toSet()));
         return dto;
     }
@@ -133,13 +131,11 @@ public class HotelServiceImpl implements HotelService {
     @Transactional(readOnly = true)
     public HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomType) {
         Hotel hotel = hotelRepository.findHotelAndRoomsByHotelIdAndRoomType(hotelId, roomType)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found"));
         HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);
 
         dto.setRooms(hotel.getRooms().stream()
-                .map(room -> {
-                    return modelMapper.map(room, RoomDTO.class);
-                })
+                .map(room -> modelMapper.map(room, RoomDTO.class))
                 .collect(Collectors.toSet()));
         return dto;
     }

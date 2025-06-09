@@ -10,30 +10,30 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="amenity")
+@Table(name = "amenity")
 @Data
-    public class Amenity {
-        @Id
-        @GeneratedValue(strategy=GenerationType.IDENTITY)
-        @Column(name="amenity_id")
-        private Long amenityId;
+public class Amenity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "amenity_id")
+    private Long amenityId;
 
-    @Column(name="amenity_code", nullable=false)
+    @Column(name = "amenity_code", nullable = false)
     private String amenityCode;
 
-    @Column(name = "amenity_type", nullable=false )
+    @Column(name = "amenity_type", nullable = false)
     private String amenityType;
 
-    @Column(name="amenity_description")
+    @Column(name = "amenity_description")
     private String amenityDescription;
 
-    // Relación con Hotel a través de la tabla intermedia hotel_amenity
+    // Many-to-Many relationship with Hotel through hotel_amenity table
     @ManyToMany(mappedBy = "amenities")
     @JsonIgnore
     private Set<Hotel> hotels = new HashSet<>();
 
-    // Relación con Room a través de la tabla intermedia room_amenity
+    // Many-to-Many relationship with Room through room_amenity table
     @ManyToMany(mappedBy = "amenities")
     @JsonIgnore
     private Set<Room> rooms = new HashSet<>();
-    }
+}

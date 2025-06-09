@@ -36,16 +36,17 @@ public class Address {
     @NotNull
     private String addressType;
 
-    // Relación Many-to-Many con Contact
+    // Many-to-Many relationship with Contact through contact_address table
     @ManyToMany
     @JoinTable(
-            name = "contact_address", // Nombre de la tabla intermedia
-            joinColumns = @JoinColumn(name = "address_id"), // Columna que referencia a Address
-            inverseJoinColumns = @JoinColumn(name = "contact_id") // Columna que referencia a Contact
+            name = "contact_address",
+            joinColumns = @JoinColumn(name = "address_id"),
+            inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
     @JsonIgnore
     private Set<Contact> contacts = new HashSet<>();
 
+    // Utility methods to handle Contact relationship
     public void addContact(Contact contact) {
         this.contacts.add(contact);
         contact.getAddresses().add(this);
@@ -56,22 +57,20 @@ public class Address {
         contact.getAddresses().remove(this);
     }
 
-    // Relación muchos a uno con Hotel
+    // Many-to-One relationship with Hotel
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
     @JsonIgnore
     private Hotel hotel;
 
-
-    // Métodos de utilidad para manejar la relación con Hotel
+    // Utility method to handle Hotel relationship
     public void setHotel(Hotel hotel) {
         if (this.hotel != null) {
-            this.hotel.getAddresses().remove(this); // Limpia la relación anterior
+            this.hotel.getAddresses().remove(this); // Clear previous relationship
         }
         this.hotel = hotel;
         if (hotel != null) {
-            hotel.getAddresses().add(this); // Establece la nueva relación
+            hotel.getAddresses().add(this); // Set new relationship
         }
     }
-
 }

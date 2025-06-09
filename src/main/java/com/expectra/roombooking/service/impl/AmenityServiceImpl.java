@@ -37,13 +37,6 @@ public class AmenityServiceImpl implements AmenityService {
     @Override
     @Transactional
     public Amenity createAmenity(Amenity amenity) {
-////        if (hotelId != null) {
-///
-///
-////            Hotel hotel = hotelRepository.findById(hotelId)
-////                    .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
-////            amenity.getHotels().add(hotel);
-////        }
         return amenityRepository.save(amenity);
     }
 
@@ -51,11 +44,6 @@ public class AmenityServiceImpl implements AmenityService {
     public Optional<Amenity> getAmenityById(Long id) {
         return amenityRepository.findById(id);
     }
-
-//    @Override
-//    public List<Amenity> getAllAmenities() {
-//        return amenityRepository.findAll();
-//    }
 
     @Override
     public Page<Amenity> getAllAmenities(Pageable pageable) {
@@ -82,7 +70,7 @@ public class AmenityServiceImpl implements AmenityService {
                 .orElseThrow(() -> new ResourceNotFoundException("Amenity not found with id: " + id));
 
         if (!amenity.getHotels().isEmpty() || !amenity.getRooms().isEmpty()) {
-            throw new ResourceNotFoundException("amenity has actives relationships  id: " + id);
+            throw new ResourceNotFoundException("Cannot delete amenity with id: " + id + " as it has active relationships");
         }
         amenityRepository.delete(amenity);
     }
@@ -152,16 +140,8 @@ public class AmenityServiceImpl implements AmenityService {
         hotelRepository.save(hotel);
         hotelRepository.flush();
 
-
-        // 🔹 Verificar si el Amenity quedó huérfano y eliminarlo
         if (amenity.getHotels().isEmpty() && amenity.getRooms().isEmpty()) {
             amenityRepository.delete(amenity);
         }
-
-
-//
-//        if (amenity.getHotels().isEmpty() && amenity.getRooms().isEmpty()) {
-//            amenityRepository.delete(amenity);
-//        }
     }
 }

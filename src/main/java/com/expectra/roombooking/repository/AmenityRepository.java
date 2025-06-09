@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-    public interface  AmenityRepository extends JpaRepository<Amenity, Long> {
+public interface AmenityRepository extends JpaRepository<Amenity, Long> {
 
-    // Método personalizado para encontrar todas las medias de una habitación específica
+    // Find all amenities for a specific room
     @Query("SELECT a FROM Amenity a JOIN a.rooms r WHERE r.roomId = :roomId")
     List<Amenity> findAllAmenitiesByRoomId(Long roomId);
 
-    // Método personalizado para encontrar todas las medias de un hotel específico
+    // Find all amenities for a specific hotel
     @Query("SELECT a FROM Amenity a JOIN a.hotels h WHERE h.hotelId = :hotelId")
     List<Amenity> findAllAmenitiesByHotelId(Long hotelId);
 

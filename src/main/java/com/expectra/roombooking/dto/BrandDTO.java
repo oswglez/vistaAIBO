@@ -13,5 +13,7 @@ public class BrandDTO implements Serializable {
 
     private String brandDescription;
 
+    private Long chainId;
+
     private Set<HotelOnlyDTO> hotels;
 }

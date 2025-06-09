@@ -9,22 +9,23 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    // Metodo personalizado para encontrar todas las medias de una habitacion específica
-//    @Query("SELECT m FROM Media m JOIN m.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomId = :roomId")
+    // Find all media for a specific room in a hotel
     @Query("SELECT m FROM Media m JOIN m.rooms r WHERE r.roomId = :roomId AND r.hotel.hotelId = :hotelId")
     List<Media> getAllMediasByHotelIdAndRoomId(@Param("hotelId") Long hotelId, @Param("roomId") Long roomId);
 
-    // Metodo personalizado para encontrar todas las medias de un tipo de habitacion específica
+    // Find all media for a specific room type in a hotel
     @Query("SELECT m FROM Media m JOIN m.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomType = :roomType")
     List<Media> getAllMediasByHotelIdAndRoomType(@Param("hotelId") Long hotelId, @Param("roomType") String roomType);
 
+    // Find all amenities for a specific room in a hotel
     @Query("SELECT a FROM Amenity a JOIN a.rooms r WHERE r.roomId = :roomId AND r.hotel.hotelId = :hotelId")
     List<Amenity> getAllAmenitiesByHotelIdAndRoomId(@Param("hotelId") Long hotelId, @Param("roomId") Long roomId);
 
-    // Metodo personalizado para encontrar todas las amenities de un tipo de habitacion específica
+    // Find all amenities for a specific room type in a hotel
     @Query("SELECT a FROM Amenity a JOIN a.rooms r JOIN r.hotel h WHERE h.hotelId = :hotelId AND r.roomType = :roomType")
     List<Amenity> getAllAmenitiesByHotelIdAndRoomType(Long hotelId, String roomType);
 }

@@ -1,15 +1,13 @@
 package com.expectra.roombooking.dto;
 
-import com.expectra.roombooking.model.MediaTypes;
 import lombok.Data;
-import java.io.Serializable;
-
 
 @Data
-public class MediaDTO implements Serializable {
+public class MediaDTO {
     private Long mediaId;
-    private Integer mediaCode;
-    private MediaTypes mediaType;
-    private String mediaDescription;
+    private String mediaType;
     private String mediaUrl;
+    private String mediaDescription;
+    private Long roomId;
+    private Long hotelId;
 }

@@ -39,13 +39,12 @@ public class Contact {
     @Column(name = "contact_type", nullable = false)
     private String contactType;
 
-    // Relación Many-to-Many con Hotel
-
+    // Many-to-Many relationship with Hotel
     @ManyToMany(mappedBy = "contacts")
     @JsonIgnore
     private Set<Hotel> hotels = new HashSet<>();
 
-    // Métodos de utilidad para manejar la relación
+    // Utility methods to handle the relationship
     public void addHotel(Hotel hotel) {
         this.hotels.add(hotel);
         hotel.getContacts().add(this);
@@ -55,7 +54,8 @@ public class Contact {
         this.hotels.remove(hotel);
         hotel.getContacts().remove(this);
     }
-    // Relación Many-to-Many con Address
+
+    // Many-to-Many relationship with Address
     @ManyToMany(mappedBy = "contacts")
     @JsonIgnore
     private Set<Address> addresses = new HashSet<>();
@@ -64,6 +64,7 @@ public class Contact {
         this.addresses.add(address);
         address.getContacts().add(this);
     }
+
     public void removeAddress(Address address) {
         this.addresses.remove(address);
         address.getContacts().remove(this);

@@ -22,19 +22,20 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.rooms WHERE h.hotelId = :hotelId AND h.hotelDeleted = false")
     Optional<Hotel> getHotelAndRoomsByHotelId(@Param("hotelId") @NonNull Long hotelId);
-    // Metodo personalizado para buscar hoteles por nombre
+
+    // Custom method to find hotels by name
     List<Hotel> findByHotelName(String hotelName);
 
     @Query("SELECT h FROM Hotel h WHERE h.hotelDeleted = false")
     List<Hotel> findAllHotels();
 
-    // Metodo personalizado para eliminar logicamente un hotel
+    // Custom method to logically delete a hotel
     @Transactional
     @Modifying
     @Query("UPDATE Hotel h SET h.hotelDeleted = true WHERE h.hotelId = :hotelId")
     void markHotelAsDeleted(@Param("hotelId") Long hotelId);
 
-    // Metodo personalizado para encontrar todas las amenities de un hotel específico
+    // Custom method to find all amenities for a specific hotel
     @Query("SELECT a FROM Amenity a JOIN a.hotels h WHERE h.hotelId = :hotelId")
     List<Amenity> findAllAmenitiesByHotelId(@NonNull Long hotelId);
 
@@ -47,47 +48,43 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT c FROM Contact c JOIN c.hotels h WHERE h.hotelId = :hotelId")
     List<Contact> findAllContactsByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-    @Query("SELECT a FROM Address a  WHERE a.hotel.hotelId = :hotelId")
+    @Query("SELECT a FROM Address a WHERE a.hotel.hotelId = :hotelId")
     List<Address> findAllAddressesByHotelId(@Param("hotelId") @NonNull Long hotelId);
 
-
-//    @Query("SELECT h FROM Hotel h JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomType = :roomType")
     @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.rooms r WHERE h.hotelId = :hotelId AND r.roomId IN (SELECT r2.roomId FROM Room r2 WHERE r2.hotel = h AND r2.roomType = :roomType)")
-    Optional<Hotel>  findHotelAndRoomsByHotelIdAndRoomType(
+    Optional<Hotel> findHotelAndRoomsByHotelIdAndRoomType(
             @Param("hotelId") @NonNull Long hotelId,
             @Param("roomType") @NonNull String roomType);
 
     @Query("SELECT new com.expectra.roombooking.dto.HotelListDTO(" +
             "    h.hotelId, " +
-            "    h.hotelCode AS hotelCode, " +            // Alias coincide
-            "    h.hotelName AS hotelName, " +            // Alias coincide
-            "    h.hotelWebsiteUrl AS hotelWebsiteUrl, " +// Alias coincide
-            "    h.hotelStatus AS hotelStatus, " +        // Alias coincide
-            "    b.brandName AS hotelBrand, " +           // ALIAS 'hotelBrand' para b.brandName
-            "    c.chainName AS hotelChain, " +           // ALIAS 'hotelChain' para c.chainName
-            "    a.street AS hotelStreet, " +             // ALIAS 'hotelStreet' para a.street
-            "    a.city AS hotelCity, " +                 // ALIAS 'hotelCity' para a.city
-            "    a.state AS hotelState, " +               // ALIAS 'hotelState' para a.state
-            "    a.country AS hotelCountry, " +           // ALIAS 'hotelCountry' para a.country
-            "    ct.firstName AS contactFirstName, " +    // ALIAS 'contactFirstName' para ct.firstName
-            "    ct.lastName AS contactLastName, " +      // ALIAS 'contactLastName' para ct.lastName
-            "    ct.contactTitle AS contactTitle" +           // y 'title'
+            "    h.hotelCode AS hotelCode, " +
+            "    h.hotelName AS hotelName, " +
+            "    h.hotelWebsiteUrl AS hotelWebsiteUrl, " +
+            "    h.hotelStatus AS hotelStatus, " +
+            "    b.brandName AS hotelBrand, " +
+            "    c.chainName AS hotelChain, " +
+            "    a.street AS hotelStreet, " +
+            "    a.city AS hotelCity, " +
+            "    a.state AS hotelState, " +
+            "    a.country AS hotelCountry, " +
+            "    ct.firstName AS contactFirstName, " +
+            "    ct.lastName AS contactLastName, " +
+            "    ct.contactTitle AS contactTitle" +
             ") " +
-            "FROM Hotel h " + // 'Hotel' es el nombre de tu Entidad JPA
-            "LEFT JOIN h.brand b " +     // 'brand' es el campo de relación en la entidad Hotel
-            "LEFT JOIN b.chain c " +     // 'chain' es el campo de relación en la entidad Brand
-            "LEFT JOIN h.addresses a WITH a.addressType = 'MAIN' " + // 'addresses' es la colección en Hotel, filtra por tipo
+            "FROM Hotel h " +
+            "LEFT JOIN h.brand b " +
+            "LEFT JOIN b.chain c " +
+            "LEFT JOIN h.addresses a WITH a.addressType = 'MAIN' " +
             "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " +
-            "WHERE h.hotelDeleted = false ") // Excluye hoteles eliminados lógicamente
-//            "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " + // 'contacts' es la colección en Hotel, filtra por tipo
-//            "ORDER BY h.hotelId ASC")
+            "WHERE h.hotelDeleted = false ")
     Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable);
 
     @Query("SELECT h FROM Hotel h " +
-            "LEFT JOIN FETCH h.brand b " +        // JOIN FETCH para Brand
-            "LEFT JOIN FETCH b.chain " +          // JOIN FETCH para Chain (a través de Brand)
-            "LEFT JOIN FETCH h.contacts " +       // JOIN FETCH para Contacts
-            "LEFT JOIN FETCH h.addresses " +      // JOIN FETCH para Addresses
+            "LEFT JOIN FETCH h.brand b " +
+            "LEFT JOIN FETCH b.chain " +
+            "LEFT JOIN FETCH h.contacts " +
+            "LEFT JOIN FETCH h.addresses " +
             "WHERE h.hotelId = :hotelId")
     Optional<Hotel> findHotelByIdWithFullRelations(@Param("hotelId") Long id);
 }

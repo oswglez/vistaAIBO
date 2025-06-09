@@ -10,11 +10,16 @@ import java.util.Optional;
 // RoomService.java
 
 public interface RoomService {
+    // Basic CRUD operations
     Room saveRoom(Room room);
-    void deleteRoomById(Long roomId);
-    List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType);
-    List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType);
     Optional<Room> getRoomById(Long roomId);
+    void deleteRoomById(Long roomId);
+
+    // Media related operations
     List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId);
+    List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType);
+
+    // Amenity related operations
     List<Amenity> getAllAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId);
+    List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType);
 }

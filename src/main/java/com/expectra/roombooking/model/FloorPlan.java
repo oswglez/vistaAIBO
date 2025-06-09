@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 @Entity
 @Table(name = "floor_plan")
 @Data
@@ -23,6 +22,7 @@ public class FloorPlan {
     @Column(name = "plan_url", nullable = false)
     private String planUrl;
 
+    // Many-to-One relationship with Hotel
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hotel_id")
     @JsonBackReference

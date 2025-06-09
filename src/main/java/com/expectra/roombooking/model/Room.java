@@ -10,23 +10,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="room")
+@Table(name = "room")
 @Data
-@ToString(exclude = {"medias", "amenities"}) // Excluye colecciones
-@EqualsAndHashCode(exclude = {"medias", "amenities"}) // Excluye colecciones
+@ToString(exclude = {"medias", "amenities"})
+@EqualsAndHashCode(exclude = {"medias", "amenities"})
 public class Room {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="room_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private Long roomId;
 
-    @Column(name="room_number", nullable=false)
+    @Column(name = "room_number", nullable = false)
     private Integer roomNumber;
 
-    @Column(name="room_type", nullable=false) // Tipo de habitación, puedes definir un Enum si es necesario.
+    @Column(name = "room_type", nullable = false)
     private String roomType;
 
-    @Column(name="room_name")
+    @Column(name = "room_name")
     private String roomName;
 
     @Column(name = "room_building", columnDefinition = "VARCHAR DEFAULT 'Main'")
@@ -38,22 +38,22 @@ public class Room {
     @Column(name = "room_price", nullable = false, columnDefinition = "DOUBLE DEFAULT 100.0")
     private Double roomPrice;
 
-    // Relación con Hotel (1:N) - cada habitación pertenece a un solo hotel.
+    // Many-to-One relationship with Hotel - each room belongs to a single hotel
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_hotel_id", nullable = false)
     @JsonIgnore
     private Hotel hotel;
 
-    // Relación con Amenity a través de la tabla intermedia room_amenity.
+    // Many-to-Many relationship with Amenity through room_amenity table
     @ManyToMany
     @JoinTable(
-            name="room_amenity",
-            joinColumns=@JoinColumn(name="room_id"),
-            inverseJoinColumns=@JoinColumn(name="amenity_id"))
+            name = "room_amenity",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id"))
     @JsonIgnore
-    private Set<Amenity> amenities; // Relación con Amenity
+    private Set<Amenity> amenities = new HashSet<>();
 
-    // Métodos de utilidad para manejar la relación con Amenity
+    // Utility methods to handle Amenity relationship
     public void addAmenity(Amenity amenity) {
         this.amenities.add(amenity);
         amenity.getRooms().add(this);
@@ -64,16 +64,16 @@ public class Room {
         amenity.getRooms().remove(this);
     }
 
-    // Relación con Media a través de la tabla intermedia room_media.
+    // Many-to-Many relationship with Media through room_media table
     @ManyToMany
     @JoinTable(
-            name="room_media",
-            joinColumns=@JoinColumn(name="room_id"),
-            inverseJoinColumns=@JoinColumn(name="media_id"))
+            name = "room_media",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "media_id"))
     @JsonIgnore
     private Set<Media> medias = new HashSet<>();
 
-    // Métodos de utilidad para manejar la relación con Media
+    // Utility methods to handle Media relationship
     public void addMedia(Media media) {
         this.medias.add(media);
         media.getRooms().add(this);

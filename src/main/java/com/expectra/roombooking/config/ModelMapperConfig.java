@@ -11,7 +11,7 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper() {
         final ModelMapper mapper = new ModelMapper();
-        // Configuración personalizada (si es necesario)
+        // Custom configuration (if needed)
         mapper.createTypeMap(Brand.class, BrandDTO.class);
         mapper.createTypeMap(Provider.class, ProviderDTO.class);
         mapper.createTypeMap(Hotel.class, HotelOnlyDTO.class);
@@ -23,7 +23,4 @@ public class ModelMapperConfig {
         mapper.createTypeMap(AddressInfoDTO.class, Address.class);
         return mapper;
     }
-
-    public ModelMapperConfig() {
-    }
-}
+} 

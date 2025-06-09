@@ -16,17 +16,17 @@ import java.util.Set;
 @Data
 @ToString(exclude = {"medias", "amenities", "rooms", "contacts", "addresses", "brand"})
 @EqualsAndHashCode(exclude = {"medias", "amenities", "rooms", "contacts", "addresses", "brand"})
-public class    Hotel {
+public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hotel_id")
     private Long hotelId;
 
-    @NotBlank(message = "El codigo del hotel no puede estar vacío")
+    @NotBlank(message = "Hotel code cannot be empty")
     @Column(name = "hotel_code", nullable = true)
     private String hotelCode;
 
-    @NotBlank(message = "El nombre del hotel no puede estar vacío")
+    @NotBlank(message = "Hotel name cannot be empty")
     @Column(name = "hotel_name", nullable = false)
     private String hotelName;
 
@@ -43,7 +43,7 @@ public class    Hotel {
     private Long pmsHotelId;
 
     @Column(name = "pms_token")
-    private String pmsToken; // Cambiado de Long a String
+    private String pmsToken;
 
     @Column(name = "crs_vendor")
     private String crsVendor;
@@ -52,7 +52,7 @@ public class    Hotel {
     private Long crsHotelId;
 
     @Column(name = "crs_token")
-    private String crsToken; // Cambiado de Long a String
+    private String crsToken;
 
     @Column(name = "disclaimer")
     private String disclaimer;
@@ -76,9 +76,9 @@ public class    Hotel {
     @JsonManagedReference
     private List<FloorPlan> floorPlans = new ArrayList<>();
 
-    // Relación uno a muchos con Room
+    // One-to-many relationship with Room
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Room> rooms = new HashSet<>(); // Representa las habitaciones asociadas
+    private Set<Room> rooms = new HashSet<>(); // Represents associated rooms
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -89,12 +89,12 @@ public class    Hotel {
     @JsonIgnore
     private Set<Contact> contacts = new HashSet<>();
 
-    // Relación con Hotel (1:N) - cada hotel pertenece a una sola brand.
+    // One-to-many relationship with Brand - each hotel belongs to a single brand
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_brand_id", nullable = false)
     private Brand brand;
 
-    // Métodos de utilidad para manejar la relación con Contact
+    // Utility methods to handle Contact relationship
     public void addContact(Contact contact) {
         this.contacts.add(contact);
         contact.getHotels().add(this);
@@ -104,6 +104,7 @@ public class    Hotel {
         this.contacts.remove(contact);
         contact.getHotels().remove(this);
     }
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinTable(
             name = "hotel_amenity",
@@ -122,8 +123,7 @@ public class    Hotel {
     @JsonIgnore
     private Set<Provider> providers = new HashSet<>();
 
-
-    // Métodos de utilidad para manejar la relación con Amenity
+    // Utility methods to handle Amenity relationship
     public void addAmenity(Amenity amenity) {
         this.amenities.add(amenity);
         amenity.getHotels().add(this);
@@ -143,7 +143,7 @@ public class    Hotel {
     @JsonIgnore
     private Set<Media> medias = new HashSet<>();
 
-    // Métodos de utilidad para manejar la relación con Media
+    // Utility methods to handle Media relationship
     public void addMedia(Media media) {
         this.medias.add(media);
         media.getHotels().add(this);
@@ -154,30 +154,29 @@ public class    Hotel {
         media.getHotels().remove(this);
     }
 
-    // Relación uno a muchos con Address
+    // One-to-many relationship with Address
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Address> addresses = new HashSet<>();
 
-
-    // Métodos de utilidad para manejar la relación con Address
+    // Utility methods to handle Address relationship
     public void addAddress(Address address) {
         this.addresses.add(address);
-        address.setHotel(this); // Establece la relación inversa
+        address.setHotel(this); // Set inverse relationship
     }
 
     public void removeAddress(Address address) {
         this.addresses.remove(address);
-        address.setHotel(null); // Limpia la relación inversa
+        address.setHotel(null); // Clear inverse relationship
     }
 
-    // Método helper para añadir un plano de piso
+    // Helper method to add a floor plan
     public void addFloorPlan(FloorPlan floorPlan) {
         floorPlans.add(floorPlan);
         floorPlan.setHotel(this);
     }
 
-    // Método helper para eliminar un plano de piso
+    // Helper method to remove a floor plan
     public void removeFloorPlan(FloorPlan floorPlan) {
         floorPlans.remove(floorPlan);
         floorPlan.setHotel(null);

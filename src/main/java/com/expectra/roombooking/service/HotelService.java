@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HotelService {
-    // Operaciones CRUD básicas
+    // Basic CRUD operations
     List<Hotel> findAllHotels();
     Optional<Hotel> findHotelById(Long hotelId);
     Hotel saveHotel(Hotel hotel);
     Hotel createHotelWithDetails(HotelCreationRequestDTO hotelRequest);
     void deleteHotelById(Long hotelId);
     void logicalDeleteHotel(Long hotelId);
-    // Operaciones específicas
+    // Specific operations
     List<Hotel> findHotelsByName(String hotelName);
     List<Amenity> findHotelAmenities(Long hotelId);
     List<Media> findHotelMedias(Long hotelId);
@@ -27,7 +27,7 @@ public interface HotelService {
     List<Address> findAllAddressesByHotelId(Long hotelId);
     HotelDTO getHotelAndRoomsByHotelId(Long hotelId);
     HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomTypes);
-    Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable); // Cambiado List a Page y añadido Pageable
+    Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable);
     HotelCreationRequestDTO findHotelByIdWithFullRelations(Long HotelId);
     HotelCreationRequestDTO updateHotelWithDetails(Long hotelId, HotelCreationRequestDTO hotelDetails);
 

@@ -1,23 +1,22 @@
 package com.expectra.roombooking.service.impl;
 
-        import com.expectra.roombooking.model.Amenity;
-        import com.expectra.roombooking.model.Media;
-        import com.expectra.roombooking.model.Room;
-        import com.expectra.roombooking.repository.RoomRepository;
-        import com.expectra.roombooking.service.RoomService;
-        import jakarta.transaction.Transactional;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Service;
+import com.expectra.roombooking.model.Amenity;
+import com.expectra.roombooking.model.Media;
+import com.expectra.roombooking.model.Room;
+import com.expectra.roombooking.repository.RoomRepository;
+import com.expectra.roombooking.service.RoomService;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-        import java.util.List;
-        import java.util.Optional;
-// RoomServiceImpl.java
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
-
 
     @Autowired
     public RoomServiceImpl(RoomRepository roomRepository) {
@@ -30,26 +29,19 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public Optional<Room> getRoomById(Long roomId) {
+        return roomRepository.findById(roomId);
+    }
+
+    @Override
     public void deleteRoomById(Long roomId) {
         roomRepository.deleteById(roomId);
     }
 
- //   @Override
-//   public List<Room> getRoomsByHotelId(Long hotelId) {
-//        return roomRepository.getAllRoomsByHotelId(hotelId);
-//    }
- @Override
- public List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId) {
-     return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
- }
     @Override
-    public List<Amenity> getAllAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId) {
-        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
+    public List<Media> getAllMediasByHotelIdAndRoomId(Long hotelId, Long roomId) {
+        return roomRepository.getAllMediasByHotelIdAndRoomId(hotelId, roomId);
     }
-//    @Override
-//    public List<Amenity> getRoomAmenitiesByHotelAndRoom(Long hotelId, Long roomId) {
-//        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
-//    }
 
     @Override
     public List<Media> getRoomMediaByHotelAndRoomType(Long hotelId, String roomType) {
@@ -57,12 +49,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType) {
-        return roomRepository.getAllAmenitiesByHotelIdAndRoomType(hotelId, roomType);
+    public List<Amenity> getAllAmenitiesByHotelIdAndRoomId(Long hotelId, Long roomId) {
+        return roomRepository.getAllAmenitiesByHotelIdAndRoomId(hotelId, roomId);
     }
 
     @Override
-    public Optional<Room> getRoomById(Long roomId) {
-        return roomRepository.findById(roomId);
+    public List<Amenity> getRoomAmenitiesByHotelAndRoomType(Long hotelId, String roomType) {
+        return roomRepository.getAllAmenitiesByHotelIdAndRoomType(hotelId, roomType);
     }
 }

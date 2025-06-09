@@ -8,5 +8,5 @@ public class ChainDTO {
     private Long chainId;
     private String chainName;
     private String chainDescription;
-//    private Set<BrandDTO> brands;
+    private Set<BrandDTO> brands;
 }
