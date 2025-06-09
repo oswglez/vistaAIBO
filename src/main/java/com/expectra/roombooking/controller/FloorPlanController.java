@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/floorplan")
 @Tag(name = "FloorPlan Management", description = "Endpoints para gestión de planos de piso de hoteles")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 public class FloorPlanController {
 
     private final FloorPlanService floorPlanService;

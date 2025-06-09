@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/contacts")
 @Tag(name = "Contact Management", description = "Endpoints para gestión de contactos")
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 public class ContactController {
 
     private final ContactService contactService;

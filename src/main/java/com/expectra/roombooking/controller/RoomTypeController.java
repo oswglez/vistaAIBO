@@ -6,6 +6,11 @@ import com.expectra.roombooking.service.RoomTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +37,7 @@ public class RoomTypeController {
     public ResponseEntity<RoomTypes> createRoomType(@RequestBody Map<String, Object> requestBody) {
         RoomTypes roomTypes = new RoomTypes();
         roomTypes.setRoomTypeName((String) requestBody.get("roomTypeName"));
+        roomTypes.setRoomTypeDescription((String) requestBody.get("roomTypeDescription"));
 
         RoomTypes createdRoomTypes = roomTypeService.createRoomType(roomTypes);
         return ResponseEntity.ok(createdRoomTypes);
@@ -47,8 +53,11 @@ public class RoomTypeController {
 
     @GetMapping
     @Operation(summary = "Obtiene todos los roomTypes", description = "Recupera todos los roomTypes de la base de datos.")
-    public ResponseEntity<List<RoomTypes>> getAllRoomTypes() {
-        List<RoomTypes> roomTypes = roomTypeService.getAllRoomType();
+    public ResponseEntity<Page<RoomTypes>> getAllRoomTypes(
+            @PageableDefault(page = 0, size = 10) // Valores por defecto para la paginación (0-indexed page)
+            @SortDefault(sort = "roomTypeName", direction = Sort.Direction.ASC) // Ordenamiento por defecto
+            Pageable pageable) {
+        Page<RoomTypes> roomTypes = roomTypeService.getAllRoomType(pageable);
         return ResponseEntity.ok(roomTypes);
     }
 

@@ -14,4 +14,7 @@ public class MediaTypes {
 
     @Column(name="media_types_name", nullable=false)
     private String mediaTypeName;
+
+    @Column(name="media_types_description", nullable=false)
+    private String mediaTypeDescription;
 }

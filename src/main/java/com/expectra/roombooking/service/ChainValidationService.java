@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-// Puedes llamar a esta clase MediaTypeValidationService o incluir la lógica
-// en tu MediaService o Chainervice existente.
+// Puedes llamar a esta clase ChainValidationService o incluir la lógica
+// en tu ChainService existente.
 public class ChainValidationService {
 
     private static final Logger log = LoggerFactory.getLogger(ChainValidationService.class);
@@ -39,9 +39,9 @@ public class ChainValidationService {
             // Asume que tienes un método en tu repo que devuelve los nombres
             // o los objetos completos desde donde extraer los nombres.
             // Opción 1: Si el repo devuelve List<String> directamente
-            //List<String> names = mediaTypeRepository.findAllTypeNames(); // Necesitarás crear este método
+            //List<String> names = chainRepository.findAllTypeNames(); // Necesitarás crear este método
 
-            // Opción 2: Si el repo devuelve List<MediaTypeEntity>
+            // Opción 2: Si el repo devuelve List<ChainEntity>
              List<Chain> chains = (List<Chain>) chainRepository.findAll();
              List<String> names = chains.stream()
                                      .map(Chain::getChainName) // Asume un getter getName()
@@ -63,7 +63,7 @@ public class ChainValidationService {
     // --- Método de Validación ---
 
     /**
-     * Valida si el nombre del tipo de media proporcionado es válido
+     * Valida si el nombre del tipo de chain proporcionado es válido
      * comparándolo contra el caché de tipos permitidos.
      * Lanza IllegalArgumentException si el tipo es inválido, nulo o vacío.
      *

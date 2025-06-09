@@ -1,11 +1,17 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.MediaTypes;
 import com.expectra.roombooking.service.MediaTypesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +37,7 @@ public class MediaTypeController {
 public ResponseEntity<MediaTypes> createMediaType(@RequestBody Map<String, Object> requestBody) {
     MediaTypes mediaTypes = new MediaTypes();
     mediaTypes.setMediaTypeName((String) requestBody.get("mediaTypeName"));
+    mediaTypes.setMediaTypeDescription((String) requestBody.get("mediaTypeDescription"));
 
     MediaTypes createdMediaTypes = mediaTypesService.createMediaTypes(mediaTypes);
     return ResponseEntity.ok(createdMediaTypes);
@@ -45,10 +52,14 @@ public ResponseEntity<MediaTypes> getMediaTypeByIdById(@PathVariable Long mediaT
 
 @GetMapping
 @Operation(summary = "Obtiene todas las media", description = "Recupera todas las medias de la base de datos.")
-public ResponseEntity<List<MediaTypes>> getAllMedias() {
-    List<MediaTypes> mediaTypes = mediaTypesService.getAllMediaTypes();
+public ResponseEntity<Page<MediaTypes>> getAllMedias(
+    @PageableDefault(page = 0, size = 10) // Valores por defecto para la paginación (0-indexed page)
+    @SortDefault(sort = "mediaTypeName", direction = Sort.Direction.ASC) // Ordenamiento por defecto
+    Pageable pageable) {
+    Page<MediaTypes> mediaTypes = mediaTypesService.getAllMediaTypes(pageable);
     return ResponseEntity.ok(mediaTypes);
 }
+
 
 @PutMapping("/{mediaTypeId}")
 @Operation(summary = "Actualiza una mediaType", description = "Actualiza los datos de una ia Type existente usando su Id.")

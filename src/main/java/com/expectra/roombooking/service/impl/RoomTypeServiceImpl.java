@@ -1,11 +1,14 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
+import com.expectra.roombooking.model.MediaTypes;
 import com.expectra.roombooking.model.RoomTypes;
 import com.expectra.roombooking.repository.RoomTypeRepository;
 import com.expectra.roombooking.service.RoomTypeService;
 import com.expectra.roombooking.service.RoomTypeValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +31,6 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     @Override
     @Transactional
     public RoomTypes createRoomType(RoomTypes roomTypes) {
-    //    roomTypeValidator.validateType(roomTypes.getRoomTypeName());
         return roomTypeRepository.save(roomTypes);
     }
 
@@ -38,8 +40,8 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     }
 
     @Override
-    public List<RoomTypes> getAllRoomType() {
-        return (List<RoomTypes>) roomTypeRepository.findAll();
+    public Page<RoomTypes> getAllRoomType(Pageable pageable) {
+        return roomTypeRepository.findAll(pageable);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
         RoomTypes roomTypes = roomTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("RoomType not found with id: " + id));
 
+        roomTypes.setRoomTypeDescription(roomTypeDetails.getRoomTypeDescription());
         roomTypes.setRoomTypeName(roomTypeDetails.getRoomTypeName());
         return roomTypeRepository.save(roomTypes);
     }

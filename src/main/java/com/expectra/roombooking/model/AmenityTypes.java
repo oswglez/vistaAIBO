@@ -15,4 +15,7 @@ public class AmenityTypes {
 
     @Column(name="amenity_types_name", nullable=false)
     private String amenityTypeName;
+
+    @Column(name="amenity_types_description", nullable=false)
+    private String amenityTypeDescription;
 }

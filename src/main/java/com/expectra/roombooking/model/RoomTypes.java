@@ -14,4 +14,7 @@ public class RoomTypes {
 
     @Column(name = "room_types_name", nullable = false)
     private String roomTypeName;
+
+    @Column(name="room_types_description", nullable=false)
+    private String roomTypeDescription;
 }

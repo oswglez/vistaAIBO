@@ -39,9 +39,9 @@ public class BrandValidationService {
             // Asume que tienes un método en tu repo que devuelve los nombres
             // o los objetos completos desde donde extraer los nombres.
             // Opción 1: Si el repo devuelve List<String> directamente
-            //List<String> names = mediaTypeRepository.findAllTypeNames(); // Necesitarás crear este método
+            //List<String> names = brandRepository.findAllTypeNames(); // Necesitarás crear este método
 
-            // Opción 2: Si el repo devuelve List<MediaTypeEntity>
+            // Opción 2: Si el repo devuelve List<BrandEntity>
              List<Brand> brands = (List<Brand>) brandRepository.findAll();
              List<String> names = brands.stream()
                                      .map(Brand::getBrandName) // Asume un getter getName()
@@ -49,7 +49,7 @@ public class BrandValidationService {
 
 //             Guardar en un HashSet para búsquedas eficientes O(1)
             this.validBrandNamesCache = new HashSet<>(names);
-            log.info("Media Type cache initialized successfully with {} types: {}",
+            log.info("Brand cache initialized successfully with {} types: {}",
                     validBrandNamesCache.size(), validBrandNamesCache);
 
         } catch (Exception e) {
@@ -63,7 +63,7 @@ public class BrandValidationService {
     // --- Método de Validación ---
 
     /**
-     * Valida si el nombre del tipo de media proporcionado es válido
+     * Valida si el nombre del brand proporcionado es válido
      * comparándolo contra el caché de tipos permitidos.
      * Lanza IllegalArgumentException si el tipo es inválido, nulo o vacío.
      *
@@ -73,7 +73,7 @@ public class BrandValidationService {
      */
     public void validateName(String nameToValidate) {
         if (this.validBrandNamesCache == null) {
-            // Esto solo debería pasar si initializeMediaTypeCache falló gravemente.
+            // Esto solo debería pasar si initializeBrandCache falló gravemente.
             log.error("Attempted validation but Brand cache is not initialized!");
             throw new IllegalStateException("Brand cache is not available.");
         }
