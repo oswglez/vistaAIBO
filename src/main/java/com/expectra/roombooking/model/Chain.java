@@ -1,6 +1,5 @@
 package com.expectra.roombooking.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 

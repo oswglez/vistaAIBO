@@ -1,9 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Amenity;
 import com.expectra.roombooking.model.AmenityTypes;
-import com.expectra.roombooking.service.AmenityService;
 import com.expectra.roombooking.service.AmenityTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,8 +13,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Map;
 
 @RestController

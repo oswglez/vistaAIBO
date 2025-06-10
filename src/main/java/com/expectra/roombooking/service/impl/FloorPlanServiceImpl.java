@@ -55,7 +55,7 @@ public class FloorPlanServiceImpl implements FloorPlanService {
 
     @Override
     public void deleteFloorPlanById(Long floorPlanId) {
-        FloorPlan floorPlan = floorPlanRepository.findById(floorPlanId)
+        floorPlanRepository.findById(floorPlanId)
                 .orElseThrow(() -> new ResourceNotFoundException("FloorPlan not found with ID: " + floorPlanId));
 
         floorPlanRepository.deleteById(floorPlanId);

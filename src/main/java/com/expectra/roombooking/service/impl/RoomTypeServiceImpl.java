@@ -1,7 +1,6 @@
 package com.expectra.roombooking.service.impl;
 
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.MediaTypes;
 import com.expectra.roombooking.model.RoomTypes;
 import com.expectra.roombooking.repository.RoomTypeRepository;
 import com.expectra.roombooking.service.RoomTypeService;
@@ -11,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service

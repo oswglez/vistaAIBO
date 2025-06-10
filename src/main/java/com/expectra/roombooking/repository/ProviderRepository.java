@@ -1,8 +1,5 @@
 package com.expectra.roombooking.repository;
 
-import com.expectra.roombooking.dto.HotelOnlyDTO;
-
-import com.expectra.roombooking.dto.ProviderDTO;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.Provider;
 import lombok.NonNull;

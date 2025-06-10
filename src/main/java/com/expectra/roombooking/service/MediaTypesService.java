@@ -1,8 +1,5 @@
 package com.expectra.roombooking.service;
 
-import java.util.List;
-
-import com.expectra.roombooking.model.AmenityTypes;
 import com.expectra.roombooking.model.MediaTypes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

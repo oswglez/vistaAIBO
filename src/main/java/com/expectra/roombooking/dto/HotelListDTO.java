@@ -1,11 +1,8 @@
 package com.expectra.roombooking.dto;
 
-import com.expectra.roombooking.model.FloorPlan;
 import lombok.Data;
-
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
+
 
 @Data
 // HotelListDTO.java

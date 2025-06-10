@@ -14,10 +14,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/amenities")
 @Tag(name = "Amenity Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")

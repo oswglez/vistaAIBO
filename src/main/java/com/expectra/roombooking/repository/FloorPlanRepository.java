@@ -1,7 +1,6 @@
 package com.expectra.roombooking.repository;
 
 import com.expectra.roombooking.model.FloorPlan;
-import com.expectra.roombooking.model.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

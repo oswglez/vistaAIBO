@@ -3,7 +3,6 @@ package com.expectra.roombooking.controller;
 import com.expectra.roombooking.dto.BrandDTO;
 import com.expectra.roombooking.dto.ChainDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
-import com.expectra.roombooking.model.Brand;
 import com.expectra.roombooking.model.Chain;
 import com.expectra.roombooking.service.ChainService;
 import io.swagger.v3.oas.annotations.Operation;

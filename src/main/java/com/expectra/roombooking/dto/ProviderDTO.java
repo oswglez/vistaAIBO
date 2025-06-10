@@ -1,6 +1,5 @@
 package com.expectra.roombooking.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.io.Serializable;

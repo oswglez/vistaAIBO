@@ -1,7 +1,6 @@
 package com.expectra.roombooking.service;
 
 import com.expectra.roombooking.model.FloorPlan;
-import com.expectra.roombooking.model.Hotel;
 
 import java.util.List;
 

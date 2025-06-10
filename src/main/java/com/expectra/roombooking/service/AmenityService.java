@@ -1,6 +1,5 @@
 package com.expectra.roombooking.service;
 
-import com.expectra.roombooking.dto.AmenityDTO;
 import com.expectra.roombooking.model.Amenity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

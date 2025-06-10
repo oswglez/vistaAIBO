@@ -1,6 +1,5 @@
 package com.expectra.roombooking.dto;
 
-import com.expectra.roombooking.model.AmenityTypes;
 import lombok.Data;
 import java.io.Serializable;
 

@@ -1,7 +1,5 @@
 package com.expectra.roombooking.service.impl;
 
-import com.expectra.roombooking.dto.HotelOnlyDTO;
-import com.expectra.roombooking.dto.ProviderDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.service.ProviderService;

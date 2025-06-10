@@ -1,7 +1,5 @@
 package com.expectra.roombooking.service;
 
-import com.expectra.roombooking.dto.HotelOnlyDTO;
-import com.expectra.roombooking.dto.ProviderDTO;
 import com.expectra.roombooking.model.Hotel;
 import org.springframework.stereotype.Service;
 import java.util.List;
