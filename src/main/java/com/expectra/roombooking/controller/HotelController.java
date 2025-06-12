@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.Parameters;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/hotels")
 @Tag(name = "Hotel Management", description = "Endpoints para gestión de hoteles")
-@CrossOrigin(origins = "*")
+@Slf4j
 public class HotelController {
 
     private static final Logger log = LoggerFactory.getLogger(HotelController.class);

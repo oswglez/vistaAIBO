@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rooms")
 @Tag(name = "Room Management", description = "Endpoints para gestión de habitaciones")
-@CrossOrigin(origins = "*")
 
 public class RoomController {
 
@@ -122,10 +121,5 @@ public class RoomController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Si el valor no es válido, devuelve 400
         }
-//
-//
-//
-//        List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoomType(hotelId, roomType);
-//        return new ResponseEntity<>(amenities, HttpStatus.OK);
     }
 }
