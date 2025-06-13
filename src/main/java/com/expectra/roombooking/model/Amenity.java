@@ -9,6 +9,8 @@ import java.util.Set;
 @Entity
 @Table(name = "amenity")
 @Data
+@ToString(exclude = {"hotels", "rooms"})
+@EqualsAndHashCode(exclude = {"hotels", "rooms"})
 public class Amenity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

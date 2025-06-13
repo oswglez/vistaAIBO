@@ -23,28 +23,28 @@ public class AddressController {
     }
 
     @GetMapping
-    @Operation(summary = "Consulta todas las direcciones", description = "Consulta. todas las direcciones de un hotel.")
+    @Operation(summary = "Get all addresses", description = "Retrieves all addresses from the database.")
     public ResponseEntity<List<Address>> getAllAddresses() {
         List<Address> addresses = addressService.getAllAddresses();
         return ResponseEntity.ok(addresses);
     }
 
     @GetMapping("/{addressId}")
-    @Operation(summary = "Consulta una. direccion por Id", description = "Elimina o desconecta una direccion de un hotel.")
+    @Operation(summary = "Get an address", description = "Retrieves an address using its ID.")
     public ResponseEntity<Address> getAddressById(@PathVariable Long addressId) {
         Address address = addressService.getAddressById(addressId);
         return ResponseEntity.ok(address);
     }
 
     @PostMapping
-    @Operation(summary = "Crear una nueva direccion", description = "Elimina o desconecta una direccion de un hotel.")
+    @Operation(summary = "Create an address", description = "Creates a new address.")
     public ResponseEntity<Address> createAddress(@RequestBody Address address) {
         Address savedAddress = addressService.createAddress(address);
         return new ResponseEntity<>(savedAddress, HttpStatus.CREATED);
     }
 
     @PutMapping("/{addressId}")
-    @Operation(summary = "Actualzar una. direccion por Id", description = "Elimina o desconecta una direccion de un hotel.")
+    @Operation(summary = "Update an address", description = "Updates an existing address using its ID.")
     public ResponseEntity<Address> updateAddress(
             @PathVariable Long addressId,
             @RequestBody Address addressDetails) {
@@ -52,24 +52,24 @@ public class AddressController {
         return ResponseEntity.ok(updatedAddress);
     }
     @DeleteMapping("/{addressId}")
-    @Operation(summary = "Elimina una direccion", description = "Elimina o desconecta una direccion de un hotel.")
+    @Operation(summary = "Delete an address", description = "Deletes an existing address using its ID.")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId) {
         addressService.deleteAddress(addressId);
         return ResponseEntity.noContent().build();
     }
 
-    // Desvincular dirección de un contacto
+    // Unlink address from a contact
     @DeleteMapping("/contacts/{contactId}/addresses/{addressId}")
-    @Operation(summary = "Desvincular dirección de contacto", description = "Elimina la relación entre un contacto y una dirección.")
+    @Operation(summary = "Get addresses by contact", description = "Retrieves all addresses associated with a specific contact.")
     public ResponseEntity<Void> removeAddressFromContact(
             @PathVariable Long contactId,
             @PathVariable Long addressId) {
         addressService.removeAddressFromContact(contactId, addressId);
         return ResponseEntity.noContent().build();
     }
-    // Desvincular dirección de un hotel
+    // Unlink address from a hotel
     @DeleteMapping("/hotels/{hotelId}/addresses/{addressId}")
-    @Operation(summary = "Desvincular dirección de hotel", description = "Elimina la relación entre un hotel y una dirección.")
+    @Operation(summary = "Get addresses by hotel", description = "Retrieves all addresses associated with a specific hotel.")
     public ResponseEntity<Void> removeAddressFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long addressId) {

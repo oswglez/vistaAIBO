@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/mediaType")
-@Tag(name = "Media Management", description = "Endpoints para gestión de medias para hoteles y habitaciones")
+@Tag(name = "Media Management", description = "Endpoints for managing hotel and room media")
 
 @CrossOrigin(origins = "*")
 public class MediaTypeController {
@@ -41,7 +41,7 @@ public ResponseEntity<MediaTypes> createMediaType(@RequestBody Map<String, Objec
     return ResponseEntity.ok(createdMediaTypes);
 }
 @GetMapping("/{mediaTypeId}")
-@Operation(summary = "Obtiene una mediaType", description = "Recupera una mediaType usando su ID.")
+@Operation(summary = "Get a media type", description = "Retrieves a media type using its ID.")
 public ResponseEntity<MediaTypes> getMediaTypeByIdById(@PathVariable Long mediaTypeId) {
     return mediaTypesService.getMediaTypesById(mediaTypeId)
             .map(ResponseEntity::ok)
@@ -49,10 +49,10 @@ public ResponseEntity<MediaTypes> getMediaTypeByIdById(@PathVariable Long mediaT
 }
 
 @GetMapping
-@Operation(summary = "Obtiene todas las media", description = "Recupera todas las medias de la base de datos.")
+@Operation(summary = "Get all media types", description = "Retrieves all media types from the database.")
 public ResponseEntity<Page<MediaTypes>> getAllMedias(
-    @PageableDefault(page = 0, size = 10) // Valores por defecto para la paginación (0-indexed page)
-    @SortDefault(sort = "mediaTypeName", direction = Sort.Direction.ASC) // Ordenamiento por defecto
+    @PageableDefault(page = 0, size = 10) // Default pagination values (0-indexed page)
+    @SortDefault(sort = "mediaTypeName", direction = Sort.Direction.ASC) // Default sorting
     Pageable pageable) {
     Page<MediaTypes> mediaTypes = mediaTypesService.getAllMediaTypes(pageable);
     return ResponseEntity.ok(mediaTypes);
@@ -60,15 +60,14 @@ public ResponseEntity<Page<MediaTypes>> getAllMedias(
 
 
 @PutMapping("/{mediaTypeId}")
-@Operation(summary = "Actualiza una mediaType", description = "Actualiza los datos de una ia Type existente usando su Id.")
+@Operation(summary = "Update a media type", description = "Updates the data of an existing media type using its ID.")
 public ResponseEntity<MediaTypes> updateMediaType(@PathVariable Long mediaTypeId, @RequestBody MediaTypes mediaTypeDetails) {
     MediaTypes updatedMediaTypes = mediaTypesService.updateMediaTypes(mediaTypeId, mediaTypeDetails);
     return ResponseEntity.ok(updatedMediaTypes);
 }
 
 @DeleteMapping("/{mediaTypeId}")
-@Operation(summary = "" +
-        "Elimina una mediaType", description = "Elimina una media Type existente usando su Id.")
+@Operation(summary = "Delete a media type", description = "Deletes an existing media type using its ID.")
 public ResponseEntity<MediaTypes> deleteMediaType(@PathVariable Long mediaTypeId) {
     mediaTypesService.deleteMediaTypes(mediaTypeId);
     return ResponseEntity.noContent().build();

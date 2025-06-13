@@ -15,15 +15,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-// Puedes llamar a esta clase ChainValidationService o incluir la lógica
-// en tu ChainService existente.
+// You can call this class ChainValidationService or include the logic
+// in your ChainService existing.
 public class ChainValidationService {
 
     private static final Logger log = LoggerFactory.getLogger(ChainValidationService.class);
 
     private final ChainRepository chainRepository;
 
-    // El caché en memoria. Usamos Set para búsquedas rápidas (contains).
+    // In-memory cache. We use Set for fast lookups (contains).
     private Set<String> validChainNamesCache;
 
     @Autowired
@@ -31,49 +31,48 @@ public class ChainValidationService {
         this.chainRepository = chainRepository;
     }
 
-    // --- Lógica del Caché ---
-    @PostConstruct // Se ejecuta una vez después de que el bean es creado e inyectado
+    // --- Cache Logic ---
+    @PostConstruct // Executes once after the bean is created and injected
     private void initializeChainCache() {
         log.info("Initializing Chain cache...");
         try {
-            // Asume que tienes un método en tu repo que devuelve los nombres
-            // o los objetos completos desde donde extraer los nombres.
-            // Opción 1: Si el repo devuelve List<String> directamente
-            //List<String> names = chainRepository.findAllTypeNames(); // Necesitarás crear este método
+            // Assume you have a method in your repo that returns the names
+            // Option 1: If the repo returns List<String> directly
+            //List<String> names = chainRepository.findAllTypeNames(); // You'll need to create this method
 
-            // Opción 2: Si el repo devuelve List<ChainEntity>
+            // Option 2: If the repo returns List<ChainEntity>
              List<Chain> chains = (List<Chain>) chainRepository.findAll();
              List<String> names = chains.stream()
-                                     .map(Chain::getChainName) // Asume un getter getName()
+                                     .map(Chain::getChainName) // Asume a getter getName()
                                      .collect(Collectors.toList());
 
-//             Guardar en un HashSet para búsquedas eficientes O(1)
+//             Store in a HashSet for efficient O(1) lookups
             this.validChainNamesCache = new HashSet<>(names);
             log.info("Chain cache initialized successfully with {} chain names: {}",
                     validChainNamesCache.size(), validChainNamesCache);
 
         } catch (Exception e) {
             log.error("FATAL: Failed to initialize Chain cache! Validation might fail.", e);
-            // En caso de error, inicializar vacío para evitar NullPointerException,
-            // aunque la validación no funcionará correctamente.
+            // In case of error, initialize empty to avoid NullPointerException,
+            // although validation won't work correctly.
             this.validChainNamesCache = Collections.emptySet();
         }
     }
 
-    // --- Método de Validación ---
+    // --- Validation Method ---
 
     /**
-     * Valida si el nombre del tipo de chain proporcionado es válido
-     * comparándolo contra el caché de tipos permitidos.
-     * Lanza IllegalArgumentException si el tipo es inválido, nulo o vacío.
+     * Validates if the provided chain type name is valid
+     * by comparing it against the cache of allowed types.
+     * Throws IllegalArgumentException if the type is invalid, null, or empty.
      *
-     * @param nameToValidate El nombre del tipo a validar (ej: "IMAGE").
-     * @throws IllegalArgumentException si el tipo no es válido.
-     * @throws IllegalStateException si el caché no pudo ser inicializado.
+     * @param nameToValidate The name of the type to validate (e.g., "IMAGE").
+     * @throws IllegalArgumentException if the type is not valid.
+     * @throws IllegalStateException if the cache could not be initialized.
      */
     public void validateName(String nameToValidate) {
         if (this.validChainNamesCache == null) {
-            // Esto solo debería pasar si initialize Cache falló gravemente.
+            // This should only happen if initializeCache failed severely.
             log.error("Attempted validation but Chain cache is not initialized!");
             throw new IllegalStateException("Chain cache is not available.");
         }
@@ -82,15 +81,15 @@ public class ChainValidationService {
             throw new IllegalArgumentException("Chain name cannot be null or blank.");
         }
 
-        // Comprobar si el tipo existe en el caché (distingue mayúsculas/minúsculas por defecto)
+        // Check if the type exists in the cache (case-sensitive by default)
         if (!this.validChainNamesCache.contains(nameToValidate)) {
             log.warn("Invalid Chain received: '{}'. Valid types are: {}", nameToValidate, this.validChainNamesCache);
             throw new IllegalArgumentException("Invalid Chain provided: '" + nameToValidate + "'");
-            // Considera crear una excepción personalizada (ej: InvalidInputDataException)
-            // que pueda ser mapeada automáticamente a un 400 Bad Request por un @ControllerAdvice.
+            // Consider creating a custom exception (e.g., InvalidInputDataException)
+            // that can be automatically mapped to a 400 Bad Request by a @ControllerAdvice.
         }
 
-        // Si .contains(typeNameToValidate) es true, el tipo es válido y el método termina.
-        log.debug("Chain validation successful for: {}", nameToValidate); // Log de depuración
+        // If .contains(typeNameToValidate) is true, the type is valid and the method ends.
+        log.debug("Chain validation successful for: {}", nameToValidate); // Debug log
     }
 }

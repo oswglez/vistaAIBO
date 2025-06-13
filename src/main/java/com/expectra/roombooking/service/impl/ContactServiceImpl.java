@@ -66,7 +66,7 @@ public class ContactServiceImpl implements ContactService {
         Contact contact = contactRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Contact not found with id: " + id));
 
-        // Solo eliminar si no está asociado a ningún hotel
+        // Only delete if not associated with any hotel
         if (contact.getHotels().isEmpty()) {
             contactRepository.deleteById(id);
         } else {
@@ -86,8 +86,8 @@ public class ContactServiceImpl implements ContactService {
         hotel.getContacts().remove(contact);
         hotelRepository.save(hotel);
         hotelRepository.flush();
-        // La persistencia se maneja automáticamente debido a @Transactional
-        // 🔹 Verificar si el Amenity quedó huérfano y eliminarlo
+        // Persistence is handled automatically due to @Transactional
+        // 🔹 Check if the Contact is orphaned and delete it
         if (contact.getHotels().isEmpty() && contact.getAddresses().isEmpty()) {
             contactRepository.delete(contact);
         }

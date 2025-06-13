@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/contacts")
-@Tag(name = "Contact Management", description = "Endpoints para gestión de contactos")
+@Tag(name = "Contact Management", description = "Endpoints for contact management")
 
 @CrossOrigin(origins = "*")
 public class ContactController {
@@ -51,14 +51,14 @@ public class ContactController {
         return ResponseEntity.ok(contacts);
     }
     @PostMapping
-    @Operation(summary = "Crea un contacto", description = "Creación de un contacto")
+    @Operation(summary = "Create a contact", description = "Creates a new contact")
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         Contact savedContact = contactService.save(contact);
         return new ResponseEntity<>(savedContact, HttpStatus.CREATED);
     }
 
     @PutMapping("/{contactId}")
-    @Operation(summary = "Actualiza un contacto", description = "Actualiza los datos de un contacto a traves de su Id.")
+    @Operation(summary = "Update contact", description = "Update contact by Id.")
     public ResponseEntity<Contact> updateContact
             (@PathVariable Long contactId,
              @RequestBody Contact contactDetails) {
@@ -78,7 +78,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/hotels/{hotelId}/contacts/{contactId}")
-    @Operation(summary = "Remueve un contacto de un hotel", description = "Elimina o desconecta un contacto de un hotel.")
+    @Operation(summary = "Delete a hotel contact", description = "Delete a contact from a hotel.")
     public ResponseEntity<Void> removeContactFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long contactId) {
@@ -87,7 +87,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/{contactId}")
-    @Operation(summary = "Elimina un contacto", description = "Elimina contacto a traves de su Id.")
+    @Operation(summary = "Delete contact", description = "Delete contact by Id.")
     public ResponseEntity<Void> deleteContact(@PathVariable Long contactId) {
         contactService.delete(contactId);
         return ResponseEntity.noContent().build();

@@ -18,9 +18,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/api/**") // Verifica este patrón
-//                .allowedOrigins("http://localhost:5173") // Asegúrate que el puerto de tu FE esté aquí
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // ¿Está POST aquí?
+//        registry.addMapping("/api/**") // Check this pattern
+//                .allowedOrigins("http://localhost:5173") // Make sure your FE port is here
+//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // Is POST included here?
 //                .allowedHeaders("*")
 //                .allowCredentials(true)
 //                .maxAge(3600);

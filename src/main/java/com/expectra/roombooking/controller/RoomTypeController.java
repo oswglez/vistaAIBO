@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/roomType")
-@Tag(name = "Room Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")
+@Tag(name = "Room Management", description = "Endpoints for managing hotel and room amenities")
 
 @CrossOrigin(origins = "*")
 public class RoomTypeController {
@@ -31,7 +31,7 @@ public class RoomTypeController {
     }
 
     @PostMapping
-    @Operation(summary = "Crea una roomType", description = "Crea una roomType usando su ID.")
+    @Operation(summary = "Create roomType", description = "Create a roomType by ID.")
     public ResponseEntity<RoomTypes> createRoomType(@RequestBody Map<String, Object> requestBody) {
         RoomTypes roomTypes = new RoomTypes();
         roomTypes.setRoomTypeName((String) requestBody.get("roomTypeName"));
@@ -42,7 +42,7 @@ public class RoomTypeController {
     }
 
     @GetMapping("/{roomTypeId}")
-    @Operation(summary = "Obtiene una roomType", description = "Recupera una roomType usando su ID.")
+    @Operation(summary = "Get a roomType by Id", description = "Get a roomType using its ID.")
     public ResponseEntity<RoomTypes> getRoomTypeByIdById(@PathVariable Long roomTypeId) {
         return roomTypeService.getRoomTypeById(roomTypeId)
                 .map(ResponseEntity::ok)
@@ -50,17 +50,17 @@ public class RoomTypeController {
     }
 
     @GetMapping
-    @Operation(summary = "Obtiene todos los roomTypes", description = "Recupera todos los roomTypes de la base de datos.")
+    @Operation(summary = "Get all roomTypes", description = "Get all roomTypes from the database.")
     public ResponseEntity<Page<RoomTypes>> getAllRoomTypes(
-            @PageableDefault(page = 0, size = 10) // Valores por defecto para la paginación (0-indexed page)
-            @SortDefault(sort = "roomTypeName", direction = Sort.Direction.ASC) // Ordenamiento por defecto
+            @PageableDefault(page = 0, size = 10) // Default pagination values (0-indexed page)
+            @SortDefault(sort = "roomTypeName", direction = Sort.Direction.ASC) // Default sorting
             Pageable pageable) {
         Page<RoomTypes> roomTypes = roomTypeService.getAllRoomType(pageable);
         return ResponseEntity.ok(roomTypes);
     }
 
     @PutMapping("/{roomTypeId}")
-    @Operation(summary = "Actualiza una roomType", description = "Actualiza los datos de una roomType existente usando su Id.")
+    @Operation(summary = "Update a roomType", description = "Update room type by Id")
     public ResponseEntity<RoomTypes> updateRoomType(@PathVariable Long roomTypeId, @RequestBody RoomTypes roomTypesDetails) {
         RoomTypes updatedRoomType = roomTypeService.updateRoomType(roomTypeId, roomTypesDetails);
         return ResponseEntity.ok(updatedRoomType);
@@ -68,7 +68,7 @@ public class RoomTypeController {
 
     @DeleteMapping("/{roomTypeId}")
     @Operation(summary = "" +
-            "Elimina una roomType", description = "Elimina una roomType existente usando su Id.")
+    "Delete roomType", description = "Delete roomType using Id.")
     public ResponseEntity<RoomTypes> deleteRoomType(@PathVariable Long roomTypeId) {
         roomTypeService.deleteRoomType(roomTypeId);
         return ResponseEntity.noContent().build();

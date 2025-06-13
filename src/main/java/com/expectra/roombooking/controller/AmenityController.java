@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/amenities")
-@Tag(name = "Amenity Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")
+@Tag(name = "Amenity Management", description = "Endpoints for managing hotel and room amenities")
 
 @CrossOrigin(origins = "*")
 public class AmenityController {
@@ -29,10 +29,10 @@ public class AmenityController {
         this.amenityService = amenityService;
     }
 
-//. falta perfeccionar el metodo para que verifique si la amenity existe en ese caso solo lo conecta
+//. Method needs to be perfected to verify if the amenity exists, in that case just connect it
 
 //    @PostMapping
-//    @Operation(summary = "Crear una amenity", description = "Crea una amenity.")
+//    @Operation(summary = "Create an amenity", description = "Creates an amenity.")
 //    public ResponseEntity<Amenity> createAmenity(
 //            @RequestParam(required = false) Long hotelId,
 //            @RequestBody Amenity amenity) {
@@ -50,11 +50,11 @@ public ResponseEntity<Amenity> createAmenity(
     createdAmenity.setAmenityDescription( requestBody.getAmenityDescription());
     createdAmenity.setAmenityType((String) requestBody.getAmenityType());
     amenityService.createAmenity(createdAmenity);
-//    // Conversión de String a enum
+//    // String to enum conversion
 //    String amenityTypeStr = (String) requestBody.get("amenityType");
 //    amenity.setAmenityType(AmenityType.valueOf(amenityTypeStr));
 
-    // Si hay un hotelId en el request
+    // If there's a hotelId in the request
 //
 //    Long hotelId = requestBody.get("hotelId") != null ?
 //    Long.valueOf(requestBody.get("hotelId").toString()) : null;
@@ -63,23 +63,23 @@ public ResponseEntity<Amenity> createAmenity(
     return ResponseEntity.ok(createdAmenity);
 }
 //    @GetMapping
-//    @Operation(summary = "Obtiene todas las amenity", description = "Recupera todas las amenities de la base de datos.")
+//    @Operation(summary = "Get all amenities", description = "Retrieves all amenities from the database.")
 //    public ResponseEntity<List<Amenity>> getAllAmenities() {
 //        List<Amenity> amenities = amenityService.getAllAmenities();
 //        return ResponseEntity.ok(amenities);
 //    }
     @GetMapping
-    @Operation(summary = "Obtener todas las amenidades con paginación y ordenamiento",
-            description = "Permite consultar una lista paginada y ordenada de todas las amenidades.")
+    @Operation(summary = "Get all amenities with pagination and sorting",
+            description = "Retrieves a paginated list of amenities with sorting options")
     public ResponseEntity<Page<Amenity>> getAllAmenitiesPage(
-            @PageableDefault(page = 0, size = 10) // Valores por defecto para la paginación (0-indexed page)
-            @SortDefault(sort = "amenityCode", direction = Sort.Direction.ASC) // Ordenamiento por defecto
+            @PageableDefault(page = 0, size = 10) // Default pagination values (0-indexed page)
+            @SortDefault(sort = "amenityCode", direction = Sort.Direction.ASC) // Default sorting
             Pageable pageable) {
-        Page<Amenity> amenitiesPage = amenityService.getAllAmenities(pageable); // <-- Llama al nuevo método del servicio
+        Page<Amenity> amenitiesPage = amenityService.getAllAmenities(pageable); // <-- Calls the new service method
         return ResponseEntity.ok(amenitiesPage);
     }
     @GetMapping("/{amenityId}")
-    @Operation(summary = "Obtiene una amenity", description = "Recupera una amenity usando su ID.")
+    @Operation(summary = "Get an amenity", description = "Retrieves an amenity using its ID.")
     public ResponseEntity<Amenity> getAmenityById(@PathVariable Long amenityId) {
         return amenityService.getAmenityById(amenityId)
                 .map(ResponseEntity::ok)
@@ -87,14 +87,14 @@ public ResponseEntity<Amenity> createAmenity(
     }
 
     @PutMapping("/{amenityId}")
-    @Operation(summary = "Actualiza una amenity", description = "Actualiza los datos de una amenity existente usando su Id.")
+    @Operation(summary = "Update an amenity", description = "Updates the data of an existing amenity using its ID.")
     public ResponseEntity<Amenity> updateAmenity(@PathVariable Long amenityId, @RequestBody Amenity amenityDetails) {
         Amenity updatedAmenity = amenityService.updateAmenity(amenityId, amenityDetails);
         return ResponseEntity.ok(updatedAmenity);
     }
 
     @DeleteMapping("/rooms/{roomId}/amenities/{amenityId}")
-    @Operation(summary = "Desconecta o elimina una amenity de una habitacion", description = "Elimina o desconecta una amenity de una habitación.")
+    @Operation(summary = "Connect or disconnect an amenity from a room", description = "Connects or disconnects an amenity from a room.")
     public ResponseEntity<Void> removeAmenityFromRoom(
             @PathVariable Long roomId,
             @PathVariable Long amenityId) {
@@ -103,7 +103,7 @@ public ResponseEntity<Amenity> createAmenity(
     }
 
     @DeleteMapping("/hotels/{hotelId}/amenities/{amenityId}")
-    @Operation(summary = "Desconecta o elimina una amenity de. un. hotel", description = "Elimina o desconecta una amenity de un hotel.")
+    @Operation(summary = "Disconnect or remove an amenity from a hotel", description = "Removes or disconnects an amenity from a hotel.")
     public ResponseEntity<Void> removeAmenityFromHotel(
             @PathVariable Long hotelId,
             @PathVariable Long amenityId) {
@@ -112,7 +112,7 @@ public ResponseEntity<Amenity> createAmenity(
     }
 
     @DeleteMapping("/{amenityId}")
-    @Operation(summary = "Elimina una amenity", description = "Elimina una amenity.")
+    @Operation(summary = "Delete an amenity", description = "Deletes an amenity.")
     public ResponseEntity<Void> deleteAmenity(@PathVariable Long amenityId) {
         amenityService.deleteAmenity(amenityId);
         return ResponseEntity.noContent().build();

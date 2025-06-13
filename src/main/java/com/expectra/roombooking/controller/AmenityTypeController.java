@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/amenityType")
-@Tag(name = "Amenity Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")
+@Tag(name = "Amenity Management", description = "Endpoints for managing hotel and room amenities")
 
 @CrossOrigin(origins = "*")
 public class AmenityTypeController {
@@ -31,6 +31,7 @@ public class AmenityTypeController {
     }
 
     @PostMapping
+    @Operation(summary = "Create an amenity type", description = "Creates an amenity type using its ID.")
     public ResponseEntity<AmenityTypes> createAmenityType(@RequestBody Map<String, Object> requestBody) {
         AmenityTypes amenityTypes = new AmenityTypes();
         amenityTypes.setAmenityTypeName((String) requestBody.get("amenityTypeName"));
@@ -41,7 +42,7 @@ public class AmenityTypeController {
     }
 
     @GetMapping("/{amenityTypeId}")
-    @Operation(summary = "Obtiene una amenityType", description = "Recupera una amenityType usando su ID.")
+    @Operation(summary = "Get an amenity type", description = "Retrieves an amenity type using its ID.")
     public ResponseEntity<AmenityTypes> getAmenityTypeByIdById(@PathVariable Long amenityTypeId) {
         return amenityTypeService.getAmenityTypesById(amenityTypeId)
                 .map(ResponseEntity::ok)
@@ -49,9 +50,9 @@ public class AmenityTypeController {
     }
 
     @GetMapping
-    @Operation(summary = "Obtiene todas las amenity", description = "Recupera todas las amenities de la base de datos.")
+    @Operation(summary = "Get all amenity types", description = "Retrieves all amenity types from the database.")
     public ResponseEntity<Page<AmenityTypes>> getAllAmenities(
-            @PageableDefault(page = 0, size = 10) // Valores por defecto para la paginación (0-indexed page)
+            @PageableDefault(page = 0, size = 10) // Default pagination values (0-indexed page)
             @SortDefault(sort = "amenityTypeName", direction = Sort.Direction.ASC) // Ordenamiento por defecto
             Pageable pageable) {
         Page<AmenityTypes> amenitiyTypes = amenityTypeService.getAllAmenitiesTypes(pageable);
@@ -59,15 +60,14 @@ public class AmenityTypeController {
     }
 
     @PutMapping("/{amenityTypeId}")
-    @Operation(summary = "Actualiza una amenityType", description = "Actualiza los datos de una amenity Type existente usando su Id.")
+    @Operation(summary = "Update an amenity type", description = "Updates an existing amenity type using its ID.")
     public ResponseEntity<AmenityTypes> updateAmenity(@PathVariable Long amenityTypeId, @RequestBody AmenityTypes amenityTypeDetails) {
         AmenityTypes updatedAmenityTypes = amenityTypeService.updateAmenityTypes(amenityTypeId, amenityTypeDetails);
         return ResponseEntity.ok(updatedAmenityTypes);
     }
 
     @DeleteMapping("/{amenityTypeId}")
-    @Operation(summary = "" +
-            "Elimina una amenityType", description = "Elimina una amenity Type existente usando su Id.")
+    @Operation(summary = "Delete an amenity type", description = "Deletes an existing amenity type using its ID.")
     public ResponseEntity<AmenityTypes> deleteAmenityType(@PathVariable Long amenityTypeId) {
         amenityTypeService.deleteAmenityTypes(amenityTypeId);
         return ResponseEntity.noContent().build();

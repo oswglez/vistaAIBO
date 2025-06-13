@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/brand")
-@Tag(name = "Room Management", description = "Endpoints para gestión de amenities para hoteles y habitaciones")
+@Tag(name = "Brand Management", description = "Endpoints for managing hotel brands")
 
 @CrossOrigin(origins = "*")
 public class BrandController {
@@ -35,7 +35,7 @@ public class BrandController {
     }
 
     @PostMapping
-    @Operation(summary = "Crea una brand", description = "Crea una brand usando su ID.")
+    @Operation(summary = "Create a brand", description = "Creates a brand using its ID.")
     public ResponseEntity<Brand> createbrand(@RequestBody Map<String, Object> requestBody) {
         Long chainId = ((Number) requestBody.get("chainId")).longValue();
 
@@ -56,7 +56,7 @@ public class BrandController {
     }
 
     @GetMapping("/{brandId}")
-    @Operation(summary = "Obtiene una brand", description = "Recupera una brand usando su ID.")
+    @Operation(summary = "Get a brand", description = "Retrieves a brand using its ID.")
     public ResponseEntity<BrandDTO> getbrandByIdById(@PathVariable Long brandId) {
         return brandService.getBrandById(brandId)
                 .map(ResponseEntity::ok)
@@ -71,21 +71,21 @@ public class BrandController {
     }
 
     @GetMapping
-    @Operation(summary = "Obtiene todos los brands", description = "Recupera todos los brands de la base de datos.")
+    @Operation(summary = "Get all brands", description = "Retrieves all brands from the database.")
     public ResponseEntity<List<BrandDTO>> getAllbrands() {
         List<BrandDTO> brands = brandService.getAllBrands();
         return ResponseEntity.ok(brands);
     }
 
     @PutMapping("/{brandId}")
-    @Operation(summary = "Actualiza una brand", description = "Actualiza los datos de una brand existente usando su Id.")
+    @Operation(summary = "Update a brand", description = "Updates an existing brand using its ID.")
     public ResponseEntity<BrandDTO> updatebrand(@PathVariable Long brandId, @RequestBody BrandDTO brandsDetails) {
         BrandDTO updatedbrand = brandService.updateBrand(brandId, brandsDetails);
         return ResponseEntity.ok(updatedbrand);
     }
 
     @DeleteMapping("/{brandId}")
-    @Operation(summary = "Elimina una brand", description = "Elimina una brand existente usando su Id.")
+    @Operation(summary = "Delete a brand", description = "Deletes an existing brand using its ID.")
     public ResponseEntity<Brand> deletebrand(@PathVariable Long brandId) {
         brandService.deleteBrand(brandId);
         return ResponseEntity.noContent().build();

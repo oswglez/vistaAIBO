@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/hotels")
-@Tag(name = "Hotel Management", description = "Endpoints para gestión de hoteles")
+@Tag(name = "Hotel Management", description = "Endpoints for hotel management")
 @Slf4j
 public class HotelController {
 
@@ -57,8 +57,8 @@ public class HotelController {
 
     // Create a new Hotel (AHORA CON EL DTO COMPUESTO)
     @PostMapping("/createFull") // O simplemente @PostMapping si base-path es /api/hotels
-    @Operation(summary = "Crea un hotel completo con contacto y dirección principal",
-            description = "Crea un hotel, su contacto principal y su dirección principal en una sola operación.")
+    @Operation(summary = "Create a complete hotel with main contact and address",
+            description = "Creates a hotel, its main contact and main address in a single operation.")
     public ResponseEntity<HotelOnlyDTO> createFullHotel(@Valid @RequestBody HotelCreationRequestDTO hotelRequest) {
         Hotel createdHotel = hotelService.createHotelWithDetails(hotelRequest);
         HotelOnlyDTO hotelOnlyDTO = modelMapper.map(createdHotel, HotelOnlyDTO.class);
@@ -79,20 +79,20 @@ public class HotelController {
     @GetMapping("/hotelList")
     @Operation(summary = "HotelList creation", description = "Query to create the hotel list with pagination.")
     @Parameters({
-            @Parameter(name = "page", description = "Número de página (0-indexado)", schema = @Schema(type = "integer", defaultValue = "0")),
-            @Parameter(name = "size", description = "Tamaño de la página", schema = @Schema(type = "integer", defaultValue = "25")),
-            @Parameter(name = "sort", description = "Criterio de ordenación (ej. hotelName,asc o hotelId,desc)", schema = @Schema(type = "string"))
+            @Parameter(name = "page", description = "Page number (0-indexed)", schema = @Schema(type = "integer", defaultValue = "0")),
+            @Parameter(name = "size", description = "Page size", schema = @Schema(type = "integer", defaultValue = "25")),
+            @Parameter(name = "sort", description = "Sort criteria (e.g. hotelName,asc or hotelId,desc)", schema = @Schema(type = "string"))
     })
     public ResponseEntity<Page<HotelListDTO>> getAllHotelsAndRelationships(
-            @Parameter(hidden = true) Pageable pageable // Spring inyectará el Pageable a partir de los parámetros ?page, ?size, ?sort
+            @Parameter(hidden = true) Pageable pageable // Spring will inject the Pageable from ?page, ?size, ?sort parameters
     ) {
-        if (pageable.getPageSize() > 200) { // Limitar el tamaño máximo de página
+        if (pageable.getPageSize() > 200) { // Limit maximum page size
             pageable = PageRequest.of(pageable.getPageNumber(), 25, pageable.getSort());
         } else if (pageable.getPageSize() < 1) {
             pageable = PageRequest.of(pageable.getPageNumber(), 25, pageable.getSort());
         }
 
-        // Por defecto, si no se especifica sort en la URL, podrías querer un ordenamiento por defecto
+        // By default, if sort is not specified in the URL, you might want a default sorting
         if (pageable.getSort().isUnsorted()) {
             pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("hotelId").ascending());
         }
@@ -153,35 +153,22 @@ public class HotelController {
 //        return ResponseEntity.noContent().build();
 //    }
     // Delete logically Hotel
-@DeleteMapping("/{hotelId}")
-@Operation(summary = "Elimina lógicamente un hotel", description = "Marca un hotel como eliminado usando el hotelId.")
-public ResponseEntity<Void> deleteHotel(@PathVariable Long hotelId) {
-    Optional<Hotel> hotelOptional = hotelService.findHotelById(hotelId);
+    @DeleteMapping("/{hotelId}")
+    @Operation(summary = "Logically delete a hotel", description = "Marks a hotel as deleted using the hotelId.")
+    public ResponseEntity<Void> deleteHotel(@PathVariable Long hotelId) {
+        Optional<Hotel> hotelOptional = hotelService.findHotelById(hotelId);
 
-    if (hotelOptional.isPresent()) {
-        // Perform the logical deletion
-        hotelService.logicalDeleteHotel(hotelId);
-        // Return a 204 No Content response
-        return ResponseEntity.noContent().build();
-    } else {
-        // Throw a ResourceNotFoundException if the hotel is not found
-        throw new ResourceNotFoundException("Hotel no encontrado: " + hotelId);
+        if (hotelOptional.isPresent()) {
+            // Perform the logical deletion
+            hotelService.logicalDeleteHotel(hotelId);
+            // Return a 204 No Content response
+            return ResponseEntity.noContent().build();
+        } else {
+            // Throw a ResourceNotFoundException if the hotel is not found
+            throw new ResourceNotFoundException("Hotel not found: " + hotelId);
+        }
     }
-}
 
- //       Optional<Hotel> hotel = hotelService.findHotelById(hotelId);
-//        if (hotelService.findHotelById(hotelId).isEmpty()) {
-//            throw new ResourceNotFoundException(messageNotfound + hotelId);
-//        }
-//        if (!hotel.ifPresent()) {
-//            throw new ResourceNotFoundException(messageNotfound + hotelId);
-//        };
-//
-//        log.info("Deleting hotel with ID: {}", hotelId);
-//        hotel.setDeleted(true);
-//        hotelService.deleteHotelById(hotelId);
-//        return ResponseEntity.noContent().build();
-//    }
     // Get Hotels by Name
     @GetMapping("/search")
     @Operation(summary = "Consulta por nombre de hotel", description = "Consulta un hotel por su nombre.")

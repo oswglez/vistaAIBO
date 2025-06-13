@@ -49,15 +49,15 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Convertir la cadena de orígenes permitidos en una lista
+        // Convert the string of allowed origins into a list
         List<String> origins = Arrays.asList(allowedOrigins.split(","));
         configuration.setAllowedOrigins(origins);
         
-        // Convertir la cadena de métodos permitidos en una lista
+        // Convert the string of allowed methods into a list
         List<String> methods = Arrays.asList(allowedMethods.split(","));
         configuration.setAllowedMethods(methods);
         
-        // Convertir la cadena de headers permitidos en una lista
+        // Convert the string of allowed headers into a list
         List<String> headers = Arrays.asList(allowedHeaders.split(","));
         configuration.setAllowedHeaders(headers);
         

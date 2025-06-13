@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/floorplan")
-@Tag(name = "FloorPlan Management", description = "Endpoints para gestión de planos de piso de hoteles")
+@Tag(name = "FloorPlan Management", description = "Endpoints for managing hotel floor plans")
 @CrossOrigin(origins = "*")
 public class FloorPlanController {
 
@@ -31,28 +31,28 @@ public class FloorPlanController {
     }
 
     @GetMapping
-    @Operation(summary = "Obtener todos los planos", description = "Retorna todos los planos de piso disponibles")
+    @Operation(summary = "Get all floor plans", description = "Returns all floor plans available")
     public ResponseEntity<List<FloorPlan>> getAllFloorPlans() {
         List<FloorPlan> floorPlans = floorPlanService.getAllFloorPlans();
         return new ResponseEntity<>(floorPlans, HttpStatus.OK);
     }
 
     @GetMapping("/{floorPlanid}")
-    @Operation(summary = "Obtener plano por ID", description = "Busca y retorna un plano de piso por su ID")
+    @Operation(summary = "Get floor plan by ID", description = "Get a floor plan by its ID")
     public ResponseEntity<FloorPlan> getFloorPlanById(@PathVariable Long floorPlanid) {
         FloorPlan floorPlan = floorPlanService.getFloorPlanById(floorPlanid);
         return new ResponseEntity<>(floorPlan, HttpStatus.OK);
     }
 
     @GetMapping("/hotel/{hotelId}")
-    @Operation(summary = "Obtener planos por hotel", description = "Retorna todos los planos asociados a un hotel específico")
+    @Operation(summary = "Get floor plans by hotel", description = "Get all floor plans associated with a specific hotel")
     public ResponseEntity<List<FloorPlan>> getFloorPlansByHotelId(@PathVariable Long hotelId) {
         List<FloorPlan> floorPlans = floorPlanService.getFloorPlansByHotelId(hotelId);
         return new ResponseEntity<>(floorPlans, HttpStatus.OK);
     }
 
     @PostMapping("/hotels/{hotelId}")
-    @Operation(summary = "Crea un FloorPlan para un Hotel específico")
+    @Operation(summary = "Create a FloorPlan for a specific Hotel")
     public ResponseEntity<FloorPlan> createFloorPlanForHotel(
             @PathVariable Long hotelId,          // <-- Extrae el ID del path
             @RequestBody FloorPlan floorPlan   // <-- Datos del floorplan del cuerpo
@@ -62,7 +62,7 @@ public class FloorPlanController {
     }
 
     @PutMapping("/{floorPlanid}")
-    @Operation(summary = "Actualizar plano de piso", description = "Actualiza un plano de piso existente por su ID")
+    @Operation(summary = "Update floor plan", description = "Updates an existing floor plan by its ID")
     public ResponseEntity<FloorPlan> updateFloorPlan(@PathVariable Long floorPlanid, @RequestBody FloorPlan floorPlan) {
         // Asegurarse de que el ID del path coincida con el ID del objeto
         floorPlan.setId(floorPlanid);
@@ -71,15 +71,15 @@ public class FloorPlanController {
     }
 
     @DeleteMapping("/{floorPlanid}")
-    @Operation(summary = "Eliminar plano de piso", description = "Elimina un plano de piso por su ID")
+    @Operation(summary = "Delete floor plan", description = "Deletes a floor plan by  ID")
     public ResponseEntity<Void> deleteFloorPlan(@PathVariable Long floorPlanid) {
         floorPlanService.deleteFloorPlanById(floorPlanid);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/batch/hotel/{hotelId}")
-    @Operation(summary = "Crear múltiples planos para un hotel",
-            description = "Recibe y guarda una lista de planos asociados a un hotel específico")
+    @Operation(summary = "Create multiple floor plans for a hotel",
+            description = "Receives and saves a list of floor plans associated with a specific hotel")
     public ResponseEntity<List<FloorPlan>> createMultipleFloorPlans(
             @PathVariable Long hotelId,
             @RequestBody List<FloorPlan> floorPlans) {

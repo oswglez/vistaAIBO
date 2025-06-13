@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/provider")
-@Tag(name = "Provider Management", description = "Endpoints para gestión de providers para hoteles y habitaciones")
+@Tag(name = "Provider Management", description = "Endpoints for managing hotel and room providers")
 
 @CrossOrigin(origins = "*")
 public class ProviderController {
@@ -39,7 +39,7 @@ public class ProviderController {
     }
 
     @PostMapping
-    @Operation(summary = "Crea un Provider", description = "Crea un provider")
+    @Operation(summary = "Create a provider", description = "Creates a provider")
     public ResponseEntity<Provider> createProvider(@RequestBody Map<String, Object> requestBody) {
         Provider provider = new Provider();
         provider.setProviderName((String) requestBody.get("providerName"));
@@ -50,7 +50,7 @@ public class ProviderController {
     }
 
     @GetMapping("/{providerId}")
-    @Operation(summary = "Obtiene un provider", description = "Recupera un provider usando su ID.")
+    @Operation(summary = "Get a provider", description = "Retrieves a provider using its ID.")
     public ResponseEntity<Provider> getProviderById(@PathVariable Long providerId) {
         return providerService.getProviderById(providerId)
                 .map(ResponseEntity::ok)
@@ -58,9 +58,9 @@ public class ProviderController {
     }
 
     @GetMapping("/type")
-    @Operation(summary = "Obtiene todos los providers", description = "Recupera todos los provider de un tipo dado de la base de datos.")
+    @Operation(summary = "Get all providers", description = "Retrieves all providers of a given type from the database.")
     public ResponseEntity<List<ProviderDTO>> getProvidersByType(
-            @RequestParam @Parameter(description = "Tipo de provider para filtrar (ej: 'Hotel', 'Restaurante')", required = true) String type) {
+            @RequestParam @Parameter(description = "Provider type to filter (e.g., 'Hotel', 'Restaurant')", required = true) String type) {
 
         List<Provider> providers = providerService.getProvidersByType(type);
         List<ProviderDTO> providerDTOs = providers.stream()
@@ -71,35 +71,35 @@ public class ProviderController {
     }
 
     @GetMapping
-    @Operation(summary = "Obtiene todos los providers por  type", description = "Recupera todos los provider de la base de datos dado un type")
+    @Operation(summary = "Get all providers by type", description = "Retrieves all providers from the database for a given type")
     public ResponseEntity<List<Provider>> getAllProviders() {
         List<Provider> providers = providerService.getAllProviders();
         return ResponseEntity.ok(providers);
     }
 
     @PutMapping("/{providerId}")
-    @Operation(summary = "Actualiza un provider", description = "Actualiza los datos de un provider existente usando su Id.")
+    @Operation(summary = "Update a provider", description = "Updates the data of an existing provider using its ID.")
     public ResponseEntity<Provider> updateProvider(@PathVariable Long providerId, @RequestBody Provider providerDetails) {
         Provider updatedprovider = providerService.updateProvider(providerId, providerDetails);
         return ResponseEntity.ok(updatedprovider);
     }
 
     @DeleteMapping("/{providerId}")
-    @Operation(summary = "Elimina un provider", description = "Elimina un provider existente usando su Id.")
+    @Operation(summary = "Delete a provider", description = "Deletes an existing provider using its ID.")
     public ResponseEntity<Provider> deleteProvider(@PathVariable Long providerId) {
         providerService.deleteProvider(providerId);
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/{providerId}/hotels")
-    @Operation(summary = "Obtiene todos los hoteles de un provider", description = "Recupera todos los hoteles asociados a un provider específico.")
+    @Operation(summary = "Get hotels by provider", description = "Retrieves all hotels associated with a specific provider.")
     public ResponseEntity<ProviderDTO> getProviderWithHotels(@PathVariable Long providerId) {
         Optional<Provider> provider = providerService.getProviderById(providerId);
         List<Hotel> hotels = providerService.getAllHotelsByProviderId(providerId);
 
-        // Mapea el Provider a ProviderDTO
+        // Map Provider to ProviderDTO
         ProviderDTO providerDTO = modelMapper.map(provider, ProviderDTO.class);
 
-        // Mapea los Hotels a HotelOnlyDTO y los asigna al ProviderDTO
+        // Map Hotels to HotelOnlyDTO and assign them to ProviderDTO
         Set<HotelOnlyDTO> hotelOnlyDTOs = hotels.stream()
                 .map(hotel -> modelMapper.map(hotel, HotelOnlyDTO.class))
                 .collect(Collectors.toSet());

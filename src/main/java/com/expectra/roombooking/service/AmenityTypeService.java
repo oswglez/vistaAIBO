@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface AmenityTypeService {
-    // Operaciones básicas CRUD
+    // Basic CRUD operations
     AmenityTypes createAmenityTypes(AmenityTypes amenity);
     Optional<AmenityTypes> getAmenityTypesById(Long id);
  //   List<AmenityTypes> getAllAmenityTypes();

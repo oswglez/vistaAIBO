@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
-@Tag(name = "Room Management", description = "Endpoints para gestión de habitaciones")
+@Tag(name = "Room Management", description = "Endpoints for room management")
 
 public class RoomController {
 
@@ -32,7 +32,7 @@ public class RoomController {
 
     // Create a new Room
     @PostMapping("/{hotelId}")
-    @Operation(summary = "Crea una habitación", description = "Crea una habitación de un hotel.")
+    @Operation(summary = "Create a room", description = "Creates a room for a hotel.")
     public ResponseEntity<Room> createRoom(@PathVariable Long hotelId, @RequestBody Room room) {
         Hotel hotel = hotelService.findHotelById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
@@ -44,14 +44,14 @@ public class RoomController {
 
     // Get Room by ID
     @GetMapping("/{roomId}")
-    @Operation(summary = "Cosulta una habitación por id", description = "Recupera una habitación de acuerdo a su Id.")
+    @Operation(summary = "Get a room by id", description = "Retrieves a room by its Id.")
     public ResponseEntity<Room> getRoomById(@PathVariable Long roomId) {
         return roomService.getRoomById(roomId)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + roomId));
     }
     @PutMapping("/{roomId}")
-    @Operation(summary = "Actualiza una habitación", description = "Actualiza los datos de una habitación.")
+    @Operation(summary = "Update a room", description = "Updates room data.")
     public ResponseEntity<Room> updateRoom(@PathVariable Long roomId, @RequestBody Room roomDetails) {
         Room existingRoom = roomService.getRoomById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + roomId));
@@ -69,14 +69,14 @@ public class RoomController {
 
     // Delete Room
     @DeleteMapping("/{roomId}")
-    @Operation(summary = "Elimina una habitación", description = "Elimina una habbitación y desconecta sus medias y amenities.")
+    @Operation(summary = "Delete a room", description = "Deletes a room and disconnects its media and amenities.")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
         roomService.deleteRoomById(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     // Get Room Media by Hotel ID and Room Unit
     @GetMapping("/{hotelId}/roomId/{roomId}/media")
-    @Operation(summary = "Consulta las medias por roomId", description = "Consulta las medias de una habitación de un hotel.")
+    @Operation(summary = "Get media by roomId", description = "Retrieves media for a hotel room.")
     public ResponseEntity<List<Media>> getRoomMediasByHotelIdAndRoomId(
             @PathVariable Long hotelId,
             @PathVariable Long roomId) {
@@ -86,7 +86,7 @@ public class RoomController {
 
     // Get Room Amenities by Hotel ID and Room Type
     @GetMapping("/{hotelId}/roomId/{roomId}/amenities")
-    @Operation(summary = "Consulta las amenities por roomId", description = "Consulta las ammenities de una habitación de un hotel.")
+    @Operation(summary = "Get amenities by roomId", description = "Retrieves amenities for a hotel room.")
     public ResponseEntity<List<Amenity>> getRoomAmenitiesByHotelIdAndRoomId(
             @PathVariable Long hotelId,
             @PathVariable Long roomId) {
@@ -95,7 +95,7 @@ public class RoomController {
     }
     // Get Room Media by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/media")
-    @Operation(summary = "Consulta las medias por tipo. de habitacion", description = "Consulta las medias de un tipo  habitación de un hotel.")
+    @Operation(summary = "Get media by room type", description = "Retrieves media for a specific room type in a hotel.")
     public ResponseEntity<List<Media>> getRoomMediaByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
@@ -104,13 +104,13 @@ public class RoomController {
             List<Media> media = roomService.getRoomMediaByHotelAndRoomType(hotelId, type);
             return new ResponseEntity<>(media, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Si el valor no es válido, devuelve 400
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // If the value is not valid, returns 400
         }
     }
 
     // Get Room Amenities by Hotel ID and Room Type
     @GetMapping("/{hotelId}/type/{roomType}/amenities")
-    @Operation(summary = "Consulta las amenities por tipo. de habitacion", description = "Consulta las ammenities de un tipo habitación de un hotel.")
+    @Operation(summary = "Get amenities by room type", description = "Retrieves amenities for a specific room type in a hotel.")
     public ResponseEntity<List<Amenity>> getRoomAmenitiesByType(
             @PathVariable Long hotelId,
             @PathVariable String roomType) {
@@ -119,7 +119,7 @@ public class RoomController {
             List<Amenity> amenities = roomService.getRoomAmenitiesByHotelAndRoomType(hotelId, type);
             return new ResponseEntity<>(amenities, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Si el valor no es válido, devuelve 400
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // If the value is not valid, returns 400
         }
     }
 }

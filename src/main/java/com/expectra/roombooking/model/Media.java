@@ -3,6 +3,8 @@ package com.expectra.roombooking.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +12,8 @@ import java.util.Set;
 @Entity
 @Table(name="media")
 @Data
+@ToString(exclude = {"hotels", "rooms"})
+@EqualsAndHashCode(exclude = {"hotels", "rooms"})
 public class Media {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
