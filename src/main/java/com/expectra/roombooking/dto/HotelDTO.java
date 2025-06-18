@@ -26,5 +26,5 @@ public class HotelDTO implements Serializable {
     private Boolean hotelDeleted;
     private List<FloorPlan> floorPlans;
     // Colección de habitaciones asociadas
-    private Set<RoomDTO> rooms;
+    private Set<RoomOnlyDTO> rooms;
 }

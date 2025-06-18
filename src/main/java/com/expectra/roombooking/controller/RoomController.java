@@ -1,5 +1,6 @@
 package com.expectra.roombooking.controller;
 
+import com.expectra.roombooking.dto.RoomOnlyDTO;
 import com.expectra.roombooking.exception.ResourceNotFoundException;
 import com.expectra.roombooking.model.*;
 import com.expectra.roombooking.service.RoomService;
@@ -7,9 +8,12 @@ import com.expectra.roombooking.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
@@ -21,13 +25,32 @@ public class RoomController {
 
     private final RoomService roomService;
     private final HotelService hotelService;
+    private final ModelMapper modelMapper;
     private final String messageNotfound = "Room not found by Id" ;
 
-
-    @Autowired
-    public RoomController(final RoomService roomService, final HotelService hotelService) {
+    public RoomController(final RoomService roomService, final HotelService hotelService, final ModelMapper modelMapper) {
         this.roomService = roomService;
         this.hotelService = hotelService;
+        this.modelMapper = modelMapper;
+    }
+
+    // Get all rooms with pagination
+    @GetMapping
+    @Operation(summary = "Get all rooms", description = "Retrieves a paginated list of all rooms.")
+    public ResponseEntity<Page<Room>> getAllRooms(Pageable pageable) {
+        Page<Room> rooms = roomService.getAllRooms(pageable);
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
+    }
+
+    // Get rooms by hotel ID with pagination
+    @GetMapping("/hotel/{hotelId}")
+    @Operation(summary = "Get rooms by hotel ID", description = "Retrieves a paginated list of rooms for a specific hotel.")
+    public ResponseEntity<Page<Room>> getRoomsByHotelId(@PathVariable Long hotelId, Pageable pageable) {
+        if (!hotelService.findHotelById(hotelId).isPresent()) {
+            throw new ResourceNotFoundException("Hotel not found with id: " + hotelId);
+        }
+        Page<Room> rooms = roomService.getRoomsByHotelId(hotelId, pageable);
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
     // Create a new Room
@@ -52,16 +75,23 @@ public class RoomController {
     }
     @PutMapping("/{roomId}")
     @Operation(summary = "Update a room", description = "Updates room data.")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long roomId, @RequestBody Room roomDetails) {
+    public ResponseEntity<Room> updateRoom(@PathVariable Long roomId, @RequestBody RoomOnlyDTO roomDetails) {
         Room existingRoom = roomService.getRoomById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException(messageNotfound + roomId));
 
         // Actualizar los campos necesarios
-        existingRoom.setRoomNumber(roomDetails.getRoomNumber());
+        existingRoom.setRoomNumber(Integer.valueOf(roomDetails.getRoomNumber()));
         existingRoom.setRoomType(roomDetails.getRoomType());
         existingRoom.setRoomName(roomDetails.getRoomName());
-        existingRoom.setAmenities(roomDetails.getAmenities());
-        existingRoom.setMedias(roomDetails.getMedias());
+        existingRoom.setRoomPrice(roomDetails.getRoomPrice());
+        existingRoom.setRoomDescription(roomDetails.getRoomDescription());
+        existingRoom.setRoomBuildingName(roomDetails.getRoomBuildingName());
+        existingRoom.setRoomBuildingCode(roomDetails.getRoomBuildingCode());
+        existingRoom.setRoomFloor(Integer.valueOf(roomDetails.getRoomFloor()));
+        existingRoom.setRoomXCoordinates(roomDetails.getRoomXCoordinates());
+        existingRoom.setRoomYCoordinates(roomDetails.getRoomYCoordinates());
+   //     existingRoom.setAmenities(roomDetails.getAmenities());
+    //    existingRoom.setMedias(roomDetails.getMedias());
 
         Room updatedRoom = roomService.saveRoom(existingRoom);
         return new ResponseEntity<>(updatedRoom, HttpStatus.OK);

@@ -7,6 +7,8 @@ import com.expectra.roombooking.repository.RoomRepository;
 import com.expectra.roombooking.service.RoomService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,16 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void deleteRoomById(Long roomId) {
         roomRepository.deleteById(roomId);
+    }
+
+    @Override
+    public Page<Room> getAllRooms(Pageable pageable) {
+        return roomRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Room> getRoomsByHotelId(Long hotelId, Pageable pageable) {
+        return roomRepository.findByHotelHotelId(hotelId, pageable);
     }
 
     @Override

@@ -123,7 +123,7 @@ public class HotelServiceImpl implements HotelService {
         HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);
 
         dto.setRooms(hotel.getRooms().stream()
-                .map(room -> modelMapper.map(room, RoomDTO.class))
+                .map(room -> modelMapper.map(room, RoomOnlyDTO.class))
                 .collect(Collectors.toSet()));
         return dto;
     }
@@ -135,7 +135,7 @@ public class HotelServiceImpl implements HotelService {
         HotelDTO dto = modelMapper.map(hotel, HotelDTO.class);
 
         dto.setRooms(hotel.getRooms().stream()
-                .map(room -> modelMapper.map(room, RoomDTO.class))
+                .map(room -> modelMapper.map(room, RoomOnlyDTO.class))
                 .collect(Collectors.toSet()));
         return dto;
     }

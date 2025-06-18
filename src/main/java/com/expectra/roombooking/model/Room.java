@@ -29,11 +29,23 @@ public class Room {
     @Column(name = "room_name")
     private String roomName;
 
-    @Column(name = "room_building", columnDefinition = "VARCHAR DEFAULT 'Main'")
-    private String roomBuilding;
+    @Column(name = "room_description")
+    private String roomDescription;
 
-    @Column(name = "room_floor", nullable = false, columnDefinition = "INTEGER DEFAULT 1")
+    @Column(name = "room_building")
+    private String roomBuildingName;
+
+    @Column(name = "room_building_code", nullable = false)
+    private String roomBuildingCode;
+
+    @Column(name = "room_floor", nullable = false)
     private Integer roomFloor;
+
+    @Column(name = "room_x_coordinates")
+    private String roomXCoordinates;
+
+    @Column(name = "room_y_coordinates")
+    private String roomYCoordinates;
 
     @Column(name = "room_price", nullable = false, columnDefinition = "DOUBLE DEFAULT 100.0")
     private Double roomPrice;

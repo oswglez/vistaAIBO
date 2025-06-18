@@ -15,8 +15,7 @@ public class ModelMapperConfig {
         mapper.createTypeMap(Brand.class, BrandDTO.class);
         mapper.createTypeMap(Provider.class, ProviderDTO.class);
         mapper.createTypeMap(Hotel.class, HotelOnlyDTO.class);
-        mapper.createTypeMap(Room.class, RoomOnlyDTO.class);
-        mapper.createTypeMap(Room.class, RoomDTO.class);
+  //      mapper.createTypeMap(Room.class, RoomDTO.class);
         mapper.createTypeMap(Media.class, MediaDTO.class);
         mapper.createTypeMap(Amenity.class, AmenityDTO.class);
         mapper.createTypeMap(ContactInfoDTO.class, Contact.class);
