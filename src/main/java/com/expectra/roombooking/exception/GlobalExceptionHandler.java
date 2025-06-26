@@ -1,5 +1,6 @@
 package com.expectra.roombooking.exception; // Or .advice
 
+import com.expectra.roombooking.dto.ErrorResponseDTO;
 import org.slf4j.Logger; // SLF4J Logger import
 import org.slf4j.LoggerFactory; // SLF4J LoggerFactory import
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // Define the SLF4J Logger
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    // Handler for AuthenticationException (401 Unauthorized)
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAuthenticationException(
+            AuthenticationException ex, WebRequest request) {
+
+        String requestPath = request.getDescription(false).replace("uri=", "");
+        
+        // Log the authentication failure
+        log.warn("Authentication failed: {} on path {}", ex.getMessage(), requestPath);
+        
+        String details;
+        switch (ex.getErrorCode()) {
+            case "NO_ROLES_ASSIGNED":
+                details = "Please contact your administrator to assign appropriate roles to your account.";
+                break;
+            case "ACCOUNT_DISABLED":
+                details = "Your account has been deactivated. Please contact the administrator for assistance.";
+                break;
+            case "INVALID_CREDENTIALS":
+            default:
+                details = "Please verify your credentials and try again.";
+                break;
+        }
+        
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.of(
+            ex.getErrorCode(),
+            ex.getMessage(),
+            details,
+            requestPath
+        );
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
 
     // Handler for ResourceNotFoundException (404 Not Found)
     @ExceptionHandler(ResourceNotFoundException.class)
