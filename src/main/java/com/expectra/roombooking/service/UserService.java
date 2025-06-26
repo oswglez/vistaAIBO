@@ -1,12 +1,9 @@
 package com.expectra.roombooking.service;
 
-import com.expectra.roombooking.dto.AuthResponseDTO;
-import com.expectra.roombooking.dto.LoginRequestDTO;
 import com.expectra.roombooking.model.User;
 import com.expectra.roombooking.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,71 +15,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public AuthResponseDTO authenticateUser(LoginRequestDTO loginRequest) {
-        log.info("Starting authentication for user: {}", loginRequest.getUsername());
-        
-        try {
-            // Buscar usuario por username
-            log.debug("Searching for user with username: {}", loginRequest.getUsername());
-            Optional<User> userOpt = userRepository.findByUsernameAndIsActiveTrue(loginRequest.getUsername());
-            
-            if (userOpt.isEmpty()) {
-                log.warn("User not found or inactive: {}", loginRequest.getUsername());
-                throw new RuntimeException("Invalid credentials - User not found");
-            }
-            
-            User user = userOpt.get();
-            log.debug("User found: {} (ID: {})", user.getUsername(), user.getUserId());
-            
-            // Verificar contraseña
-            log.debug("Verifying password for user: {}", user.getUsername());
-            log.debug("Stored password hash: {}", user.getPasswordHash());
-            log.debug("Input password: {}", loginRequest.getPassword());
-            
-            boolean passwordMatches = passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash());
-            log.debug("Password matches: {}", passwordMatches);
-            
-            if (!passwordMatches) {
-                log.warn("Invalid password for user: {}", user.getUsername());
-                throw new RuntimeException("Invalid credentials - Wrong password");
-            }
-            
-            log.info("Password verified successfully for user: {}", user.getUsername());
-            
-            // Actualizar último login
-            log.debug("Updating last login for user: {}", user.getUsername());
-            user.setLastLogin(LocalDateTime.now());
-            userRepository.save(user);
-            
-            // Crear respuesta
-            log.debug("Creating authentication response for user: {}", user.getUsername());
-            AuthResponseDTO response = new AuthResponseDTO();
-            response.setToken("dummy-token-" + System.currentTimeMillis()); // En producción, usar JWT
-            response.setRefreshToken("dummy-refresh-token");
-            response.setExpiresAt(LocalDateTime.now().plusHours(24));
-            
-            AuthResponseDTO.UserDTO userDTO = new AuthResponseDTO.UserDTO();
-            userDTO.setUserId(user.getUserId());
-            userDTO.setUsername(user.getUsername());
-            userDTO.setEmail(user.getEmail());
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
-            userDTO.setIsActive(user.getIsActive());
-            
-            response.setUser(userDTO);
-            
-            log.info("Authentication successful for user: {}", user.getUsername());
-            return response;
-            
-        } catch (Exception e) {
-            log.error("Authentication failed for user: {}. Error: {}", loginRequest.getUsername(), e.getMessage(), e);
-            throw e;
-        }
-    }
 
     public User getUserById(Long userId) {
         log.debug("Getting user by ID: {}", userId);
@@ -93,11 +25,52 @@ public class UserService {
                 });
     }
 
+    public User getUserByAuth0Id(String auth0Id) {
+        log.debug("Getting user by Auth0 ID: {}", auth0Id);
+        return userRepository.findByAuth0Id(auth0Id)
+                .orElseThrow(() -> {
+                    log.warn("User not found with Auth0 ID: {}", auth0Id);
+                    return new RuntimeException("User not found");
+                });
+    }
+
+    public User getUserByEmail(String email) {
+        log.debug("Getting user by email: {}", email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    log.warn("User not found with email: {}", email);
+                    return new RuntimeException("User not found");
+                });
+    }
+
+    public Optional<User> findUserByAuth0Id(String auth0Id) {
+        log.debug("Finding user by Auth0 ID: {}", auth0Id);
+        return userRepository.findByAuth0Id(auth0Id);
+    }
+
+    public Optional<User> findUserByEmail(String email) {
+        log.debug("Finding user by email: {}", email);
+        return userRepository.findByEmail(email);
+    }
+
+    public User saveUser(User user) {
+        log.debug("Saving user: {}", user.getUsername());
+        return userRepository.save(user);
+    }
+
     public void updateLastLogin(Long userId) {
         log.debug("Updating last login for user ID: {}", userId);
         User user = getUserById(userId);
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
         log.debug("Last login updated for user ID: {}", userId);
+    }
+
+    public void updateLastLoginByAuth0Id(String auth0Id) {
+        log.debug("Updating last login for Auth0 ID: {}", auth0Id);
+        User user = getUserByAuth0Id(auth0Id);
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+        log.debug("Last login updated for Auth0 ID: {}", auth0Id);
     }
 } 

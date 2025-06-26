@@ -1,19 +1,15 @@
 package com.expectra.roombooking.service;
 
-import com.expectra.roombooking.dto.LoginRequestDTO;
 import com.expectra.roombooking.dto.AuthResponseDTO;
-import com.expectra.roombooking.exception.AuthenticationException;
 import com.expectra.roombooking.model.User;
 import com.expectra.roombooking.model.UserHotelRole;
 import com.expectra.roombooking.repository.UserRepository;
 import com.expectra.roombooking.repository.UserHotelRoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,41 +22,16 @@ public class AuthService {
     @Autowired
     private UserHotelRoleRepository userHotelRoleRepository;
     
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    
-    public AuthResponseDTO authenticate(LoginRequestDTO loginRequest) {
-        log.info("Attempting to authenticate user: {}", loginRequest.getUsername());
+    public AuthResponseDTO getUserInfoWithRoles(Long userId) {
+        log.info("Getting user info with roles for user ID: {}", userId);
         
-        // Find user by username
-        Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
-        
-        if (userOpt.isEmpty()) {
-            log.warn("User not found: {}", loginRequest.getUsername());
-            throw new AuthenticationException(
-                "Invalid credentials", 
-                "INVALID_CREDENTIALS"
-            );
-        }
-        
-        User user = userOpt.get();
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
         
         // Check if user is active
         if (!user.getIsActive()) {
-            log.warn("Inactive user attempting to authenticate: {}", loginRequest.getUsername());
-            throw new AuthenticationException(
-                "Your account has been deactivated. Please contact the administrator.", 
-                "ACCOUNT_DISABLED"
-            );
-        }
-        
-        // Verify password
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
-            log.warn("Incorrect password for user: {}", loginRequest.getUsername());
-            throw new AuthenticationException(
-                "Invalid credentials", 
-                "INVALID_CREDENTIALS"
-            );
+            log.warn("Inactive user attempting to access: {}", user.getUsername());
+            throw new RuntimeException("Your account has been deactivated. Please contact the administrator.");
         }
         
         // Get user's active roles for all hotels
@@ -68,14 +39,11 @@ public class AuthService {
         
         // Check if user has any active roles
         if (userHotelRoles.isEmpty()) {
-            log.warn("User has no active roles: {}", loginRequest.getUsername());
-            throw new AuthenticationException(
-                "Your account has no active roles assigned. Please contact the administrator.", 
-                "NO_ROLES_ASSIGNED"
-            );
+            log.warn("User has no active roles: {}", user.getUsername());
+            throw new RuntimeException("Your account has no active roles assigned. Please contact the administrator.");
         }
         
-        log.info("User authenticated successfully: {} with {} active roles", loginRequest.getUsername(), userHotelRoles.size());
+        log.info("User info retrieved successfully: {} with {} active roles", user.getUsername(), userHotelRoles.size());
         
         // Create response with correct structure
         AuthResponseDTO response = new AuthResponseDTO();
@@ -89,9 +57,6 @@ public class AuthService {
         userDTO.setIsActive(user.getIsActive());
         
         response.setUser(userDTO);
-        response.setToken("dummy-token-" + System.currentTimeMillis()); // Placeholder
-        response.setRefreshToken("dummy-refresh-" + System.currentTimeMillis()); // Placeholder
-        response.setExpiresAt(java.time.LocalDateTime.now().plusHours(24)); // Placeholder
         
         // Map user hotel roles to DTOs
         List<AuthResponseDTO.UserHotelRoleDTO> userHotelRoleDTOs = userHotelRoles.stream()
@@ -117,9 +82,5 @@ public class AuthService {
         dto.setAssignedAt(userHotelRole.getAssignedAt());
         
         return dto;
-    }
-    
-    public String generatePasswordHash(String rawPassword) {
-        return passwordEncoder.encode(rawPassword);
     }
 } 

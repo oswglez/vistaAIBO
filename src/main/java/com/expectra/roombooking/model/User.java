@@ -26,8 +26,8 @@ public class User {
     @Column(unique = true, nullable = false, length = 100)
     private String email;
     
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "auth0_id", unique = true, length = 100)
+    private String auth0Id;
     
     @Column(name = "first_name", length = 50)
     private String firstName;
@@ -52,4 +52,20 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<UserHotelRole> userHotelRoles;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", auth0Id='" + auth0Id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", isActive=" + isActive +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", lastLogin=" + lastLogin +
+                '}';
+    }
 } 
