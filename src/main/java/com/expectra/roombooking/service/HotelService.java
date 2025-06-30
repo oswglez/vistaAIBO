@@ -27,7 +27,7 @@ public interface HotelService {
     List<Address> findAllAddressesByHotelId(Long hotelId);
     HotelDTO getHotelAndRoomsByHotelId(Long hotelId);
     HotelDTO findHotelAndRoomsByHotelIdAndRoomType(Long hotelId, String roomTypes);
-    Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable);
+    Page<HotelListDTO> findConsolidatedHotelData(Long userId, Pageable pageable);
     HotelCreationRequestDTO findHotelByIdWithFullRelations(Long HotelId);
     HotelCreationRequestDTO updateHotelWithDetails(Long hotelId, HotelCreationRequestDTO hotelDetails);
 

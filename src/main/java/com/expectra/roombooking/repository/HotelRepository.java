@@ -77,8 +77,10 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "LEFT JOIN b.chain c " +
             "LEFT JOIN h.addresses a WITH a.addressType = 'MAIN' " +
             "LEFT JOIN h.contacts ct WITH ct.contactType = 'MAIN' " +
-            "WHERE h.hotelDeleted = false ")
-    Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable);
+            "JOIN UserHotelRole uhr ON uhr.hotel = h " +
+            "JOIN uhr.user u " +
+            "WHERE h.hotelDeleted = false AND uhr.user.userId = :userId")
+    Page<HotelListDTO> findConsolidatedHotelData(@Param("userId") Long userId, Pageable pageable);
 
     @Query("SELECT h FROM Hotel h " +
             "LEFT JOIN FETCH h.brand b " +

@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.Parameters;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,6 +85,7 @@ public class HotelController {
             @Parameter(name = "sort", description = "Sort criteria (e.g. hotelName,asc or hotelId,desc)", schema = @Schema(type = "string"))
     })
     public ResponseEntity<Page<HotelListDTO>> getAllHotelsAndRelationships(
+         Authentication authentication,
             @Parameter(hidden = true) Pageable pageable // Spring will inject the Pageable from ?page, ?size, ?sort parameters
     ) {
         if (pageable.getPageSize() > 200) { // Limit maximum page size
@@ -96,8 +98,10 @@ public class HotelController {
         if (pageable.getSort().isUnsorted()) {
             pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("hotelId").ascending());
         }
-
-        Page<HotelListDTO> hotelsPage = hotelService.findConsolidatedHotelData(pageable);
+        User user = (User) authentication.getPrincipal();
+        Long userId = user.getUserId();
+        
+        Page<HotelListDTO> hotelsPage = hotelService.findConsolidatedHotelData(userId, pageable);
         return ResponseEntity.ok(hotelsPage);
     }
 

@@ -142,8 +142,8 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     @Transactional(readOnly = true) // Es buena práctica marcar como readOnly las consultas
-    public Page<HotelListDTO> findConsolidatedHotelData(Pageable pageable) {
-        return hotelRepository.findConsolidatedHotelData(pageable);
+    public Page<HotelListDTO> findConsolidatedHotelData(Long userId, Pageable pageable) {
+        return hotelRepository.findConsolidatedHotelData(userId, pageable);
     }
     @Override
     @Transactional // Asegura que toda la operación sea una única transacción
