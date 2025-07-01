@@ -19,6 +19,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.KeyFactory;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Base64;
+import java.util.Date;
+import com.expectra.roombooking.util.JwtUtil;
+import org.springframework.core.env.Environment;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,6 +45,7 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final UserHotelRoleService userHotelRoleService;
     private final OAuth0UserService oAuth0UserService;
+    private final Environment env;
 
     public AuthController(
         UserService userService,
@@ -42,7 +54,8 @@ public class AuthController {
         UserRepository userRepository,
         RoleRepository roleRepository,
         UserHotelRoleService userHotelRoleService,
-        OAuth0UserService oAuth0UserService
+        OAuth0UserService oAuth0UserService,
+        Environment env
     ) {
         this.userService = userService;
         this.authorizationService = authorizationService;
@@ -51,6 +64,7 @@ public class AuthController {
         this.roleRepository = roleRepository;
         this.userHotelRoleService = userHotelRoleService;
         this.oAuth0UserService = oAuth0UserService;
+        this.env = env;
     }
 
     @GetMapping("/me")
@@ -236,10 +250,23 @@ public class AuthController {
             }
 
             // Generar token JWT de prueba
-            String testToken = generateTestJwtToken(user);
+            String privateKeyPath = "vistaAIBO/keys/private_key.pem";
+            RSAPrivateKey privateKey = JwtUtil.getPrivateKey(privateKeyPath);
+            Algorithm algorithm = Algorithm.RSA256(null, privateKey);
+
+            String token = JWT.create()
+                .withKeyId("dev-key-1")
+                .withSubject(user.getAuth0Id())
+                .withClaim("email", user.getEmail())
+                .withClaim("name", user.getFirstName() + " " + user.getLastName())
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000))
+                .sign(algorithm);
+
+            System.out.println("Token de prueba: " + token);
 
             return ResponseEntity.ok(Map.of(
-                "token", testToken,
+                "token", token,
                 "tokenType", "Bearer",
                 "expiresIn", 3600,
                 "user", Map.of(
@@ -263,29 +290,25 @@ public class AuthController {
         }
     }
 
-    private String generateTestJwtToken(User user) {
-        // Generar un token JWT simple para testing
-        // En producción, esto debería usar una librería JWT real
-        String header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
-        String payload = String.format(
-            "{\"sub\":\"%s\",\"email\":\"%s\",\"name\":\"%s %s\",\"iat\":%d,\"exp\":%d}",
-            user.getAuth0Id(),
-            user.getEmail(),
-            user.getFirstName(),
-            user.getLastName(),
-            System.currentTimeMillis() / 1000,
-            (System.currentTimeMillis() / 1000) + 3600
-        );
-        
-        // Codificar payload en base64
-        String encodedPayload = java.util.Base64.getUrlEncoder().withoutPadding()
-            .encodeToString(payload.getBytes());
-        
-        // Firma simple para testing (en producción usar una clave real)
-        String signature = "test-signature-for-development-only";
-        String encodedSignature = java.util.Base64.getUrlEncoder().withoutPadding()
-            .encodeToString(signature.getBytes());
-        
-        return header + "." + encodedPayload + "." + encodedSignature;
+    @GetMapping("/test-jwt")
+    public ResponseEntity<?> generateTestJwt() {
+        try {
+            String privateKeyPath = "C:/Users/Admin/Expectra/backoffice/vistaAIBO/keys/private_key.pem";
+            RSAPrivateKey privateKey = JwtUtil.getPrivateKey(privateKeyPath);
+            Algorithm algorithm = Algorithm.RSA256(null, privateKey);
+
+            String token = JWT.create()
+                .withKeyId("dev-key-1")
+                .withSubject("test-user-id")
+                .withClaim("email", "test@example.com")
+                .withClaim("name", "Test User")
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000))
+                .sign(algorithm);
+
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
 } 

@@ -30,29 +30,36 @@ public class OAuth0JwtValidator {
     @Value("${oauth0.issuer}")
     private String issuer;
 
+    @Value("${jwt.public.key.path}")
+    private String publicKeyPath;
+
     public DecodedJWT validateToken(String token) throws JWTVerificationException {
         try {
-            // Decode the JWT without verification first to get the key ID
             DecodedJWT unverifiedJwt = JWT.decode(token);
-            
-            // Get the key ID from the JWT header
             String keyId = unverifiedJwt.getKeyId();
-            
-            // Fetch the public key from Auth0
-            JwkProvider provider = new UrlJwkProvider(new URL("https://" + domain + "/.well-known/jwks.json"));
-            Jwk jwk = provider.get(keyId);
-            RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
-            
-            // Create the verifier
-            Algorithm algorithm = Algorithm.RSA256(publicKey, null);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(issuer)
-                    .withAudience(audience)
-                    .build();
-            
-            // Verify the token
+
+            Algorithm algorithm;
+            JWTVerifier verifier;
+
+            if ("dev-key-1".equals(keyId)) {
+                // Token de pruebas: usa tu clave pública local
+                RSAPublicKey publicKey = getLocalPublicKey();
+                algorithm = Algorithm.RSA256(publicKey, null);
+                verifier = JWT.require(algorithm).build();
+            } else {
+                // Token de Auth0: usa JWKS
+                JwkProvider provider = new UrlJwkProvider(new URL("https://" + domain + "/.well-known/jwks.json"));
+                Jwk jwk = provider.get(keyId);
+                RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
+                algorithm = Algorithm.RSA256(publicKey, null);
+                verifier = JWT.require(algorithm)
+                        .withIssuer(issuer)
+                        .withAudience(audience)
+                        .build();
+            }
+
             return verifier.verify(token);
-            
+
         } catch (Exception e) {
             log.error("Error validating JWT token: {}", e.getMessage());
             throw new JWTVerificationException("Invalid token");
@@ -77,5 +84,16 @@ public class OAuth0JwtValidator {
             log.error("Error extracting claims from token: {}", e.getMessage());
             return null;
         }
+    }
+
+    private RSAPublicKey getLocalPublicKey() throws Exception {
+        String key = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(publicKeyPath)))
+            .replaceAll("-----BEGIN PUBLIC KEY-----", "")
+            .replaceAll("-----END PUBLIC KEY-----", "")
+            .replaceAll("\\s", "");
+        byte[] keyBytes = java.util.Base64.getDecoder().decode(key);
+        java.security.spec.X509EncodedKeySpec spec = new java.security.spec.X509EncodedKeySpec(keyBytes);
+        java.security.KeyFactory kf = java.security.KeyFactory.getInstance("RSA");
+        return (RSAPublicKey) kf.generatePublic(spec);
     }
 } 
