@@ -23,4 +23,7 @@ public interface UserHotelRoleRepository extends JpaRepository<UserHotelRole, Lo
     
     @Query("SELECT uhr FROM UserHotelRole uhr WHERE uhr.user.userId = :userId AND uhr.hotel.hotelId = :hotelId AND uhr.isActive = true")
     List<UserHotelRole> findByUserIdAndHotelIdAndIsActiveTrue(@Param("userId") Long userId, @Param("hotelId") Long hotelId);
+
+    @Query("SELECT uhr FROM UserHotelRole uhr WHERE uhr.user.userId = :userId AND uhr.isActive = true ORDER BY uhr.hotel.hotelId ASC")
+    List<UserHotelRole> findByUserId(@Param("userId") Long userId);
 } 

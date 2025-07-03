@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class AuthResponseDTO {
@@ -32,7 +33,7 @@ public class AuthResponseDTO {
         private Long roleId;
         private String roleName;
         private String roleDescription;
-        private String permissions;
+        private Map<String, Object> permissions;
         private Boolean isActive;
         private LocalDateTime assignedAt;
     }

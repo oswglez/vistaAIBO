@@ -1,6 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.dto.UserHotelRoleDTO;
+import com.expectra.roombooking.dto.AssignUserRoleDTO;
 import com.expectra.roombooking.model.Hotel;
 import com.expectra.roombooking.model.UserHotelRole;
 import com.expectra.roombooking.service.UserHotelRoleService;
@@ -8,6 +9,8 @@ import com.expectra.roombooking.repository.UserRepository;
 import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.repository.RoleRepository;
 import com.expectra.roombooking.repository.UserHotelRoleRepository;
+import com.expectra.roombooking.repository.BrandRepository;
+import com.expectra.roombooking.repository.ChainRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +27,25 @@ public class UserHotelRoleController {
     private final HotelRepository hotelRepository;
     private final RoleRepository roleRepository;
     private final UserHotelRoleRepository userHotelRoleRepository;
+    private final BrandRepository brandRepository;
+    private final ChainRepository chainRepository;
 
     public UserHotelRoleController(
         UserHotelRoleService userHotelRoleService,
         UserRepository userRepository,
         HotelRepository hotelRepository,
         RoleRepository roleRepository,
-        UserHotelRoleRepository userHotelRoleRepository
+        UserHotelRoleRepository userHotelRoleRepository,
+        BrandRepository brandRepository,
+        ChainRepository chainRepository
     ) {
         this.userHotelRoleService = userHotelRoleService;
         this.userRepository = userRepository;
         this.hotelRepository = hotelRepository;
         this.roleRepository = roleRepository;
         this.userHotelRoleRepository = userHotelRoleRepository;
+        this.brandRepository = brandRepository;
+        this.chainRepository = chainRepository;
     }
 
     // --- Métodos de mapeo ---
@@ -58,6 +67,14 @@ public class UserHotelRoleController {
         if (uhr.getAssignedBy() != null) {
             dto.setAssignedById(uhr.getAssignedBy().getUserId());
             dto.setAssignedByUsername(uhr.getAssignedBy().getUsername());
+        }
+        if (uhr.getBrand() != null) {
+            dto.setBrandId(uhr.getBrand().getBrandId());
+            dto.setBrandName(uhr.getBrand().getBrandName());
+        }
+        if (uhr.getChain() != null) {
+            dto.setChainId(uhr.getChain().getChainId());
+            dto.setChainName(uhr.getChain().getChainName());
         }
         dto.setAssignedAt(uhr.getAssignedAt());
         dto.setIsActive(uhr.getIsActive());
@@ -84,6 +101,12 @@ public class UserHotelRoleController {
         if (dto.getAssignedById() != null) {
             uhr.setAssignedBy(userRepository.findById(dto.getAssignedById()).orElse(null));
         }
+        if (dto.getChainId() != null) {
+            uhr.setChain(chainRepository.findById(dto.getChainId()).orElse(null));
+        }
+        if (dto.getBrandId() != null) {
+            uhr.setBrand(brandRepository.findById(dto.getBrandId()).orElse(null));
+        }
         uhr.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : true);
         return uhr;
     }
@@ -102,10 +125,43 @@ public class UserHotelRoleController {
 
     @PostMapping
     public ResponseEntity<UserHotelRoleDTO> create(@RequestBody UserHotelRoleDTO dto) {
-        if (userHotelRoleRepository.findByUserUserIdAndHotelHotelIdAndRoleRoleId(
-                dto.getUserId(), dto.getHotelId(), dto.getRoleId()).isPresent()) {
-            throw new IllegalArgumentException("Ya existe una relación para ese usuario, hotel y rol.");
+        // Validate that only one field is present
+        int count = 0;
+        if (dto.getHotelId() != null) count++;
+        if (dto.getBrandId() != null) count++;
+        if (dto.getChainId() != null) count++;
+        if (count != 1) {
+            throw new IllegalArgumentException("Must specify only one of: hotelId, brandId or chainId");
         }
+        
+        // Check for duplicates based on assignment type
+        if (dto.getHotelId() != null) {
+            if (userHotelRoleRepository.findByUserUserIdAndHotelHotelIdAndRoleRoleId(
+                    dto.getUserId(), dto.getHotelId(), dto.getRoleId()).isPresent()) {
+                throw new IllegalArgumentException("A relationship already exists for this user, hotel and role.");
+            }
+        } else if (dto.getBrandId() != null) {
+            // Check if a relationship already exists for the user and role in the same brand
+            List<UserHotelRole> existingRoles = userHotelRoleRepository.findByUserId(dto.getUserId());
+            boolean exists = existingRoles.stream()
+                .anyMatch(uhr -> uhr.getBrand() != null && 
+                               uhr.getBrand().getBrandId().equals(dto.getBrandId()) && 
+                               uhr.getRole().getRoleId().equals(dto.getRoleId()));
+            if (exists) {
+                throw new IllegalArgumentException("A relationship already exists for this user, brand and role.");
+            }
+        } else if (dto.getChainId() != null) {
+            // Check if a relationship already exists for the user and role in the same chain
+            List<UserHotelRole> existingRoles = userHotelRoleRepository.findByUserId(dto.getUserId());
+            boolean exists = existingRoles.stream()
+                .anyMatch(uhr -> uhr.getChain() != null && 
+                               uhr.getChain().getChainId().equals(dto.getChainId()) && 
+                               uhr.getRole().getRoleId().equals(dto.getRoleId()));
+            if (exists) {
+                throw new IllegalArgumentException("A relationship already exists for this user, chain and role.");
+            }
+        }
+        
         UserHotelRole entity = toEntity(dto, false);
         return ResponseEntity.ok(toDTO(userHotelRoleService.save(entity)));
     }
@@ -125,5 +181,19 @@ public class UserHotelRoleController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<UserHotelRoleDTO> getUserHotelRolesByUserId(@PathVariable Long userId) {
+        return userHotelRoleService.findByUserId(userId)
+            .stream()
+            .map(this::toDTO)
+            .collect(Collectors.toList());
+    }
+
+    @PostMapping("/assign")
+    public ResponseEntity<Void> assignUserRole(@RequestBody AssignUserRoleDTO dto) {
+        userHotelRoleService.assignRole(dto);
+        return ResponseEntity.ok().build();
     }
 } 

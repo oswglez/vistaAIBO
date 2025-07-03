@@ -5,6 +5,9 @@ import com.expectra.roombooking.repository.UserHotelRoleRepository;
 import com.expectra.roombooking.repository.UserRepository;
 import com.expectra.roombooking.repository.HotelRepository;
 import com.expectra.roombooking.repository.RoleRepository;
+import com.expectra.roombooking.repository.BrandRepository;
+import com.expectra.roombooking.repository.ChainRepository;
+import com.expectra.roombooking.dto.AssignUserRoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,32 +22,53 @@ public class UserHotelRoleServiceImpl implements UserHotelRoleService {
     private final UserRepository userRepository;
     private final HotelRepository hotelRepository;
     private final RoleRepository roleRepository;
+    private final BrandRepository brandRepository;
+    private final ChainRepository chainRepository;
 
     @Autowired
     public UserHotelRoleServiceImpl(
             UserHotelRoleRepository userHotelRoleRepository,
             UserRepository userRepository,
             HotelRepository hotelRepository,
-            RoleRepository roleRepository
+            RoleRepository roleRepository,
+            BrandRepository brandRepository,
+            ChainRepository chainRepository
     ) {
         this.userHotelRoleRepository = userHotelRoleRepository;
         this.userRepository = userRepository;
         this.hotelRepository = hotelRepository;
         this.roleRepository = roleRepository;
+        this.brandRepository = brandRepository;
+        this.chainRepository = chainRepository;
     }
 
     @Override
-    public void assignRole(Long userId, Long hotelId, Long roleId, Long assignedBy) {
-        UserHotelRole uhr = userHotelRoleRepository
-            .findByUserUserIdAndHotelHotelIdAndRoleRoleId(userId, hotelId, roleId)
-            .orElse(new UserHotelRole());
-        uhr.setUser(userRepository.findById(userId).orElseThrow());
-        uhr.setHotel(hotelRepository.findById(hotelId).orElseThrow());
-        uhr.setRole(roleRepository.findById(roleId).orElseThrow());
-        if (assignedBy != null) {
-            uhr.setAssignedBy(userRepository.findById(assignedBy).orElse(null));
+    public void assignRole(AssignUserRoleDTO dto) {
+        // Validate that only one field is present
+        int count = 0;
+        if (dto.getHotelId() != null) count++;
+        if (dto.getBrandId() != null) count++;
+        if (dto.getChainId() != null) count++;
+        if (count != 1) {
+            throw new IllegalArgumentException("Must specify only one of: hotelId, brandId or chainId");
         }
-        uhr.setIsActive(true);
+
+        UserHotelRole uhr = new UserHotelRole();
+        uhr.setUser(userRepository.findById(dto.getUserId()).orElseThrow());
+        uhr.setRole(roleRepository.findById(dto.getRoleId()).orElseThrow());
+        if (dto.getHotelId() != null) {
+            uhr.setHotel(hotelRepository.findById(dto.getHotelId()).orElseThrow());
+        }
+        if (dto.getBrandId() != null) {
+            uhr.setBrand(brandRepository.findById(dto.getBrandId()).orElseThrow());
+        }
+        if (dto.getChainId() != null) {
+            uhr.setChain(chainRepository.findById(dto.getChainId()).orElseThrow());
+        }
+        if (dto.getAssignedBy() != null) {
+            uhr.setAssignedBy(userRepository.findById(dto.getAssignedBy()).orElse(null));
+        }
+        uhr.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : true);
         uhr.setAssignedAt(LocalDateTime.now());
         userHotelRoleRepository.save(uhr);
     }
@@ -79,5 +103,10 @@ public class UserHotelRoleServiceImpl implements UserHotelRoleService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<UserHotelRole> findByUserId(Long userId) {
+        return userHotelRoleRepository.findByUserId(userId);
     }
 } 

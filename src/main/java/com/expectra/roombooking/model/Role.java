@@ -2,7 +2,9 @@ package com.expectra.roombooking.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.Type;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,9 @@ public class Role {
     private String description;
     
     @Column(columnDefinition = "jsonb")
-    private String permissions; // JSON string for permissions
+    @JdbcTypeCode(SqlTypes.JSON)
+    @JsonProperty("permissions")
+    private Map<String, Object> permissions; // JSON object for permissions
     
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<UserHotelRole> userHotelRoles;

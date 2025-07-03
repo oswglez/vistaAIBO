@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Builder;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -22,6 +23,6 @@ public class UserContextDTO {
         private Long roleId;
         private String roleName;
         private String description;
-        private String permissions;
+        private Map<String, Object> permissions;
     }
 } 

@@ -11,6 +11,10 @@ public class UserHotelRoleDTO {
     private String username;
     private Long hotelId;
     private String hotelName;
+    private Long brandId;
+    private String brandName;
+    private Long chainId;
+    private String chainName;
     private Long roleId;
     private String roleName;
     private Long assignedById;
@@ -29,6 +33,14 @@ public class UserHotelRoleDTO {
     public void setHotelId(Long hotelId) { this.hotelId = hotelId; }
     public String getHotelName() { return hotelName; }
     public void setHotelName(String hotelName) { this.hotelName = hotelName; }
+    public Long getBrandId() { return brandId; }
+    public void setBrandId(Long brandId) { this.brandId = brandId; }
+    public String getBrandName() { return brandName; }
+    public void setBrandName(String brandName) { this.brandName = brandName; }
+    public Long getChainId() { return chainId; }
+    public void setChainId(Long chainId) { this.chainId = chainId; }
+    public String getChainName() { return chainName; }
+    public void setChainName(String chainName) { this.chainName = chainName; }
     public Long getRoleId() { return roleId; }
     public void setRoleId(Long roleId) { this.roleId = roleId; }
     public String getRoleName() { return roleName; }

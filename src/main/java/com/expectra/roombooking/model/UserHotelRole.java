@@ -25,6 +25,14 @@ public class UserHotelRole {
     private Hotel hotel;
     
     @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+    
+    @ManyToOne
+    @JoinColumn(name = "chain_id")
+    private Chain chain;
+    
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
     
