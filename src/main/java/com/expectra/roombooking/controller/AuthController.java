@@ -1,6 +1,7 @@
 package com.expectra.roombooking.controller;
 
 import com.expectra.roombooking.dto.UserContextDTO;
+import com.expectra.roombooking.dto.UserResponseDTO;
 import com.expectra.roombooking.model.User;
 import com.expectra.roombooking.repository.RoleRepository;
 import com.expectra.roombooking.repository.UserRepository;
@@ -292,18 +293,21 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/test-jwt")
-    public ResponseEntity<?> generateTestJwt() {
+    @GetMapping("/test-jwt/{userId}")
+    public ResponseEntity<?> generateTestJwt(@PathVariable Long userId) {
         try {
+            // Obtener los datos reales del usuario
+            UserResponseDTO userResponse = userService.getUserById(userId);
+            
             String privateKeyPath = "C:/Users/Admin/Expectra/backoffice/vistaAIBO/keys/private_key.pem";
             RSAPrivateKey privateKey = JwtUtil.getPrivateKey(privateKeyPath);
             Algorithm algorithm = Algorithm.RSA256(null, privateKey);
 
             String token = JWT.create()
                 .withKeyId("dev-key-1")
-                .withSubject("test-user-id")
-                .withClaim("email", "test@example.com")
-                .withClaim("name", "Test User")
+                .withSubject(userId.toString())
+                .withClaim("email", userResponse.getEmail())
+                .withClaim("name", userResponse.getFirstName() + " " + userResponse.getLastName())
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000))
                 .sign(algorithm);

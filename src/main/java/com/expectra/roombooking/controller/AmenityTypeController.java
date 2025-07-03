@@ -25,7 +25,6 @@ public class AmenityTypeController {
     private final AmenityTypeService amenityTypeService;
     private final String messageNotFound = "Amenity not found with ID: ";
 
-    @Autowired
     public AmenityTypeController(final AmenityTypeService amenityTypeService) {
         this.amenityTypeService = amenityTypeService;
     }

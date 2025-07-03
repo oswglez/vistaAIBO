@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,9 +24,11 @@ public class AuthorizationService {
         
         return userRoles.stream()
             .anyMatch(userRole -> {
-                String permissions = userRole.getRole().getPermissions();
-                // Simple check - in production, use proper JSON parsing
-                return permissions != null && permissions.contains(permission);
+                Map<String, Object> permissions = userRole.getRole().getPermissions();
+                // Check if the permission exists and is true
+                return permissions != null && 
+                       permissions.containsKey(permission) && 
+                       Boolean.TRUE.equals(permissions.get(permission));
             });
     }
     
