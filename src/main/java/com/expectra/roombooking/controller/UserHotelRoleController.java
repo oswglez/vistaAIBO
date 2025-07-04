@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user-hotel-roles")
@@ -192,8 +194,8 @@ public class UserHotelRoleController {
     }
 
     @PostMapping("/assign")
-    public ResponseEntity<Void> assignUserRole(@RequestBody AssignUserRoleDTO dto) {
+    public ResponseEntity<Map<String, Object>> assignUserRole(@RequestBody AssignUserRoleDTO dto) {
         userHotelRoleService.assignRole(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Collections.emptyMap());
     }
 } 
