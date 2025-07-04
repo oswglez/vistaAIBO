@@ -10,4 +10,5 @@ public interface UserService {
     UserResponseDTO createUser(UserRequestDTO userRequestDTO);
     UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO);
     void deleteUser(Long id);
+    UserResponseDTO getUserByUsername(String username);
 } 

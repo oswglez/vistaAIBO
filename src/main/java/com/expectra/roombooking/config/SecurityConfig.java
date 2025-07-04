@@ -55,6 +55,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/test-jwt/**").permitAll() // Allow test-jwt with path variables
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permit Swagger
                 .requestMatchers("/actuator/**").permitAll() // Permit endpoints de actuator
+                .requestMatchers("/api/users/me").authenticated()
                 .requestMatchers("/api/**").authenticated() // Require authentication for all API endpoints
                 .requestMatchers("/**").permitAll() // Permit other endpoints
             );

@@ -7,6 +7,7 @@ import com.expectra.roombooking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
@@ -51,6 +52,31 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        Object principal = authentication.getPrincipal();
+        String username = null;
+
+        if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+            username = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+        } else if (principal instanceof String) {
+            username = (String) principal;
+        } else if (principal instanceof com.expectra.roombooking.model.User) {
+            username = ((com.expectra.roombooking.model.User) principal).getUsername();
+        } else {
+            throw new RuntimeException("Unknown principal type: " + principal.getClass().getName());
+        }
+
+        UserResponseDTO user = userService.getUserByUsername(username);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
     }
 
     public static RSAPublicKey getPublicKey(String filename) throws Exception {
